@@ -134,14 +134,14 @@
     var self = this;
     var inputs = [this.inputText, this.rootInput, this.nodeAttrsText];
     inputs.forEach(function (el) {
-      el.addEventListener('input', function () { self.saveState(); });
+      if (el) el.addEventListener('input', function () { self.saveState(); });
     });
     var selects = [this.rendererSel];
     selects.forEach(function (el) {
-      el.addEventListener('change', function () { self.saveState(); });
+      if (el) el.addEventListener('change', function () { self.saveState(); });
     });
-    this.autoRenderChk.addEventListener('change', function () { self.saveState(); });
-    this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
+    if (this.autoRenderChk) this.autoRenderChk.addEventListener('change', function () { self.saveState(); });
+    if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
   };
 
   RootedTreeTab.prototype.cacheDom = function () {
@@ -170,19 +170,19 @@
 
   RootedTreeTab.prototype.bindEvents = function () {
     var self = this;
-    this.parseBtn.addEventListener('click', function () { self.parse(); });
-    this.inputTabsEl.addEventListener('click', function (e) {
+    if (this.parseBtn) this.parseBtn.addEventListener('click', function () { self.parse(); });
+    if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.input-tab-btn');
       if (!btn) return;
       self.setInputMode(btn.getAttribute('data-input-mode'));
     });
-    this.renderBtn.addEventListener('click', function () { self.render(); });
-    this.rendererSel.addEventListener('change', function () {
+    if (this.renderBtn) this.renderBtn.addEventListener('click', function () { self.render(); });
+    if (this.rendererSel) this.rendererSel.addEventListener('change', function () {
       self.rendererName = self.rendererSel.value;
       if (self.autoRenderChk.checked) self.render();
     });
-    this.addNodeFieldBtn.addEventListener('click', function () { self.promptAddNodeField(); });
-    this.addEdgeFieldBtn.addEventListener('click', function () { self.promptAddEdgeField(); });
+    if (this.addNodeFieldBtn) this.addNodeFieldBtn.addEventListener('click', function () { self.promptAddNodeField(); });
+    if (this.addEdgeFieldBtn) this.addEdgeFieldBtn.addEventListener('click', function () { self.promptAddEdgeField(); });
     if (this.clearBtn) {
       this.clearBtn.addEventListener('click', function () { self.clearAll(); });
     }
@@ -191,6 +191,7 @@
   /** 切换输入方式选项卡。 */
   RootedTreeTab.prototype.setInputMode = function (mode) {
     this.inputMode = mode;
+    if (!this.inputTabsEl) return;
     var btns = this.inputTabsEl.querySelectorAll('.input-tab-btn');
     for (var i = 0; i < btns.length; i++) {
       if (btns[i].getAttribute('data-input-mode') === mode) {
