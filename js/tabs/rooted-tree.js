@@ -51,7 +51,7 @@
       this.model.edgeAttributeFields.forEach(function (f) { fieldVis.edge[f.name] = f.visible; });
     }
     return {
-      inputMode: this.inputModeSel.value,
+      inputMode: this.inputMode,
       inputText: this.inputText.value,
       root: this.rootInput.value,
       nodeAttrsText: this.nodeAttrsText.value,
@@ -85,9 +85,7 @@
   /** 将保存的状态应用到 UI。 */
   RootedTreeTab.prototype.applyState = function (saved) {
     if (saved.inputMode != null) {
-      this.inputMode = saved.inputMode;
-      this.inputModeSel.value = saved.inputMode;
-      this.updatePlaceholder();
+      this.setInputMode(saved.inputMode);
     }
     if (saved.inputText != null) this.inputText.value = saved.inputText;
     if (saved.root != null) this.rootInput.value = saved.root;
@@ -138,16 +136,17 @@
     inputs.forEach(function (el) {
       el.addEventListener('input', function () { self.saveState(); });
     });
-    var selects = [this.inputModeSel, this.rendererSel];
+    var selects = [this.rendererSel];
     selects.forEach(function (el) {
       el.addEventListener('change', function () { self.saveState(); });
     });
     this.autoRenderChk.addEventListener('change', function () { self.saveState(); });
+    this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
   };
 
   RootedTreeTab.prototype.cacheDom = function () {
     var el = this.rootEl;
-    this.inputModeSel = el.querySelector('#rt-input-mode');
+    this.inputTabsEl = el.querySelector('#rt-input-tabs');
     this.inputText = el.querySelector('#rt-input-text');
     this.rootInput = el.querySelector('#rt-root');
     this.parseBtn = el.querySelector('#rt-parse-btn');
@@ -172,9 +171,10 @@
   RootedTreeTab.prototype.bindEvents = function () {
     var self = this;
     this.parseBtn.addEventListener('click', function () { self.parse(); });
-    this.inputModeSel.addEventListener('change', function () {
-      self.inputMode = self.inputModeSel.value;
-      self.updatePlaceholder();
+    this.inputTabsEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.input-tab-btn');
+      if (!btn) return;
+      self.setInputMode(btn.getAttribute('data-input-mode'));
     });
     this.renderBtn.addEventListener('click', function () { self.render(); });
     this.rendererSel.addEventListener('change', function () {
@@ -188,6 +188,20 @@
     }
   };
 
+  /** 切换输入方式选项卡。 */
+  RootedTreeTab.prototype.setInputMode = function (mode) {
+    this.inputMode = mode;
+    var btns = this.inputTabsEl.querySelectorAll('.input-tab-btn');
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].getAttribute('data-input-mode') === mode) {
+        btns[i].classList.add('active');
+      } else {
+        btns[i].classList.remove('active');
+      }
+    }
+    this.updatePlaceholder();
+  };
+
   RootedTreeTab.prototype.updatePlaceholder = function () {
     var placeholders = {
       edges: '每行一条边：u v [attr1 attr2 …]\n前2个数字为 父→子，其余依次为边属性\n例如：\n1 2\n1 3\n2 4 heavy\n2 5 light',
@@ -198,8 +212,7 @@
   };
 
   RootedTreeTab.prototype.loadSample = function () {
-    this.inputMode = 'edges';
-    this.inputModeSel.value = 'edges';
+    this.setInputMode('edges');
     this.updatePlaceholder();
     this.inputText.value = '1 2\n1 3\n2 4\n2 5\n3 6\n3 7';
     this.rootInput.value = '1';
