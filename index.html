@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>算法竞赛可视化调试工具</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="https://tikzjax.com/dist/tikzjax.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>算法竞赛可视化调试工具</h1>
+    <span class="app-sub">Algo CP Tools</span>
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="rooted-tree">有根树</button>
+    <span class="tab-placeholder">更多模型（图、并查集、线段树…）规划中</span>
+  </nav>
+
+  <main class="tab-container">
+    <!-- ===================== 有根树 Tab ===================== -->
+    <section class="tab-content active" id="tab-rooted-tree">
+      <div class="rt-layout">
+
+        <!-- 左：输入 -->
+        <section class="rt-panel rt-input">
+          <h2>输入</h2>
+          <div class="form-row">
+            <label class="form-label">输入方式</label>
+            <select id="rt-input-mode" class="form-control">
+              <option value="edges">边集合（u v 每行）</option>
+              <option value="parent">父节点数组</option>
+              <option value="children">邻接表（k v1 v2…）</option>
+            </select>
+          </div>
+          <textarea id="rt-input-text" class="form-control rt-textarea" rows="12" spellcheck="false"></textarea>
+          <div class="form-row form-row-inline">
+            <label class="form-label">根节点 / 索引基数</label>
+            <input type="number" id="rt-root" class="form-control rt-root-input" value="1" min="0" />
+            <button id="rt-parse-btn" class="btn btn-primary">解析</button>
+            <button id="rt-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
+          </div>
+          <div id="rt-parse-status" class="rt-status"></div>
+          <div class="form-row">
+            <label class="form-label">节点属性（每行一个属性：属性名 值1 值2 … 值n）</label>
+          </div>
+          <textarea id="rt-node-attrs-text" class="form-control rt-textarea" rows="5" spellcheck="false" placeholder="每行一个属性：属性名 值1 值2 … 值n&#10;第 j 个值对应节点 (base+j)，base=根节点值&#10;属性值可为字符串&#10;例如（根=1，7节点）：&#10;label 根 左 右 LL LR RL RR&#10;weight 10 5 5 1 1 1 1"></textarea>
+        </section>
+
+        <!-- 中：属性字段 -->
+        <section class="rt-panel rt-attrs">
+          <h2>属性字段</h2>
+          <div class="fields-section">
+            <div class="fields-head">
+              <h3>节点字段</h3>
+              <button id="rt-add-node-field" class="btn btn-ghost btn-sm">+ 添加</button>
+            </div>
+            <div id="rt-node-fields" class="fields-list"></div>
+          </div>
+          <div class="fields-section">
+            <div class="fields-head">
+              <h3>边字段</h3>
+              <button id="rt-add-edge-field" class="btn btn-ghost btn-sm">+ 添加</button>
+            </div>
+            <div id="rt-edge-fields" class="fields-list"></div>
+          </div>
+
+          <div class="tables-section">
+            <h3>节点表</h3>
+            <div class="rt-table-wrap" id="rt-node-table-wrap"></div>
+            <h3>边表</h3>
+            <div class="rt-table-wrap" id="rt-edge-table-wrap"></div>
+          </div>
+        </section>
+
+        <!-- 右：可视化 -->
+        <section class="rt-panel rt-viz">
+          <h2>可视化</h2>
+          <div class="form-row form-row-inline">
+            <label class="form-label">渲染引擎</label>
+            <select id="rt-renderer" class="form-control">
+              <option value="mermaid">Mermaid</option>
+              <option value="graphviz">Graphviz</option>
+              <option value="tikz">TikZ (TikZJax)</option>
+            </select>
+            <button id="rt-render-btn" class="btn btn-primary">渲染</button>
+          </div>
+          <div class="form-row form-row-inline">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rt-auto-render" checked /> 自动渲染
+            </label>
+          </div>
+          <div id="rt-graph-output" class="graph-output"></div>
+          <details class="code-details">
+            <summary>生成代码</summary>
+            <pre id="rt-code-output" class="code-block"></pre>
+          </details>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== 第三方库（CDN） ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/viz.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/full.render.js"></script>
+  <script src="https://tikzjax.com/dist/tikzjax.js"></script>
+
+  <!-- ===== 应用脚本（按序加载） ===== -->
+  <script src="js/namespace.js?v=3"></script>
+  <script src="js/models/tree-model.js?v=3"></script>
+  <script src="js/parsers/tree-parsers.js?v=3"></script>
+  <script src="js/utils/tree-layout.js?v=3"></script>
+  <script src="js/renderers/mermaid-renderer.js?v=3"></script>
+  <script src="js/renderers/graphviz-renderer.js?v=3"></script>
+  <script src="js/renderers/tikz-renderer.js?v=3"></script>
+  <script src="js/tabs/rooted-tree.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+</body>
+</html>
