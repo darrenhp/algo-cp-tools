@@ -24,23 +24,47 @@
     return String(s).replace(/[\\%&$#_{}~^]/g, function (c) { return TIKZ_SPECIALS[c]; });
   }
 
+  /** 圆形布局：节点均匀分布在圆周上，供非树图使用。 */
+  function computeCircleLayout(model) {
+    var positions = {};
+    var ids = model.getAllNodeIds().sort(function (a, b) { return Number(a) - Number(b); });
+    var n = ids.length;
+    var radius = Math.max(2, n / (2 * Math.PI));
+    for (var i = 0; i < n; i++) {
+      var angle = (2 * Math.PI * i) / n;
+      positions[ids[i]] = { x: (radius * Math.cos(angle)).toFixed(2), y: (radius * Math.sin(angle)).toFixed(2) };
+    }
+    return positions;
+  }
+
   function generateCode(model) {
-    var childrenMap = model.getChildrenMap();
-    var positions = NS.utils.treeLayout.computeLayout(model.root, childrenMap);
-    var scale = 1.6;
+    var graphType = model.graphType;
+    var directed = model.isDirected();
+    var positions;
+    if (graphType === 'rooted-tree') {
+      var childrenMap = model.getChildrenMap();
+      var treePos = NS.utils.treeLayout.computeLayout(model.root, childrenMap);
+      var scale = 1.6;
+      positions = {};
+      Object.keys(treePos).forEach(function (id) {
+        positions[id] = { x: (treePos[id].x * scale).toFixed(2), y: (-treePos[id].y * scale).toFixed(2) };
+      });
+    } else {
+      positions = computeCircleLayout(model);
+    }
     var LB = String.fromCharCode(92); // backslash
+    var arrowOpt = directed ? '[-Stealth]' : '';
 
     var lines = [];
     lines.push(LB + 'begin{tikzpicture}[');
-    lines.push('  every node/.style={circle, draw, inner sep=2pt, align=center, font=' + LB + 'small},');
-    lines.push('  level distance=15mm, sibling distance=12mm');
+    lines.push('  every node/.style={circle, draw, inner sep=2pt, align=center, font=' + LB + 'small}');
     lines.push(']');
 
     model.getAllNodeIds().forEach(function (id) {
       var p = positions[id];
       if (!p) return;
-      var x = (p.x * scale).toFixed(2);
-      var y = (-p.y * scale).toFixed(2);
+      var x = p.x;
+      var y = p.y;
       var label = escapeTikz(model.getNodeLabel(id));
       lines.push(LB + 'node (n' + id + ') at (' + x + ',' + y + ') {' + label + '};');
     });
@@ -49,9 +73,9 @@
       var elabel = model.getEdgeLabel(e);
       if (elabel) {
         var lbl = escapeTikz(elabel);
-        lines.push(LB + 'draw (n' + e.from + ') -- node[midway, draw=none, fill=white, font=' + LB + 'tiny] {' + lbl + '} (n' + e.to + ');');
+        lines.push(LB + 'draw' + arrowOpt + ' (n' + e.from + ') -- node[midway, draw=none, fill=white, font=' + LB + 'tiny] {' + lbl + '} (n' + e.to + ');');
       } else {
-        lines.push(LB + 'draw (n' + e.from + ') -- (n' + e.to + ');');
+        lines.push(LB + 'draw' + arrowOpt + ' (n' + e.from + ') -- (n' + e.to + ');');
       }
     });
 

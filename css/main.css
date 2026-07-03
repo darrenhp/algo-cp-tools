@@ -58,7 +58,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 /* ===== 有根树三栏布局 ===== */
 .rt-layout {
   display: grid;
-  grid-template-columns: 320px minmax(320px, 1fr) minmax(380px, 1.2fr);
+  grid-template-columns: 500px minmax(240px, 0.7fr) minmax(420px, 1.3fr);
   gap: 12px;
   align-items: start;
 }
@@ -105,7 +105,9 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 /* ===== 输入方式选项卡 ===== */
 .input-tabs {
   display: flex;
-  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 6px;
   margin-bottom: 10px;
 }
 .input-tab-btn {
@@ -113,10 +115,11 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   background: #1e293b;
   border: 1px solid #475569;
   border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 13px;
+  padding: 5px 12px;
+  font-size: 12px;
   color: #94a3b8;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 .input-tab-btn:hover {
@@ -131,31 +134,70 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(99,102,241,0.4);
 }
+.input-tab-btn.disabled,
+.input-tab-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ===== 图类型选项卡 ===== */
+.graph-type-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.graph-type-btn {
+  appearance: none;
+  background: #0b1120;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.graph-type-btn:hover {
+  color: #e2e8f0;
+  background: #1e293b;
+  border-color: #475569;
+}
+.graph-type-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  border-color: #a855f7;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(168,85,247,0.4);
+}
 
 /* ===== 表单控件 ===== */
 .form-row { margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
-.form-row-inline { flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; }
-.form-label { font-size: 12px; color: #94a3b8; font-weight: 500; }
+.form-row-inline { flex-direction: row; align-items: center; gap: 6px; flex-wrap: nowrap; overflow: hidden; }
+.form-label { font-size: 11px; color: #94a3b8; font-weight: 500; white-space: nowrap; }
 .form-control {
   width: 100%;
   border: 1px solid #475569;
   border-radius: 6px;
-  padding: 7px 9px;
-  font-size: 13px;
+  padding: 6px 8px;
+  font-size: 12px;
   background: #ffffff;
   color: #1e293b;
   outline: none;
 }
 .form-control:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,0.25); }
 .rt-textarea { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; resize: vertical; }
-.rt-root-input { width: 90px; flex: 0 0 auto; }
+.rt-root-input { width: 56px; flex: 0 0 auto; }
 
 /* ===== 按钮 ===== */
 .btn {
   border: 1px solid transparent;
   border-radius: 6px;
-  padding: 7px 14px;
-  font-size: 13px;
+  padding: 6px 12px;
+  font-size: 12px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -253,3 +295,185 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   margin: 8px 0 0;
   white-space: pre;
 }
+
+/* ===== 一维数组模块布局（两栏：输入 + 可视化） ===== */
+.arr-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .arr-layout { grid-template-columns: 1fr; }
+}
+
+.arr-panel {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  max-height: calc(100vh - 130px);
+  overflow: auto;
+}
+.arr-panel h2 { font-size: 15px; margin-bottom: 12px; }
+
+.arr-input {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
+  border-top: 3px solid #6366f1;
+}
+.arr-input h2 { color: #a5b4fc; }
+
+.arr-viz {
+  background: linear-gradient(135deg, #4a044e 0%, #1e1b4b 100%);
+  border-top: 3px solid #a855f7;
+}
+.arr-viz h2 { color: #d8b4fe; }
+
+.arr-textarea {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  resize: vertical;
+}
+
+/* ===== 模型选择按钮（单行文本，无描述） ===== */
+.arr-model-tabs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.arr-model-group { display: flex; flex-direction: column; gap: 4px; }
+.arr-model-group-title {
+  font-size: 11px;
+  color: #818cf8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.arr-model-btn {
+  appearance: none;
+  background: #0b1120;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-size: 13px;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+.arr-model-btn:hover {
+  background: #1e293b;
+  border-color: #6366f1;
+}
+.arr-model-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  border-color: #818cf8;
+  box-shadow: 0 2px 10px rgba(99,102,241,0.4);
+  color: #fff;
+}
+
+/* ===== 起始索引切换 ===== */
+.arr-base-toggle {
+  display: inline-flex;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.arr-base-btn {
+  appearance: none;
+  background: #1e293b;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.arr-base-btn:hover { background: #334155; }
+.arr-base-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  font-weight: 600;
+}
+/* 位排列方向按钮及位序按钮复用起始索引按钮样式 */
+.arr-orient-btn,
+.arr-bit-order-btn {
+  appearance: none;
+  background: #1e293b;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.arr-orient-btn:hover,
+.arr-bit-order-btn:hover { background: #334155; }
+.arr-orient-btn.active,
+.arr-bit-order-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===== 笛卡尔树选项按钮 ===== */
+#arr-cartesian-opts { flex-wrap: wrap; gap: 8px; }
+.arr-cart-root-btn,
+.arr-cart-tie-btn {
+  appearance: none;
+  background: #1e293b;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.arr-cart-root-btn:hover,
+.arr-cart-tie-btn:hover { background: #334155; }
+.arr-cart-root-btn.active,
+.arr-cart-tie-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===== SVG 输出 ===== */
+.arr-svg-wrap { padding: 6px; }
+.arr-svg-wrap svg { background: #fff; border-radius: 6px; }
+
+/* ===== 二维几何模块布局 ===== */
+.geom-layout {
+  display: grid;
+  grid-template-columns: 460px minmax(440px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1200px) {
+  .geom-layout { grid-template-columns: 1fr; }
+  .geom-viz { grid-column: 1 / -1; }
+}
+@media (max-width: 820px) {
+  .geom-layout { grid-template-columns: 1fr; }
+}
+
+.geom-panel {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  max-height: calc(100vh - 130px);
+  overflow: auto;
+}
+.geom-panel h2 { font-size: 15px; margin-bottom: 12px; }
+.geom-panel h3 { font-size: 13px; margin: 14px 0 8px; color: #94a3b8; }
+
+.geom-input {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
+  border-top: 3px solid #6366f1;
+}
+.geom-input h2 { color: #a5b4fc; }
+
+.geom-viz {
+  background: linear-gradient(135deg, #4a044e 0%, #1e1b4b 100%);
+  border-top: 3px solid #a855f7;
+}
+.geom-viz h2 { color: #d8b4fe; }
+
+.geom-results-section { margin-top: 14px; border-top: 1px dashed #334155; padding-top: 8px; }
+.geom-results { font-size: 12px; color: #cbd5e1; }

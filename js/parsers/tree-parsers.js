@@ -1,6 +1,6 @@
 /**
- * 有根树输入解析器
- * 支持三种输入方式：边集合、父节点数组、邻接表。
+ * 图输入解析器
+ * 支持四种输入方式：边集合、父节点数组、邻接表、邻接矩阵。
  * 统一产出边集合 { from, to }，再由 buildModel 构建 TreeModel。
  */
 (function () {
@@ -69,6 +69,33 @@
         edges.push({ from: node, to: parts[j] });
       }
       lineIdx++;
+    }
+    return edges;
+  }
+
+  /**
+   * 邻接矩阵：每行对应一个节点（从 base 开始），空格/逗号分隔的 0/1 矩阵。
+   * matrix[i][j]=1 表示存在从节点 (base+i) 到 (base+j) 的边。
+   * base = root。
+   */
+  function parseAdjMatrix(text, root) {
+    var base = Number(root);
+    if (isNaN(base)) base = 1;
+    var edges = [];
+    var lines = text.split(/\r?\n/);
+    var rowIdx = 0;
+    for (var i = 0; i < lines.length; i++) {
+      if (isComment(lines[i])) continue;
+      var parts = lines[i].trim().split(/[\s,]+/).filter(Boolean);
+      if (parts.length === 0) continue;
+      var from = String(base + rowIdx);
+      for (var j = 0; j < parts.length; j++) {
+        var val = Number(parts[j]);
+        if (val === 1) {
+          edges.push({ from: from, to: String(base + j) });
+        }
+      }
+      rowIdx++;
     }
     return edges;
   }
@@ -159,6 +186,7 @@
     parseEdges: parseEdges,
     parseParent: parseParent,
     parseChildren: parseChildren,
+    parseAdjMatrix: parseAdjMatrix,
     parseNodeAttrs: parseNodeAttrs,
     buildModel: buildModel
   };

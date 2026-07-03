@@ -15,7 +15,12 @@
   }
 
   function generateCode(model) {
-    var lines = ['graph TD'];
+    var directed = model.isDirected();
+    var graphType = model.graphType;
+    // 有根树自上而下；有向图/无向图从左到右
+    var dir = graphType === 'rooted-tree' ? 'TD' : 'LR';
+    var arrow = directed ? '-->' : '---';
+    var lines = ['graph ' + dir];
     model.getAllNodeIds().forEach(function (id) {
       var label = escapeMermaid(model.getNodeLabel(id));
       lines.push('    n' + id + '["' + label + '"]');
@@ -23,9 +28,9 @@
     model.edges.forEach(function (e) {
       var elabel = model.getEdgeLabel(e);
       if (elabel) {
-        lines.push('    n' + e.from + ' -->| ' + escapeMermaid(elabel) + ' | n' + e.to);
+        lines.push('    n' + e.from + ' ' + arrow + '| ' + escapeMermaid(elabel) + ' | n' + e.to);
       } else {
-        lines.push('    n' + e.from + ' --> n' + e.to);
+        lines.push('    n' + e.from + ' ' + arrow + ' n' + e.to);
       }
     });
     return lines.join('\n');

@@ -21,9 +21,14 @@
   }
 
   function generateCode(model) {
+    var directed = model.isDirected();
+    var graphType = model.graphType;
+    var kw = directed ? 'digraph' : 'graph';
+    var arrow = directed ? '->' : '--';
+    var rankdir = graphType === 'rooted-tree' ? 'TB' : 'LR';
     var lines = [
-      'digraph G {',
-      '    rankdir=TB;',
+      kw + ' G {',
+      '    rankdir=' + rankdir + ';',
       '    graph [fontname="Helvetica"];',
       '    node [shape=box, style="rounded,filled", fillcolor="#eef3ff", fontname="Helvetica"];',
       '    edge [fontname="Helvetica", fontsize=10];'
@@ -35,9 +40,9 @@
     model.edges.forEach(function (e) {
       var elabel = model.getEdgeLabel(e);
       if (elabel) {
-        lines.push('    n' + e.from + ' -> n' + e.to + ' [label="' + escapeDot(elabel) + '"];');
+        lines.push('    n' + e.from + ' ' + arrow + ' n' + e.to + ' [label="' + escapeDot(elabel) + '"];');
       } else {
-        lines.push('    n' + e.from + ' -> n' + e.to + ';');
+        lines.push('    n' + e.from + ' ' + arrow + ' n' + e.to + ';');
       }
     });
     lines.push('}');

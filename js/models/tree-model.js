@@ -1,6 +1,7 @@
 /**
- * 有根树数据模型
+ * 图数据模型
  * 持有节点、边、属性字段定义（schema），以及属性级显示控制。
+ * graphType: 'rooted-tree' | 'directed' | 'undirected'
  */
 (function () {
   'use strict';
@@ -14,6 +15,7 @@
    */
   function TreeModel() {
     this.root = null;
+    this.graphType = 'rooted-tree';
     this.nodes = new Map();
     this.edges = [];
     this.nodeAttributeFields = [];
@@ -23,11 +25,16 @@
 
   TreeModel.prototype.reset = function () {
     this.root = null;
+    this.graphType = 'rooted-tree';
     this.nodes = new Map();
     this.edges = [];
     this.nodeAttributeFields = [];
     this.edgeAttributeFields = [];
     this._nextEdgeId = 1;
+  };
+
+  TreeModel.prototype.isDirected = function () {
+    return this.graphType !== 'undirected';
   };
 
   TreeModel.prototype.addNode = function (id) {

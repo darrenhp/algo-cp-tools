@@ -6,8 +6,8 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>算法竞赛工具集</title>
-  <link rel="stylesheet" href="css/main.css?v=6" />
+  <title>Algo CP Tools</title>
+  <link rel="stylesheet" href="css/main.css?v=22" />
   <link rel="stylesheet" href="https://tikzjax.com/dist/tikzjax.css" />
 </head>
 <body>
@@ -16,8 +16,10 @@
   </header>
 
   <nav class="tab-bar">
-    <button class="tab-btn active" data-tab="rooted-tree">有根树</button>
-    <span class="tab-placeholder">更多模型（二维几何、三维几何、函数…）规划中</span>
+    <button class="tab-btn active" data-tab="rooted-tree">图</button>
+    <button class="tab-btn" data-tab="array">一维数组</button>
+    <button class="tab-btn" data-tab="geometry2d">二维几何</button>
+    <span class="tab-placeholder">更多模型（三维几何、函数…）规划中</span>
   </nav>
 
   <main class="tab-container">
@@ -28,14 +30,20 @@
         <!-- 左：输入 -->
         <section class="rt-panel rt-input">
           <h2>输入</h2>
+          <div class="graph-type-tabs" id="rt-graph-type-tabs">
+            <button class="graph-type-btn active" data-graph-type="rooted-tree">有根树</button>
+            <button class="graph-type-btn" data-graph-type="directed">有向图</button>
+            <button class="graph-type-btn" data-graph-type="undirected">无向图</button>
+          </div>
           <div class="input-tabs" id="rt-input-tabs">
             <button class="input-tab-btn active" data-input-mode="edges">边表</button>
             <button class="input-tab-btn" data-input-mode="parent">父节点数组</button>
             <button class="input-tab-btn" data-input-mode="children">邻接表</button>
+            <button class="input-tab-btn" data-input-mode="matrix">邻接矩阵</button>
           </div>
           <textarea id="rt-input-text" class="form-control rt-textarea" rows="12" spellcheck="false"></textarea>
           <div class="form-row form-row-inline">
-            <label class="form-label">根节点 / 索引基数</label>
+            <label class="form-label">根/基数</label>
             <input type="number" id="rt-root" class="form-control rt-root-input" value="1" min="0" />
             <button id="rt-parse-btn" class="btn btn-primary">解析</button>
             <button id="rt-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
@@ -99,6 +107,130 @@
 
       </div>
     </section>
+
+    <!-- ===================== 一维数组 Tab ===================== -->
+    <section class="tab-content" id="tab-array">
+      <div class="arr-layout">
+
+        <!-- 左：输入 -->
+        <section class="arr-panel arr-input">
+          <h2>输入</h2>
+          <div class="arr-model-tabs" id="arr-model-groups"></div>
+          <div class="form-row">
+            <label class="form-label">数组（空格/逗号/换行分隔，支持 # 与 // 注释）</label>
+          </div>
+          <textarea id="arr-input-text" class="form-control arr-textarea" rows="8" spellcheck="false" placeholder="输入数字数组，例如：&#10;3 1 4 1 5 9 2 6"></textarea>
+          <div class="form-row form-row-inline">
+            <label class="form-label">起始索引</label>
+            <div class="arr-base-toggle">
+              <button class="arr-base-btn" data-base="0">0-based</button>
+              <button class="arr-base-btn active" data-base="1">1-based</button>
+            </div>
+            <button id="arr-parse-btn" class="btn btn-primary">解析</button>
+            <button id="arr-clear-btn" class="btn btn-ghost" title="清空并重置为示例">清理</button>
+          </div>
+          <div id="arr-parse-status" class="rt-status"></div>
+        </section>
+
+        <!-- 右：可视化 -->
+        <section class="arr-panel arr-viz">
+          <h2>可视化</h2>
+          <div class="form-row form-row-inline" id="arr-scatter-opts" style="display:none;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="arr-scatter-connect" /> 连线
+            </label>
+          </div>
+          <div class="form-row form-row-inline" id="arr-bit-orient" style="display:none;">
+            <label class="form-label">位排列</label>
+            <div class="arr-base-toggle">
+              <button class="arr-orient-btn active" data-orient="horizontal">横向</button>
+              <button class="arr-orient-btn" data-orient="vertical">竖向</button>
+            </div>
+            <label class="form-label">位序</label>
+            <div class="arr-base-toggle">
+              <button class="arr-bit-order-btn active" data-order="lsb">LSB优先</button>
+              <button class="arr-bit-order-btn" data-order="msb">MSB优先</button>
+            </div>
+          </div>
+          <div class="form-row form-row-inline" id="arr-cartesian-opts" style="display:none;">
+            <label class="form-label">根</label>
+            <div class="arr-base-toggle">
+              <button class="arr-cart-root-btn active" data-root="min">最小值</button>
+              <button class="arr-cart-root-btn" data-root="max">最大值</button>
+            </div>
+            <label class="form-label">相等</label>
+            <div class="arr-base-toggle">
+              <button class="arr-cart-tie-btn active" data-tie="small">下标小</button>
+              <button class="arr-cart-tie-btn" data-tie="large">下标大</button>
+            </div>
+          </div>
+          <div id="arr-graph-output" class="graph-output"></div>
+          <details class="code-details">
+            <summary>SVG 源代码</summary>
+            <pre id="arr-code-output" class="code-block"></pre>
+          </details>
+        </section>
+
+      </div>
+    </section>
+
+    <!-- ===================== 二维几何 Tab ===================== -->
+    <section class="tab-content" id="tab-geometry2d">
+      <div class="geom-layout">
+
+        <!-- 左：输入 -->
+        <section class="geom-panel geom-input">
+          <h2>输入</h2>
+          <div class="input-tabs" id="g2-input-tabs">
+            <button class="input-tab-btn active" data-input-mode="points">点列表</button>
+            <button class="input-tab-btn" data-input-mode="xy">xy 数组</button>
+          </div>
+          <textarea id="g2-input-text" class="form-control rt-textarea" rows="12" spellcheck="false"></textarea>
+          <div class="form-row form-row-inline">
+            <button id="g2-parse-btn" class="btn btn-primary">解析</button>
+            <button id="g2-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
+          </div>
+          <div id="g2-parse-status" class="rt-status"></div>
+
+          <div class="geom-results-section">
+            <h3>结果</h3>
+            <div id="g2-results" class="geom-results"></div>
+          </div>
+        </section>
+
+        <!-- 右：可视化 -->
+        <section class="geom-panel geom-viz">
+          <h2>可视化</h2>
+          <div class="form-row form-row-inline">
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-show-aabb" checked /> 显示包围盒
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-connect-pts" /> 连接点
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-show-grid" checked /> 显示网格
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-show-coords" /> 显示坐标
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-show-index" checked /> 显示序号
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g2-index-from1" /> 序号从1开始
+            </label>
+            <button id="g2-render-btn" class="btn btn-primary">渲染</button>
+          </div>
+          <div id="g2-graph-output" class="graph-output"></div>
+          <details class="code-details">
+            <summary>SVG 源代码</summary>
+            <pre id="g2-code-output" class="code-block"></pre>
+          </details>
+        </section>
+
+      </div>
+    </section>
   </main>
 
   <!-- ===== 第三方库（CDN） ===== -->
@@ -108,14 +240,22 @@
   <script src="https://tikzjax.com/dist/tikzjax.js"></script>
 
   <!-- ===== 应用脚本（按序加载） ===== -->
-  <script src="js/namespace.js?v=4"></script>
-  <script src="js/models/tree-model.js?v=4"></script>
-  <script src="js/parsers/tree-parsers.js?v=4"></script>
-  <script src="js/utils/tree-layout.js?v=4"></script>
-  <script src="js/renderers/mermaid-renderer.js?v=4"></script>
-  <script src="js/renderers/graphviz-renderer.js?v=4"></script>
-  <script src="js/renderers/tikz-renderer.js?v=4"></script>
-  <script src="js/tabs/rooted-tree.js?v=4"></script>
-  <script src="js/app.js?v=4"></script>
+  <script src="js/namespace.js?v=22"></script>
+  <script src="js/models/tree-model.js?v=22"></script>
+  <script src="js/parsers/tree-parsers.js?v=22"></script>
+  <script src="js/utils/tree-layout.js?v=22"></script>
+  <script src="js/renderers/mermaid-renderer.js?v=22"></script>
+  <script src="js/renderers/graphviz-renderer.js?v=22"></script>
+  <script src="js/renderers/tikz-renderer.js?v=22"></script>
+  <script src="js/tabs/rooted-tree.js?v=22"></script>
+  <script src="js/models/array-model.js?v=22"></script>
+  <script src="js/parsers/array-parsers.js?v=22"></script>
+  <script src="js/renderers/array-svg-renderer.js?v=22"></script>
+  <script src="js/tabs/array.js?v=22"></script>
+  <script src="js/models/geometry2d-model.js?v=22"></script>
+  <script src="js/parsers/geometry2d-parsers.js?v=22"></script>
+  <script src="js/renderers/geometry2d-svg-renderer.js?v=22"></script>
+  <script src="js/tabs/geometry2d.js?v=22"></script>
+  <script src="js/app.js?v=22"></script>
 </body>
 </html>

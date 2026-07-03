@@ -1,6 +1,6 @@
 /**
- * 有根树 Tab 控制器
- * 负责 DOM 绑定、解析调度、属性字段/表格渲染、渲染器切换。
+ * 图 Tab 控制器
+ * 负责 DOM 绑定、图类型选择、解析调度、属性字段/表格渲染、渲染器切换。
  */
 (function () {
   'use strict';
@@ -24,6 +24,7 @@
   function RootedTreeTab(rootEl) {
     this.rootEl = rootEl;
     this.model = null;
+    this.graphType = 'rooted-tree';
     this.inputMode = 'edges';
     this.rendererName = 'mermaid';
     this._savedFieldVis = null; // 解析后恢复字段可见性
@@ -51,6 +52,7 @@
       this.model.edgeAttributeFields.forEach(function (f) { fieldVis.edge[f.name] = f.visible; });
     }
     return {
+      graphType: this.graphType,
       inputMode: this.inputMode,
       inputText: this.inputText.value,
       root: this.rootInput.value,
@@ -84,6 +86,11 @@
 
   /** 将保存的状态应用到 UI。 */
   RootedTreeTab.prototype.applyState = function (saved) {
+    if (saved.graphType != null) {
+      this.setGraphType(saved.graphType);
+    } else {
+      this.setGraphType('rooted-tree');
+    }
     if (saved.inputMode != null) {
       this.setInputMode(saved.inputMode);
     }
@@ -142,10 +149,12 @@
     });
     if (this.autoRenderChk) this.autoRenderChk.addEventListener('change', function () { self.saveState(); });
     if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
+    if (this.graphTypeTabsEl) this.graphTypeTabsEl.addEventListener('click', function () { self.saveState(); });
   };
 
   RootedTreeTab.prototype.cacheDom = function () {
     var el = this.rootEl;
+    this.graphTypeTabsEl = el.querySelector('#rt-graph-type-tabs');
     this.inputTabsEl = el.querySelector('#rt-input-tabs');
     this.inputText = el.querySelector('#rt-input-text');
     this.rootInput = el.querySelector('#rt-root');
@@ -171,6 +180,12 @@
   RootedTreeTab.prototype.bindEvents = function () {
     var self = this;
     if (this.parseBtn) this.parseBtn.addEventListener('click', function () { self.parse(); });
+    if (this.graphTypeTabsEl) this.graphTypeTabsEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.graph-type-btn');
+      if (!btn) return;
+      self.setGraphType(btn.getAttribute('data-graph-type'));
+      self.parse();
+    });
     if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.input-tab-btn');
       if (!btn) return;
@@ -188,8 +203,44 @@
     }
   };
 
+  /** 切换图类型。 */
+  RootedTreeTab.prototype.setGraphType = function (type) {
+    this.graphType = type;
+    if (this.graphTypeTabsEl) {
+      var btns = this.graphTypeTabsEl.querySelectorAll('.graph-type-btn');
+      for (var i = 0; i < btns.length; i++) {
+        if (btns[i].getAttribute('data-graph-type') === type) {
+          btns[i].classList.add('active');
+        } else {
+          btns[i].classList.remove('active');
+        }
+      }
+    }
+    // 非树图不支持父节点数组
+    if (type !== 'rooted-tree' && this.inputMode === 'parent') {
+      this.setInputMode('edges');
+    }
+    this.updateInputTabsAvailability();
+  };
+
+  /** 根据图类型启用/禁用输入方式选项卡。 */
+  RootedTreeTab.prototype.updateInputTabsAvailability = function () {
+    if (!this.inputTabsEl) return;
+    var btns = this.inputTabsEl.querySelectorAll('.input-tab-btn');
+    var isTree = this.graphType === 'rooted-tree';
+    for (var i = 0; i < btns.length; i++) {
+      var mode = btns[i].getAttribute('data-input-mode');
+      // 父节点数组仅树图可用
+      var disabled = !isTree && mode === 'parent';
+      btns[i].disabled = disabled;
+      btns[i].classList.toggle('disabled', disabled);
+    }
+  };
+
   /** 切换输入方式选项卡。 */
   RootedTreeTab.prototype.setInputMode = function (mode) {
+    // 父节点数组仅树图可用
+    if (this.graphType !== 'rooted-tree' && mode === 'parent') return;
     this.inputMode = mode;
     if (!this.inputTabsEl) return;
     var btns = this.inputTabsEl.querySelectorAll('.input-tab-btn');
@@ -207,7 +258,8 @@
     var placeholders = {
       edges: '每行一条边：u v [attr1 attr2 …]\n前2个数字为 父→子，其余依次为边属性\n例如：\n1 2\n1 3\n2 4 heavy\n2 5 light',
       parent: '空格或逗号分隔的父节点数组（跳过根节点）\n第 i 个值为节点 (base+i+1) 的父节点\nbase=根节点值（1 或 0）\n例如（根=1，7节点）：\n1 1 2 2 3 3',
-      children: '邻接表格式：每行 k v1 v2 … vk\n第 i 行对应节点 (base+i)，base=根节点值\nk=子节点数量，后跟 k 个子节点\n例如（根=1，7 节点）：\n2 2 3\n2 4 5\n2 6 7\n0\n0\n0\n0'
+      children: '邻接表格式：每行 k v1 v2 … vk\n第 i 行对应节点 (base+i)，base=根节点值\nk=子节点数量，后跟 k 个子节点\n例如（根=1，7 节点）：\n2 2 3\n2 4 5\n2 6 7\n0\n0\n0\n0',
+      matrix: '邻接矩阵：每行 0/1，空格或逗号分隔\n第 i 行第 j 列为 1 表示存在 (base+i)→(base+j) 的边\nbase=根节点值\n例如（根=1，4节点有向图）：\n0 1 1 0\n0 0 0 1\n0 0 0 0\n0 0 0 0'
     };
     this.inputText.placeholder = placeholders[this.inputMode] || '';
   };
@@ -227,13 +279,16 @@
     try {
       if (this.inputMode === 'edges') edges = P.parseEdges(text);
       else if (this.inputMode === 'parent') edges = P.parseParent(text, root);
-      else edges = P.parseChildren(text, root);
+      else if (this.inputMode === 'children') edges = P.parseChildren(text, root);
+      else if (this.inputMode === 'matrix') edges = P.parseAdjMatrix(text, root);
+      else edges = P.parseEdges(text);
     } catch (e) {
       this.setParseStatus('解析失败: ' + e.message, true);
       return;
     }
     var nodeAttrs = P.parseNodeAttrs(this.nodeAttrsText.value, root);
     this.model = P.buildModel(edges, root, nodeAttrs);
+    this.model.graphType = this.graphType;
     this.restoreFieldVisibility();
     this.setParseStatus('解析成功：' + this.model.nodes.size + ' 个节点，' + this.model.edges.length + ' 条边。', false);
     this.renderFields();

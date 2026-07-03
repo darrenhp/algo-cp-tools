@@ -32,16 +32,27 @@ algo-cp-tools/
 ├── index.html
 ├── css/main.css
 ├── js/
-│   ├── namespace.js              # 全局命名空间
-│   ├── app.js                    # Tab 管理与初始化
-│   ├── tabs/rooted-tree.js       # 有根树控制器
-│   ├── models/tree-model.js      # 树数据模型
-│   ├── parsers/tree-parsers.js   # 三种输入解析
+│   ├── namespace.js                 # 全局命名空间
+│   ├── app.js                       # Tab 管理与初始化
+│   ├── tabs/
+│   │   ├── rooted-tree.js           # 图控制器
+│   │   ├── array.js                 # 一维数组控制器
+│   │   └── geometry2d.js            # 二维几何控制器
+│   ├── models/
+│   │   ├── tree-model.js            # 图数据模型
+│   │   ├── array-model.js           # 一维数组模型
+│   │   └── geometry2d-model.js      # 二维几何模型
+│   ├── parsers/
+│   │   ├── tree-parsers.js          # 图输入解析
+│   │   ├── array-parsers.js         # 数组解析
+│   │   └── geometry2d-parsers.js    # 二维几何解析
 │   ├── renderers/
 │   │   ├── mermaid-renderer.js
 │   │   ├── graphviz-renderer.js
-│   │   └── tikz-renderer.js
-│   └── utils/tree-layout.js      # TikZ 布局算法
+│   │   ├── tikz-renderer.js
+│   │   ├── array-svg-renderer.js
+│   │   └── geometry2d-svg-renderer.js
+│   └── utils/tree-layout.js         # TikZ 布局算法
 └── README.md
 ```
 
@@ -60,7 +71,19 @@ algo-cp-tools/
   - TikZJax — `tikzjax.com`（首次编译约 5MB，加载较慢）
 - TikZ 引擎依赖浏览器内 LaTeX 编译，支持有限；若渲染失败，仍可在「生成代码」中复制 `tikzpicture` 到本地 LaTeX 环境。
 
+### 二维几何调试器
+
+- **两种输入方式**（选项卡切换）
+  - 点列表：每行 `x y`（空格/逗号分隔）
+  - xy 数组：第一行为 x 数组，第二行为 y 数组（两行长度需一致）
+- **解析与校验**：支持 `#` / `//` 注释行，非法数字报错（含行号），xy 数组长度不一致报错
+- **计算**：轴对齐包围盒（AABB）— minX / maxX / minY / maxY / width / height / area
+- **可视化**：纯 SVG 自绘散点图，自适应坐标范围，含坐标轴、网格线、刻度标签、点（实心圆 + 索引标签）、AABB 虚线矩形（可开关）；可选「连接点」按输入顺序连成折线，配合「闭合多边形」首尾相连，结果区显示连接段数与路径总长（闭合时为周长）
+- **状态持久化**：localStorage + sessionStorage 双写，刷新不丢数据
+- **生成代码**：可展开查看生成的 SVG 源码
+- **自动渲染**：输入变更后即时刷新图形
+
 ## 后续规划
 
-更多模型 Tab：无向图、有向图、并查集、线段树、堆等。
+更多模型 Tab：三维几何、函数、无向图、有向图、并查集、线段树、堆等。
 # algo-cp-tools
