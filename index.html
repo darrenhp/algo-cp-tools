@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>Algo CP Tools</title>
-  <link rel="stylesheet" href="css/main.css?v=23" />
+  <link rel="stylesheet" href="css/main.css?v=24" />
   <link rel="stylesheet" href="https://tikzjax.com/dist/tikzjax.css" />
 </head>
 <body>
@@ -185,12 +185,42 @@
 
         <!-- 左：输入 -->
         <section class="geom-panel geom-input">
-          <h2>输入</h2>
-          <div class="input-tabs" id="g2-input-tabs">
-            <button class="input-tab-btn active" data-input-mode="points">点列表</button>
-            <button class="input-tab-btn" data-input-mode="xy">xy 数组</button>
-          </div>
-          <textarea id="g2-input-text" class="form-control rt-textarea" rows="12" spellcheck="false"></textarea>
+          <h2>输入（多类实体可共存）</h2>
+
+          <!-- 点 -->
+          <details class="geom-input-block" open>
+            <summary>点 <span class="geom-hint">x y 每行 / xy 数组</span></summary>
+            <div class="input-tabs" id="g2-input-tabs">
+              <button class="input-tab-btn active" data-input-mode="points">点列表</button>
+              <button class="input-tab-btn" data-input-mode="xy">xy 数组</button>
+            </div>
+            <textarea id="g2-input-text" class="form-control rt-textarea" rows="6" spellcheck="false"></textarea>
+          </details>
+
+          <!-- 线段 -->
+          <details class="geom-input-block">
+            <summary>线段 <span class="geom-hint">x1 y1 x2 y2 每行；&gt; 前缀=有向</span></summary>
+            <textarea id="g2-segments-text" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="每行 x1 y1 x2 y2\n行首 > 表示有向线段（箭头指向第二点）\n例如：\n0 0 3 3\n> 1 0 4 2"></textarea>
+          </details>
+
+          <!-- 直线 -->
+          <details class="geom-input-block">
+            <summary>直线 <span class="geom-hint">x1 y1 x2 y2（无限延伸）</span></summary>
+            <textarea id="g2-lines-text" class="form-control rt-textarea" rows="3" spellcheck="false" placeholder="每行 x1 y1 x2 y2\n两点确定一条直线，渲染时无限延伸并裁剪\n例如：\n0 0 1 1\n0 4 1 0"></textarea>
+          </details>
+
+          <!-- 多边形 -->
+          <details class="geom-input-block">
+            <summary>多边形 <span class="geom-hint">每行一个，平铺 x1 y1 x2 y2 …</span></summary>
+            <textarea id="g2-polygons-text" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="每行一个多边形，平铺 x1 y1 x2 y2 ... xn yn\n至少 6 个数字（3 个顶点）\n例如：\n0 0 4 0 4 3 0 3\n-2 -2 -1 -2 -1 -1 -2 -1"></textarea>
+          </details>
+
+          <!-- 长方形 -->
+          <details class="geom-input-block">
+            <summary>长方形 <span class="geom-hint">x1 y1 x2 y2（对角线）</span></summary>
+            <textarea id="g2-rects-text" class="form-control rt-textarea" rows="3" spellcheck="false" placeholder="每行 x1 y1 x2 y2（对角线两端点，轴对齐）\n例如：\n-3 -2 1 1"></textarea>
+          </details>
+
           <div class="form-row form-row-inline">
             <button id="g2-parse-btn" class="btn btn-primary">解析</button>
             <button id="g2-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
@@ -257,10 +287,10 @@
   <script src="js/parsers/array-parsers.js?v=23"></script>
   <script src="js/renderers/array-svg-renderer.js?v=23"></script>
   <script src="js/tabs/array.js?v=23"></script>
-  <script src="js/models/geometry2d-model.js?v=23"></script>
-  <script src="js/parsers/geometry2d-parsers.js?v=23"></script>
-  <script src="js/renderers/geometry2d-svg-renderer.js?v=23"></script>
-  <script src="js/tabs/geometry2d.js?v=23"></script>
+  <script src="js/models/geometry2d-model.js?v=24"></script>
+  <script src="js/parsers/geometry2d-parsers.js?v=25"></script>
+  <script src="js/renderers/geometry2d-svg-renderer.js?v=25"></script>
+  <script src="js/tabs/geometry2d.js?v=25"></script>
   <script src="js/app.js?v=23"></script>
 </body>
 </html>

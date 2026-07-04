@@ -509,3 +509,43 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 
 .geom-results-section { margin-top: 14px; border-top: 1px dashed #334155; padding-top: 8px; }
 .geom-results { font-size: 12px; color: #cbd5e1; }
+
+/* 多实体输入区块 */
+.geom-input-block {
+  border: 1px solid #334155;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: rgba(15, 23, 42, 0.4);
+  overflow: hidden;
+}
+.geom-input-block > summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.08);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.geom-input-block > summary::-webkit-details-marker { display: none; }
+.geom-input-block > summary::before {
+  content: '▸';
+  font-size: 10px;
+  color: #818cf8;
+  transition: transform 0.15s;
+  display: inline-block;
+}
+.geom-input-block[open] > summary::before { transform: rotate(90deg); }
+.geom-input-block[open] > summary { border-bottom: 1px solid #334155; }
+.geom-input-block .geom-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-left: auto;
+}
+.geom-input-block .input-tabs { margin: 10px 12px 6px; }
+.geom-input-block textarea { margin: 10px 12px; width: calc(100% - 24px); box-sizing: border-box; }

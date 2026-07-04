@@ -1,7 +1,7 @@
 /**
  * 二维几何 Tab 控制器
+ * 支持多类几何实体共存输入：点 / 线段 / 直线 / 多边形 / 长方形。
  * 负责 DOM 绑定、输入方式切换、解析调度、结果展示、渲染调度、状态持久化。
- * 沿用 RootedTreeTab 的生命周期：cacheDom -> bindEvents -> loadState/loadSample -> parse -> render -> bindPersistEvents。
  */
 (function () {
   'use strict';
@@ -33,7 +33,11 @@
   Geometry2DTab.prototype.collectState = function () {
     return {
       inputMode: this.inputMode,
-      inputText: this.inputText.value,
+      pointsText: this.pointsText ? this.pointsText.value : '',
+      segmentsText: this.segmentsText ? this.segmentsText.value : '',
+      linesText: this.linesText ? this.linesText.value : '',
+      polygonsText: this.polygonsText ? this.polygonsText.value : '',
+      rectsText: this.rectsText ? this.rectsText.value : '',
       showAABB: this.showAABBChk.checked,
       connectPts: this.connectPtsChk ? this.connectPtsChk.checked : false,
       showGrid: this.showGridChk ? this.showGridChk.checked : true,
@@ -46,9 +50,7 @@
   /** 同时写入 sessionStorage 和 localStorage。 */
   Geometry2DTab.prototype.saveState = function () {
     var data;
-    try {
-      data = JSON.stringify(this.collectState());
-    } catch (e) { return; }
+    try { data = JSON.stringify(this.collectState()); } catch (e) { return; }
     try { sessionStorage.setItem(SESSION_KEY, data); } catch (e) {}
     try { localStorage.setItem(STORAGE_KEY, data); } catch (e) {}
   };
@@ -57,55 +59,42 @@
   Geometry2DTab.prototype.loadState = function () {
     var raw = null;
     try { raw = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
-    if (!raw) {
-      try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-    }
+    if (!raw) { try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {} }
     if (!raw) return null;
     try { return JSON.parse(raw); } catch (e) { return null; }
   };
 
-  /** 将保存的状态应用到 UI。 */
+  /** 将保存的状态应用到 UI（兼容旧版 inputText 字段）。 */
   Geometry2DTab.prototype.applyState = function (saved) {
     if (saved.inputMode != null) this.setInputMode(saved.inputMode);
-    if (saved.inputText != null) this.inputText.value = saved.inputText;
-    if (saved.showAABB != null) {
-      this.showAABB = saved.showAABB;
-      this.showAABBChk.checked = saved.showAABB;
-    }
-    if (saved.connectPts != null && this.connectPtsChk) {
-      this.connectPtsChk.checked = saved.connectPts;
-    }
-    if (saved.showGrid != null && this.showGridChk) {
-      this.showGridChk.checked = saved.showGrid;
-    }
-    if (saved.showCoords != null && this.showCoordsChk) {
-      this.showCoordsChk.checked = saved.showCoords;
-    }
-    if (saved.showIndex != null && this.showIndexChk) {
-      this.showIndexChk.checked = saved.showIndex;
-    }
-    if (saved.indexFrom1 != null && this.indexFrom1Chk) {
-      this.indexFrom1Chk.checked = saved.indexFrom1;
-    }
+    var pointsVal = saved.pointsText != null ? saved.pointsText : saved.inputText;
+    if (pointsVal != null && this.pointsText) this.pointsText.value = pointsVal;
+    if (saved.segmentsText != null && this.segmentsText) this.segmentsText.value = saved.segmentsText;
+    if (saved.linesText != null && this.linesText) this.linesText.value = saved.linesText;
+    if (saved.polygonsText != null && this.polygonsText) this.polygonsText.value = saved.polygonsText;
+    if (saved.rectsText != null && this.rectsText) this.rectsText.value = saved.rectsText;
+    if (saved.showAABB != null) { this.showAABB = saved.showAABB; this.showAABBChk.checked = saved.showAABB; }
+    if (saved.connectPts != null && this.connectPtsChk) this.connectPtsChk.checked = saved.connectPts;
+    if (saved.showGrid != null && this.showGridChk) this.showGridChk.checked = saved.showGrid;
+    if (saved.showCoords != null && this.showCoordsChk) this.showCoordsChk.checked = saved.showCoords;
+    if (saved.showIndex != null && this.showIndexChk) this.showIndexChk.checked = saved.showIndex;
+    if (saved.indexFrom1 != null && this.indexFrom1Chk) this.indexFrom1Chk.checked = saved.indexFrom1;
   };
 
-  /** 清除存储。 */
   Geometry2DTab.prototype.clearStorage = function () {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   };
 
-  /** 清理：清空存储、重置为示例并重新渲染。 */
   Geometry2DTab.prototype.clearAll = function () {
     this.clearStorage();
     this.loadSample();
     this.parse();
   };
 
-  /** 为输入控件绑定持久化事件。 */
   Geometry2DTab.prototype.bindPersistEvents = function () {
     var self = this;
-    var inputs = [this.inputText];
+    var inputs = [this.pointsText, this.segmentsText, this.linesText, this.polygonsText, this.rectsText];
     inputs.forEach(function (el) {
       if (el) el.addEventListener('input', function () { self.saveState(); });
     });
@@ -119,7 +108,11 @@
   Geometry2DTab.prototype.cacheDom = function () {
     var el = this.rootEl;
     this.inputTabsEl = el.querySelector('#g2-input-tabs');
-    this.inputText = el.querySelector('#g2-input-text');
+    this.pointsText = el.querySelector('#g2-input-text');
+    this.segmentsText = el.querySelector('#g2-segments-text');
+    this.linesText = el.querySelector('#g2-lines-text');
+    this.polygonsText = el.querySelector('#g2-polygons-text');
+    this.rectsText = el.querySelector('#g2-rects-text');
     this.parseBtn = el.querySelector('#g2-parse-btn');
     this.parseStatus = el.querySelector('#g2-parse-status');
     this.clearBtn = el.querySelector('#g2-clear-btn');
@@ -141,50 +134,43 @@
     if (this.parseBtn) this.parseBtn.addEventListener('click', function () { self.parse(); });
     if (this.clearBtn) this.clearBtn.addEventListener('click', function () { self.clearAll(); });
     if (this.renderBtn) this.renderBtn.addEventListener('click', function () { self.render(); });
-    if (this.inputText) this.inputText.addEventListener('keydown', function (e) {
-      // 回车换行时触发解析（排除 IME 组合输入）
-      if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) {
-        self.parse();
-      }
+    // 所有输入框回车换行触发解析
+    var inputs = [this.pointsText, this.segmentsText, this.linesText, this.polygonsText, this.rectsText];
+    inputs.forEach(function (el) {
+      if (!el) return;
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) {
+          self.parse();
+        }
+      });
     });
     if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.input-tab-btn');
       if (!btn) return;
       self.setInputMode(btn.getAttribute('data-input-mode'));
     });
-    if (this.showAABBChk) this.showAABBChk.addEventListener('change', function () {
-      self.showAABB = self.showAABBChk.checked;
-      self.render();
+    var renderChks = [this.showAABBChk, this.showGridChk, this.showCoordsChk, this.showIndexChk, this.indexFrom1Chk];
+    renderChks.forEach(function (el) {
+      if (!el) return;
+      el.addEventListener('change', function () {
+        if (el === self.showAABBChk) self.showAABB = el.checked;
+        self.render();
+      });
     });
     if (this.connectPtsChk) this.connectPtsChk.addEventListener('change', function () {
       self.renderResults();
       self.render();
     });
-    if (this.showGridChk) this.showGridChk.addEventListener('change', function () {
-      self.render();
-    });
-    if (this.showCoordsChk) this.showCoordsChk.addEventListener('change', function () {
-      self.render();
-    });
-    if (this.showIndexChk) this.showIndexChk.addEventListener('change', function () {
-      self.render();
-    });
-    if (this.indexFrom1Chk) this.indexFrom1Chk.addEventListener('change', function () {
-      self.render();
-    });
   };
 
-  /** 切换输入方式选项卡。 */
+  /** 切换点输入方式选项卡。 */
   Geometry2DTab.prototype.setInputMode = function (mode) {
     this.inputMode = mode;
     if (!this.inputTabsEl) return;
     var btns = this.inputTabsEl.querySelectorAll('.input-tab-btn');
     for (var i = 0; i < btns.length; i++) {
-      if (btns[i].getAttribute('data-input-mode') === mode) {
-        btns[i].classList.add('active');
-      } else {
-        btns[i].classList.remove('active');
-      }
+      if (btns[i].getAttribute('data-input-mode') === mode) btns[i].classList.add('active');
+      else btns[i].classList.remove('active');
     }
     this.updatePlaceholder();
   };
@@ -194,13 +180,17 @@
       points: '点列表：每行 x y（空格或逗号分隔）\n支持 # 与 // 注释行\n例如：\n0 0\n1 2\n-3 4\n2 -1',
       xy: 'xy 数组模式：\n第一行为 x 数组，第二行为 y 数组\n两行长度必须相等\n支持 # 与 // 注释\n例如：\n0 1 -3 2\n0 2 4 -1'
     };
-    this.inputText.placeholder = placeholders[this.inputMode] || '';
+    if (this.pointsText) this.pointsText.placeholder = placeholders[this.inputMode] || '';
   };
 
   Geometry2DTab.prototype.loadSample = function () {
     this.setInputMode('points');
     this.updatePlaceholder();
-    this.inputText.value = '0 0\n1 2\n-3 4\n2 -1\n3 5\n-2 -3\n4 3';
+    if (this.pointsText) this.pointsText.value = '0 0\n1 2\n-3 4\n2 -1\n3 5\n-2 -3\n4 3';
+    if (this.segmentsText) this.segmentsText.value = '# 线段：x1 y1 x2 y2，> 前缀表示有向\n0 0 3 3\n> 1 0 4 2\n-2 -3 -2 3';
+    if (this.linesText) this.linesText.value = '# 直线：x1 y1 x2 y2（两点确定直线）\n0 0 1 1\n0 4 1 0';
+    if (this.polygonsText) this.polygonsText.value = '# 多边形：每行一个，平铺 x1 y1 x2 y2 ... xn yn\n0 0 4 0 4 3 0 3\n-2 -2 -1 -2 -1 -1 -2 -1';
+    if (this.rectsText) this.rectsText.value = '# 长方形：x1 y1 x2 y2（对角线两端点）\n-3 -2 1 1';
     if (this.showAABBChk) this.showAABBChk.checked = true;
     this.showAABB = true;
     if (this.showGridChk) this.showGridChk.checked = true;
@@ -209,18 +199,28 @@
     if (this.indexFrom1Chk) this.indexFrom1Chk.checked = false;
   };
 
+  /** 解析所有输入区块。 */
   Geometry2DTab.prototype.parse = function () {
-    var text = this.inputText.value;
-    var points;
+    var data = {};
     try {
-      if (this.inputMode === 'xy') points = P.parseXYArrays(text);
-      else points = P.parsePointsList(text);
+      if (this.inputMode === 'xy') data.points = P.parseXYArrays(this.pointsText ? this.pointsText.value : '');
+      else data.points = P.parsePointsList(this.pointsText ? this.pointsText.value : '');
+      data.segments = P.parseSegments(this.segmentsText ? this.segmentsText.value : '');
+      data.lines = P.parseLines(this.linesText ? this.linesText.value : '');
+      data.polygons = P.parsePolygons(this.polygonsText ? this.polygonsText.value : '');
+      data.rectangles = P.parseRectangles(this.rectsText ? this.rectsText.value : '');
     } catch (e) {
       this.setParseStatus('解析失败: ' + e.message, true);
       return;
     }
-    this.model = P.buildModel(points);
-    this.setParseStatus('解析成功：' + this.model.size() + ' 个点。', false);
+    this.model = P.buildModel(data);
+    var parts = [];
+    if (data.points.length) parts.push(data.points.length + ' 点');
+    if (data.segments.length) parts.push(data.segments.length + ' 线段');
+    if (data.lines.length) parts.push(data.lines.length + ' 直线');
+    if (data.polygons.length) parts.push(data.polygons.length + ' 多边形');
+    if (data.rectangles.length) parts.push(data.rectangles.length + ' 长方形');
+    this.setParseStatus('解析成功：' + (parts.length ? parts.join('，') : '无实体') + '。', false);
     this.renderResults();
     this.saveState();
     this.render();
@@ -234,27 +234,32 @@
   Geometry2DTab.prototype.renderResults = function () {
     var el = this.resultsEl;
     el.innerHTML = '';
-    if (!this.model || this.model.size() === 0) {
-      el.textContent = '无点集数据';
+    if (!this.model || this.model.isEmpty()) {
+      el.textContent = '无几何数据';
       return;
     }
-    var aabb = this.model.getAABB();
+    var m = this.model;
+    var aabb = m.getAABB();
     var html = '';
     html += '<div class="arr-result-cards">';
-    html += '<div class="arr-result-card arr-result-blue">';
-    html += '<div class="arr-result-label">点数</div>';
-    html += '<div class="arr-result-value">' + this.model.size() + '</div>';
-    html += '<div class="arr-result-sub">points</div>';
-    html += '</div>';
+    html += card('实体总数', m.size(), (m.vertexCount()) + ' 顶点', 'arr-result-blue');
     if (aabb) {
-      html += '<div class="arr-result-card arr-result-purple">';
-      html += '<div class="arr-result-label">AABB 宽 × 高</div>';
-      html += '<div class="arr-result-value">' + fmt(aabb.width) + ' × ' + fmt(aabb.height) + '</div>';
-      html += '<div class="arr-result-sub">面积 = ' + fmt(aabb.area) + '</div>';
-      html += '</div>';
-      html += '</div>'; // close cards
+      html += card('AABB 宽 × 高', fmt(aabb.width) + ' × ' + fmt(aabb.height), '面积 = ' + fmt(aabb.area), 'arr-result-purple');
+    }
+    html += '</div>';
+
+    html += '<table class="attr-table" style="margin-top:8px;">';
+    html += '<thead><tr><th>类型</th><th>数量</th></tr></thead><tbody>';
+    html += row('点', m.points.length);
+    html += row('线段', m.segments.length);
+    html += row('直线', m.lines.length);
+    html += row('多边形', m.polygons.length);
+    html += row('长方形', m.rectangles.length);
+    html += '</tbody></table>';
+
+    if (aabb) {
       html += '<table class="attr-table" style="margin-top:8px;">';
-      html += '<thead><tr><th>属性</th><th>值</th></tr></thead><tbody>';
+      html += '<thead><tr><th>AABB</th><th>值</th></tr></thead><tbody>';
       html += row('minX', fmt(aabb.minX));
       html += row('maxX', fmt(aabb.maxX));
       html += row('minY', fmt(aabb.minY));
@@ -262,17 +267,24 @@
       html += row('width', fmt(aabb.width));
       html += row('height', fmt(aabb.height));
       html += row('area', fmt(aabb.area));
+      if (m.segments.length) html += row('线段总长', fmt(m.segmentsLength()));
+      if (m.polygons.length) html += row('多边形周长', fmt(m.polygonsPerimeter()));
       var connectOn = this.connectPtsChk && this.connectPtsChk.checked;
-      if (connectOn && this.model.size() >= 2) {
-        html += row('连接段数', this.model.size() - 1);
-        html += row('路径总长', fmt(this.computePathLength()));
+      if (connectOn && m.points.length >= 2) {
+        html += row('点连接段数', m.points.length - 1);
+        html += row('点路径总长', fmt(this.computePointsPathLength()));
       }
       html += '</tbody></table>';
-    } else {
-      html += '</div>';
     }
     el.innerHTML = html;
   };
+
+  function card(label, value, sub, cls) {
+    return '<div class="arr-result-card ' + cls + '">' +
+      '<div class="arr-result-label">' + label + '</div>' +
+      '<div class="arr-result-value">' + value + '</div>' +
+      '<div class="arr-result-sub">' + sub + '</div></div>';
+  }
 
   function fmt(v) {
     if (Number.isInteger(v)) return String(v);
@@ -284,20 +296,17 @@
   }
 
   function dist(a, b) {
-    var dx = a.x - b.x;
-    var dy = a.y - b.y;
+    var dx = a.x - b.x, dy = a.y - b.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  /** 计算连接路径总长。 */
-  Geometry2DTab.prototype.computePathLength = function () {
+  /** 计算点的顺序连接路径总长。 */
+  Geometry2DTab.prototype.computePointsPathLength = function () {
     var pts = this.model.points;
     var n = pts.length;
     if (n < 2) return 0;
     var total = 0;
-    for (var i = 0; i < n - 1; i++) {
-      total += dist(pts[i], pts[i + 1]);
-    }
+    for (var i = 0; i < n - 1; i++) total += dist(pts[i], pts[i + 1]);
     return total;
   };
 
