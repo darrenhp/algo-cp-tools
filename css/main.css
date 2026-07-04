@@ -141,6 +141,38 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   pointer-events: none;
 }
 
+/* ===== 邻接矩阵子模式（全矩阵/上三角/下三角） ===== */
+.matrix-sub-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.matrix-sub-btn {
+  appearance: none;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.matrix-sub-btn:hover {
+  color: #e2e8f0;
+  background: #334155;
+  border-color: #64748b;
+}
+.matrix-sub-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  border-color: #818cf8;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.4);
+}
+
 /* ===== 图类型选项卡 ===== */
 .graph-type-tabs {
   display: flex;

@@ -26,6 +26,7 @@
     this.model = null;
     this.graphType = 'rooted-tree';
     this.inputMode = 'edges';
+    this.matrixMode = 'full';
     this.rendererName = 'mermaid';
     this._savedFieldVis = null; // 解析后恢复字段可见性
     this.cacheDom();
@@ -54,6 +55,7 @@
     return {
       graphType: this.graphType,
       inputMode: this.inputMode,
+      matrixMode: this.matrixMode,
       inputText: this.inputText.value,
       root: this.rootInput.value,
       nodeAttrsText: this.nodeAttrsText.value,
@@ -93,6 +95,9 @@
     }
     if (saved.inputMode != null) {
       this.setInputMode(saved.inputMode);
+    }
+    if (saved.matrixMode != null) {
+      this.setMatrixMode(saved.matrixMode);
     }
     if (saved.inputText != null) this.inputText.value = saved.inputText;
     if (saved.root != null) this.rootInput.value = saved.root;
@@ -149,6 +154,7 @@
     });
     if (this.autoRenderChk) this.autoRenderChk.addEventListener('change', function () { self.saveState(); });
     if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
+    if (this.matrixSubTabsEl) this.matrixSubTabsEl.addEventListener('click', function () { self.saveState(); });
     if (this.graphTypeTabsEl) this.graphTypeTabsEl.addEventListener('click', function () { self.saveState(); });
   };
 
@@ -156,6 +162,7 @@
     var el = this.rootEl;
     this.graphTypeTabsEl = el.querySelector('#rt-graph-type-tabs');
     this.inputTabsEl = el.querySelector('#rt-input-tabs');
+    this.matrixSubTabsEl = el.querySelector('#rt-matrix-sub-tabs');
     this.inputText = el.querySelector('#rt-input-text');
     this.rootInput = el.querySelector('#rt-root');
     this.parseBtn = el.querySelector('#rt-parse-btn');
@@ -190,6 +197,12 @@
       var btn = e.target.closest('.input-tab-btn');
       if (!btn) return;
       self.setInputMode(btn.getAttribute('data-input-mode'));
+    });
+    if (this.matrixSubTabsEl) this.matrixSubTabsEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.matrix-sub-btn');
+      if (!btn) return;
+      self.setMatrixMode(btn.getAttribute('data-matrix-mode'));
+      self.parse();
     });
     if (this.renderBtn) this.renderBtn.addEventListener('click', function () { self.render(); });
     if (this.rendererSel) this.rendererSel.addEventListener('change', function () {
@@ -251,6 +264,25 @@
         btns[i].classList.remove('active');
       }
     }
+    // 显示/隐藏邻接矩阵子模式
+    if (this.matrixSubTabsEl) {
+      this.matrixSubTabsEl.style.display = (mode === 'matrix') ? '' : 'none';
+    }
+    this.updatePlaceholder();
+  };
+
+  /** 切换邻接矩阵子模式。 */
+  RootedTreeTab.prototype.setMatrixMode = function (mode) {
+    this.matrixMode = mode;
+    if (!this.matrixSubTabsEl) return;
+    var btns = this.matrixSubTabsEl.querySelectorAll('.matrix-sub-btn');
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].getAttribute('data-matrix-mode') === mode) {
+        btns[i].classList.add('active');
+      } else {
+        btns[i].classList.remove('active');
+      }
+    }
     this.updatePlaceholder();
   };
 
@@ -258,10 +290,18 @@
     var placeholders = {
       edges: '每行一条边：u v [attr1 attr2 …]\n前2个数字为 父→子，其余依次为边属性\n例如：\n1 2\n1 3\n2 4 heavy\n2 5 light',
       parent: '空格或逗号分隔的父节点数组（跳过根节点）\n第 i 个值为节点 (base+i+1) 的父节点\nbase=根节点值（1 或 0）\n例如（根=1，7节点）：\n1 1 2 2 3 3',
-      children: '邻接表格式：每行 k v1 v2 … vk\n第 i 行对应节点 (base+i)，base=根节点值\nk=子节点数量，后跟 k 个子节点\n例如（根=1，7 节点）：\n2 2 3\n2 4 5\n2 6 7\n0\n0\n0\n0',
-      matrix: '邻接矩阵：每行 0/1，空格或逗号分隔\n第 i 行第 j 列为 1 表示存在 (base+i)→(base+j) 的边\nbase=根节点值\n例如（根=1，4节点有向图）：\n0 1 1 0\n0 0 0 1\n0 0 0 0\n0 0 0 0'
+      children: '邻接表格式：每行 k v1 v2 … vk\n第 i 行对应节点 (base+i)，base=根节点值\nk=子节点数量，后跟 k 个子节点\n例如（根=1，7 节点）：\n2 2 3\n2 4 5\n2 6 7\n0\n0\n0\n0'
     };
-    this.inputText.placeholder = placeholders[this.inputMode] || '';
+    if (this.inputMode === 'matrix') {
+      var matrixPlaceholders = {
+        full: '邻接矩阵（全矩阵）：每行 N 个数值，空格或逗号分隔\n数值=边权（0=无边，1=普通边，其他值=带权边）\n第 i 行第 j 列表示 (base+i)→(base+j)\nbase=根节点值\n例如（根=1，4节点无向图）：\n0 5 3 0\n5 0 0 2\n3 0 0 7\n0 2 7 0',
+        upper: '邻接矩阵（上三角）：仅输入对角线下方部分\n第 i 行为 D(i+1,1) D(i+1,2) … D(i+1,i)\n数值=边权（0=无边，1=普通边，其他值=带权边）\nbase=根节点值\n例如（根=1，4节点）：\n5\n3 0\n0 2 7',
+        lower: '邻接矩阵（下三角）：仅输入对角线上方部分\n第 i 行为 D(i,i+1) D(i,i+2) … D(i,N)\n数值=边权（0=无边，1=普通边，其他值=带权边）\nbase=根节点值\n例如（根=1，4节点）：\n5 3 0\n0 2\n7'
+      };
+      this.inputText.placeholder = matrixPlaceholders[this.matrixMode] || '';
+    } else {
+      this.inputText.placeholder = placeholders[this.inputMode] || '';
+    }
   };
 
   RootedTreeTab.prototype.loadSample = function () {
@@ -280,7 +320,7 @@
       if (this.inputMode === 'edges') edges = P.parseEdges(text);
       else if (this.inputMode === 'parent') edges = P.parseParent(text, root);
       else if (this.inputMode === 'children') edges = P.parseChildren(text, root);
-      else if (this.inputMode === 'matrix') edges = P.parseAdjMatrix(text, root);
+      else if (this.inputMode === 'matrix') edges = P.parseAdjMatrix(text, root, this.matrixMode);
       else edges = P.parseEdges(text);
     } catch (e) {
       this.setParseStatus('解析失败: ' + e.message, true);

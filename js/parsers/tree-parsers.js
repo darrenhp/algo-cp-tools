@@ -74,29 +74,64 @@
   }
 
   /**
-   * 邻接矩阵：每行对应一个节点（从 base 开始），空格/逗号分隔的 0/1 矩阵。
-   * matrix[i][j]=1 表示存在从节点 (base+i) 到 (base+j) 的边。
+   * 邻接矩阵：支持全矩阵、上三角、下三角三种模式。
+   * 数值表示边权：0=无边，1=普通边，其他值=带权边（自动生成 attr1 字段）。
+   * mode: 'full'（全矩阵）| 'upper'（上三角，对角线下方）| 'lower'（下三角，对角线上方）
    * base = root。
+   *
+   * 全矩阵：第 i 行第 j 列 = (base+i)→(base+j) 的边权。
+   * 下三角（对角线上方，i<j）：第 i 行为 D(i,i+1) D(i,i+2) … D(i,N)。
+   * 上三角（对角线下方，i>j）：第 i 行为 D(i+1,0) D(i+1,1) … D(i+1,i)。
    */
-  function parseAdjMatrix(text, root) {
+  function parseAdjMatrix(text, root, mode) {
+    mode = mode || 'full';
     var base = Number(root);
     if (isNaN(base)) base = 1;
     var edges = [];
     var lines = text.split(/\r?\n/);
-    var rowIdx = 0;
+    var rows = [];
     for (var i = 0; i < lines.length; i++) {
       if (isComment(lines[i])) continue;
       var parts = lines[i].trim().split(/[\s,]+/).filter(Boolean);
       if (parts.length === 0) continue;
-      var from = String(base + rowIdx);
-      for (var j = 0; j < parts.length; j++) {
-        var val = Number(parts[j]);
-        if (val === 1) {
-          edges.push({ from: from, to: String(base + j) });
+      rows.push(parts);
+    }
+
+    function addEdge(fromIdx, toIdx, valStr) {
+      var val = Number(valStr);
+      if (isNaN(val) || val === 0) return;
+      var from = String(base + fromIdx);
+      var to = String(base + toIdx);
+      if (val === 1) {
+        edges.push({ from: from, to: to });
+      } else {
+        edges.push({ from: from, to: to, attrs: [String(val)] });
+      }
+    }
+
+    if (mode === 'lower') {
+      // 下三角（对角线上方，i<j）：第 i 行包含 D(i, i+1), D(i, i+2), …, D(i, N-1)
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < rows[i].length; j++) {
+          addEdge(i, i + 1 + j, rows[i][j]);
         }
       }
-      rowIdx++;
+    } else if (mode === 'upper') {
+      // 上三角（对角线下方，i>j）：第 i 行包含 D(i+1, 0), D(i+1, 1), …, D(i+1, i)
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < rows[i].length; j++) {
+          addEdge(i + 1, j, rows[i][j]);
+        }
+      }
+    } else {
+      // 全矩阵
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < rows[i].length; j++) {
+          addEdge(i, j, rows[i][j]);
+        }
+      }
     }
+
     return edges;
   }
 

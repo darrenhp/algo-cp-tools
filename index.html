@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>Algo CP Tools</title>
-  <link rel="stylesheet" href="css/main.css?v=22" />
+  <link rel="stylesheet" href="css/main.css?v=23" />
   <link rel="stylesheet" href="https://tikzjax.com/dist/tikzjax.css" />
 </head>
 <body>
@@ -40,6 +40,11 @@
             <button class="input-tab-btn" data-input-mode="parent">父节点数组</button>
             <button class="input-tab-btn" data-input-mode="children">邻接表</button>
             <button class="input-tab-btn" data-input-mode="matrix">邻接矩阵</button>
+          </div>
+          <div class="matrix-sub-tabs" id="rt-matrix-sub-tabs" style="display:none;">
+            <button class="matrix-sub-btn active" data-matrix-mode="full">全矩阵</button>
+            <button class="matrix-sub-btn" data-matrix-mode="upper">上三角</button>
+            <button class="matrix-sub-btn" data-matrix-mode="lower">下三角</button>
           </div>
           <textarea id="rt-input-text" class="form-control rt-textarea" rows="12" spellcheck="false"></textarea>
           <div class="form-row form-row-inline">
@@ -240,22 +245,22 @@
   <script src="https://tikzjax.com/dist/tikzjax.js"></script>
 
   <!-- ===== 应用脚本（按序加载） ===== -->
-  <script src="js/namespace.js?v=22"></script>
-  <script src="js/models/tree-model.js?v=22"></script>
-  <script src="js/parsers/tree-parsers.js?v=22"></script>
-  <script src="js/utils/tree-layout.js?v=22"></script>
-  <script src="js/renderers/mermaid-renderer.js?v=22"></script>
-  <script src="js/renderers/graphviz-renderer.js?v=22"></script>
-  <script src="js/renderers/tikz-renderer.js?v=22"></script>
-  <script src="js/tabs/rooted-tree.js?v=22"></script>
-  <script src="js/models/array-model.js?v=22"></script>
-  <script src="js/parsers/array-parsers.js?v=22"></script>
-  <script src="js/renderers/array-svg-renderer.js?v=22"></script>
-  <script src="js/tabs/array.js?v=22"></script>
-  <script src="js/models/geometry2d-model.js?v=22"></script>
-  <script src="js/parsers/geometry2d-parsers.js?v=22"></script>
-  <script src="js/renderers/geometry2d-svg-renderer.js?v=22"></script>
-  <script src="js/tabs/geometry2d.js?v=22"></script>
-  <script src="js/app.js?v=22"></script>
+  <script src="js/namespace.js?v=23"></script>
+  <script src="js/models/tree-model.js?v=23"></script>
+  <script src="js/parsers/tree-parsers.js?v=23"></script>
+  <script src="js/utils/tree-layout.js?v=23"></script>
+  <script src="js/renderers/mermaid-renderer.js?v=23"></script>
+  <script src="js/renderers/graphviz-renderer.js?v=23"></script>
+  <script src="js/renderers/tikz-renderer.js?v=23"></script>
+  <script src="js/tabs/rooted-tree.js?v=23"></script>
+  <script src="js/models/array-model.js?v=23"></script>
+  <script src="js/parsers/array-parsers.js?v=23"></script>
+  <script src="js/renderers/array-svg-renderer.js?v=23"></script>
+  <script src="js/tabs/array.js?v=23"></script>
+  <script src="js/models/geometry2d-model.js?v=23"></script>
+  <script src="js/parsers/geometry2d-parsers.js?v=23"></script>
+  <script src="js/renderers/geometry2d-svg-renderer.js?v=23"></script>
+  <script src="js/tabs/geometry2d.js?v=23"></script>
+  <script src="js/app.js?v=23"></script>
 </body>
 </html>
