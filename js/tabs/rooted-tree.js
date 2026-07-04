@@ -27,6 +27,7 @@
     this.graphType = 'rooted-tree';
     this.inputMode = 'edges';
     this.matrixMode = 'full';
+    this.base = 1; // 起始索引 0 或 1（即根节点值）
     this.rendererName = 'mermaid';
     this._savedFieldVis = null; // 解析后恢复字段可见性
     this.cacheDom();
@@ -57,7 +58,7 @@
       inputMode: this.inputMode,
       matrixMode: this.matrixMode,
       inputText: this.inputText.value,
-      root: this.rootInput.value,
+      base: this.base,
       nodeAttrsText: this.nodeAttrsText.value,
       rendererName: this.rendererSel.value,
       autoRender: this.autoRenderChk.checked,
@@ -100,7 +101,12 @@
       this.setMatrixMode(saved.matrixMode);
     }
     if (saved.inputText != null) this.inputText.value = saved.inputText;
-    if (saved.root != null) this.rootInput.value = saved.root;
+    if (saved.base != null) {
+      this.setBase(saved.base);
+    } else if (saved.root != null) {
+      // 兼容旧版本：root=1 → base=1，其余 → base=0
+      this.setBase(Number(saved.root) === 1 ? 1 : 0);
+    }
     if (saved.nodeAttrsText != null) this.nodeAttrsText.value = saved.nodeAttrsText;
     if (saved.rendererName != null) {
       this.rendererName = saved.rendererName;
@@ -144,7 +150,7 @@
   /** 为输入控件绑定持久化事件。 */
   RootedTreeTab.prototype.bindPersistEvents = function () {
     var self = this;
-    var inputs = [this.inputText, this.rootInput, this.nodeAttrsText];
+    var inputs = [this.inputText, this.nodeAttrsText];
     inputs.forEach(function (el) {
       if (el) el.addEventListener('input', function () { self.saveState(); });
     });
@@ -156,6 +162,7 @@
     if (this.inputTabsEl) this.inputTabsEl.addEventListener('click', function () { self.saveState(); });
     if (this.matrixSubTabsEl) this.matrixSubTabsEl.addEventListener('click', function () { self.saveState(); });
     if (this.graphTypeTabsEl) this.graphTypeTabsEl.addEventListener('click', function () { self.saveState(); });
+    if (this.baseToggleEl) this.baseToggleEl.addEventListener('click', function () { self.saveState(); });
   };
 
   RootedTreeTab.prototype.cacheDom = function () {
@@ -164,7 +171,8 @@
     this.inputTabsEl = el.querySelector('#rt-input-tabs');
     this.matrixSubTabsEl = el.querySelector('#rt-matrix-sub-tabs');
     this.inputText = el.querySelector('#rt-input-text');
-    this.rootInput = el.querySelector('#rt-root');
+    this.baseToggleEl = el.querySelector('#rt-base-toggle');
+    this.baseBtns = el.querySelectorAll('.rt-base-btn');
     this.parseBtn = el.querySelector('#rt-parse-btn');
     this.parseStatus = el.querySelector('#rt-parse-status');
     this.nodeAttrsText = el.querySelector('#rt-node-attrs-text');
@@ -187,6 +195,12 @@
   RootedTreeTab.prototype.bindEvents = function () {
     var self = this;
     if (this.parseBtn) this.parseBtn.addEventListener('click', function () { self.parse(); });
+    if (this.baseToggleEl) this.baseToggleEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rt-base-btn');
+      if (!btn) return;
+      self.setBase(Number(btn.getAttribute('data-base')));
+      self.parse();
+    });
     if (this.graphTypeTabsEl) this.graphTypeTabsEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.graph-type-btn');
       if (!btn) return;
@@ -234,6 +248,15 @@
       this.setInputMode('edges');
     }
     this.updateInputTabsAvailability();
+  };
+
+  /** 切换起始索引（0 或 1），同时作为根节点值。 */
+  RootedTreeTab.prototype.setBase = function (base) {
+    this.base = (base === 1) ? 1 : 0;
+    for (var i = 0; i < this.baseBtns.length; i++) {
+      var btn = this.baseBtns[i];
+      btn.classList.toggle('active', Number(btn.getAttribute('data-base')) === this.base);
+    }
   };
 
   /** 根据图类型启用/禁用输入方式选项卡。 */
@@ -308,13 +331,13 @@
     this.setInputMode('edges');
     this.updatePlaceholder();
     this.inputText.value = '1 2\n1 3\n2 4\n2 5\n3 6\n3 7';
-    this.rootInput.value = '1';
+    this.setBase(1);
     this.nodeAttrsText.value = '';
   };
 
   RootedTreeTab.prototype.parse = function () {
     var text = this.inputText.value;
-    var root = (this.rootInput.value || '').trim() || '1';
+    var root = String(this.base);
     var edges;
     try {
       if (this.inputMode === 'edges') edges = P.parseEdges(text);

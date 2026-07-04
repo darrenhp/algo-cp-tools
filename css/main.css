@@ -264,7 +264,6 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .form-control:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,0.25); }
 .rt-textarea { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; resize: vertical; }
-.rt-root-input { width: 56px; flex: 0 0 auto; }
 
 /* ===== 按钮 ===== */
 .btn {
