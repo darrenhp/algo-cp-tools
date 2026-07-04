@@ -549,3 +549,266 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .geom-input-block .input-tabs { margin: 10px 12px 6px; }
 .geom-input-block textarea { margin: 10px 12px; width: calc(100% - 24px); box-sizing: border-box; }
+
+/* ===== 三维几何 3D 画布 ===== */
+.g3-canvas-wrap {
+  height: 440px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.g3-canvas-wrap canvas { display: block; width: 100% !important; }
+.g3-tip {
+  font-size: 11px;
+  color: #64748b;
+  margin: 4px 0 8px;
+  letter-spacing: 0.3px;
+}
+
+/* ===== 数论模块布局（两栏：输入 + 结果表） ===== */
+.nt-layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .nt-layout { grid-template-columns: 1fr; }
+  .nt-viz { grid-column: 1 / -1; }
+}
+@media (max-width: 820px) {
+  .nt-layout { grid-template-columns: 1fr; }
+}
+
+.nt-panel {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  max-height: calc(100vh - 130px);
+  overflow: auto;
+}
+.nt-panel h2 { font-size: 15px; margin-bottom: 12px; }
+.nt-panel h3 { font-size: 13px; margin: 14px 0 8px; color: #94a3b8; }
+
+.nt-input {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
+  border-top: 3px solid #6366f1;
+}
+.nt-input h2 { color: #a5b4fc; }
+
+.nt-viz {
+  background: linear-gradient(135deg, #4a044e 0%, #1e1b4b 100%);
+  border-top: 3px solid #a855f7;
+}
+.nt-viz h2 { color: #d8b4fe; }
+
+/* 区间输入 */
+.nt-range-input { width: 90px; flex: 0 0 auto; }
+.nt-range-sep {
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 0 2px;
+}
+
+/* 列显隐控制 */
+.nt-cols-section {
+  margin-top: 14px;
+  border-top: 1px dashed #334155;
+  padding-top: 8px;
+}
+
+/* 素数数量统计区 */
+.nt-prime-summary-wrap {
+  margin-top: 10px;
+}
+.nt-prime-summary {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border: 1px solid #4f46e5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.nt-prime-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.nt-prime-stat-label {
+  font-size: 12px;
+  color: #a5b4fc;
+  letter-spacing: 0.3px;
+}
+.nt-prime-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #c7d2fe;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+.nt-prime-stat-sub {
+  font-size: 11px;
+  color: #818cf8;
+}
+.nt-prime-summary:empty { display: none; }
+
+.nt-col-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nt-col-pill {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.nt-col-pill:hover {
+  background: #334155;
+  border-color: #64748b;
+}
+.nt-col-pill input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  accent-color: #818cf8;
+}
+.nt-col-pill input[type="checkbox"]:checked + span {
+  color: #a5b4fc;
+  font-weight: 600;
+}
+.nt-col-pill:has(input:checked) {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.3);
+}
+
+/* 说明区 */
+.nt-tip {
+  margin-top: 14px;
+  border-top: 1px dashed #334155;
+  padding-top: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.nt-tip h3 { margin: 8px 0 6px; }
+.nt-tip ul { margin: 0; padding-left: 18px; }
+.nt-tip li { margin-bottom: 3px; line-height: 1.5; }
+
+/* 结果表格 */
+.nt-table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 200px);
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #fff;
+}
+.nt-table { font-size: 12px; }
+.nt-table th, .nt-table td {
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  white-space: nowrap;
+  text-align: center;
+}
+.nt-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.nt-table .attr-id-cell {
+  background: #f1f5f9;
+  font-weight: 600;
+}
+.nt-table td {
+  color: #1e293b;
+}
+.nt-num {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #312e81;
+}
+.nt-factor {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #4c1d95;
+  font-weight: 600;
+}
+.nt-divisors {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #155e75;
+}
+.nt-yes { color: #059669; font-weight: 600; }
+.nt-no { color: #94a3b8; }
+.nt-empty {
+  padding: 24px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* 表头中文含义小字 */
+.nt-th-desc {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+/* checkbox pill 内的中文说明 */
+.nt-pill-desc {
+  font-size: 10px;
+  color: #64748b;
+  margin-left: 4px;
+}
+.nt-col-pill:has(input:checked) .nt-pill-desc {
+  color: #818cf8;
+}
+
+/* 方向切换工具栏 */
+.nt-viz-toolbar {
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.nt-orient-hint {
+  font-size: 11px;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+/* 竖向表格：首列（函数标签）吸顶左侧，便于横向滚动查看 */
+.nt-vtrunc-note {
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-bottom: 6px;
+}
+.nt-table-vertical th.nt-row-label {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #e2e8f0;
+  text-align: left;
+  min-width: 120px;
+  max-width: 200px;
+}
+.nt-table-vertical thead th.attr-id-cell {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.nt-table-vertical thead th.nt-row-label {
+  z-index: 3;
+}
+.nt-table-vertical td {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}

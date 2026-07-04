@@ -7,6 +7,7 @@
  *   4. 直线：每行 `x1 y1 x2 y2`（两点确定直线，无限延伸）
  *   5. 多边形：空行分隔多个多边形；每个多边形每行一个顶点 `x y`
  *   6. 长方形：每行 `x1 y1 x2 y2`（对角线两端点，轴对齐）
+ *   7. 圆：每行 `cx cy r`（圆心与半径，半径可为负但按绝对值处理）
  * 沿用 tree-parsers.js / array-parsers.js 的注释判断与分隔风格。
  */
 (function () {
@@ -119,6 +120,30 @@
   function parseRectangles(text) { return parseQuadTokens(text, 'rect'); }
 
   /**
+   * 圆：每行 `cx cy r`（圆心坐标与半径）。
+   * 半径解析为数字，渲染时按绝对值处理（负值视为正）。
+   */
+  function parseCircles(text) {
+    var circles = [];
+    if (!text) return circles;
+    var lines = text.split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+      if (isComment(lines[i])) continue;
+      var trimmed = lines[i].trim();
+      if (trimmed === '') continue;
+      var parts = trimmed.split(/[\s,]+/).filter(Boolean);
+      if (parts.length < 3) {
+        throw new Error('第 ' + (i + 1) + ' 行需要三个数字（cx cy r）');
+      }
+      var cx = parseNumber(parts[0], i);
+      var cy = parseNumber(parts[1], i);
+      var r = parseNumber(parts[2], i);
+      circles.push({ cx: cx, cy: cy, r: r });
+    }
+    return circles;
+  }
+
+  /**
    * 多边形：每行一个多边形，平铺 `x1 y1 x2 y2 ... xn yn`。
    * 至少 6 个数字（3 个顶点），token 数必须为偶数。
    */
@@ -160,6 +185,7 @@
     parseLines: parseLines,
     parsePolygons: parsePolygons,
     parseRectangles: parseRectangles,
+    parseCircles: parseCircles,
     buildModel: buildModel
   };
 })();

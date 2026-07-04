@@ -1,7 +1,7 @@
 /**
  * 二维计算几何数据模型
- * 支持多类几何实体共存：点 points、线段 segments、直线 lines、多边形 polygons、长方形 rectangles。
- * 提供轴对齐包围盒（AABB）与视口范围推导，覆盖所有实体顶点。
+ * 支持多类几何实体共存：点 points、线段 segments、直线 lines、多边形 polygons、长方形 rectangles、圆 circles。
+ * 提供轴对齐包围盒（AABB）与视口范围推导，覆盖所有实体顶点及圆边界。
  */
 (function () {
   'use strict';
@@ -14,6 +14,7 @@
    * lines:      Array<{a:{x,y}, b:{x,y}}>   两点确定一条直线（无限延伸）
    * polygons:   Array<Array<{x,y}>>         每个多边形为顶点数组
    * rectangles: Array<{a:{x,y}, b:{x,y}}>   对角线两端点（轴对齐长方形）
+   * circles:    Array<{cx,cy,r}>            圆心 (cx,cy) 与半径 r
    */
   function Geometry2DModel() {
     this.points = [];
@@ -21,6 +22,7 @@
     this.lines = [];
     this.polygons = [];
     this.rectangles = [];
+    this.circles = [];
   }
 
   Geometry2DModel.prototype.reset = function () {
@@ -29,6 +31,7 @@
     this.lines = [];
     this.polygons = [];
     this.rectangles = [];
+    this.circles = [];
   };
 
   Geometry2DModel.prototype.setData = function (data) {
@@ -38,6 +41,7 @@
     this.lines = data.lines || [];
     this.polygons = data.polygons || [];
     this.rectangles = data.rectangles || [];
+    this.circles = data.circles || [];
   };
 
   /** 是否完全没有实体。 */
@@ -46,13 +50,14 @@
       this.segments.length === 0 &&
       this.lines.length === 0 &&
       this.polygons.length === 0 &&
-      this.rectangles.length === 0;
+      this.rectangles.length === 0 &&
+      this.circles.length === 0;
   };
 
   /** 实体总数（各类相加）。 */
   Geometry2DModel.prototype.size = function () {
     return this.points.length + this.segments.length + this.lines.length +
-      this.polygons.length + this.rectangles.length;
+      this.polygons.length + this.rectangles.length + this.circles.length;
   };
 
   /** 遍历所有实体顶点，调用 fn(p)。 */
@@ -76,7 +81,7 @@
   };
 
   /**
-   * 轴对齐包围盒（AABB），覆盖所有实体顶点。
+   * 轴对齐包围盒（AABB），覆盖所有实体顶点及圆的外接范围。
    * 返回 {minX,maxX,minY,maxY,width,height,area} 或 null（空）。
    */
   Geometry2DModel.prototype.getAABB = function () {
@@ -88,6 +93,21 @@
       if (p.y < minY) minY = p.y;
       if (p.y > maxY) maxY = p.y;
     });
+    // 圆的边界：圆心 ± 半径
+    for (var i = 0; i < this.circles.length; i++) {
+      var c = this.circles[i];
+      var r = Math.abs(c.r);
+      if (first) {
+        minX = c.cx - r; maxX = c.cx + r;
+        minY = c.cy - r; maxY = c.cy + r;
+        first = false;
+      } else {
+        if (c.cx - r < minX) minX = c.cx - r;
+        if (c.cx + r > maxX) maxX = c.cx + r;
+        if (c.cy - r < minY) minY = c.cy - r;
+        if (c.cy + r > maxY) maxY = c.cy + r;
+      }
+    }
     if (first) return null;
     var w = maxX - minX, h = maxY - minY;
     return { minX: minX, maxX: maxX, minY: minY, maxY: maxY, width: w, height: h, area: w * h };
@@ -130,6 +150,25 @@
         var a = poly[j], b = poly[(j + 1) % n];
         total += Math.hypot(b.x - a.x, b.y - a.y);
       }
+    }
+    return total;
+  };
+
+  /** 计算所有圆周长之和。 */
+  Geometry2DModel.prototype.circlesPerimeter = function () {
+    var total = 0;
+    for (var i = 0; i < this.circles.length; i++) {
+      total += 2 * Math.PI * Math.abs(this.circles[i].r);
+    }
+    return total;
+  };
+
+  /** 计算所有圆面积之和。 */
+  Geometry2DModel.prototype.circlesArea = function () {
+    var total = 0;
+    for (var i = 0; i < this.circles.length; i++) {
+      var r = Math.abs(this.circles[i].r);
+      total += Math.PI * r * r;
     }
     return total;
   };

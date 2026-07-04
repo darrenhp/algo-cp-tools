@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>Algo CP Tools</title>
-  <link rel="stylesheet" href="css/main.css?v=24" />
+  <link rel="stylesheet" href="css/main.css?v=30" />
   <link rel="stylesheet" href="https://tikzjax.com/dist/tikzjax.css" />
 </head>
 <body>
@@ -19,7 +19,8 @@
     <button class="tab-btn active" data-tab="rooted-tree">图</button>
     <button class="tab-btn" data-tab="array">一维数组</button>
     <button class="tab-btn" data-tab="geometry2d">二维几何</button>
-    <span class="tab-placeholder">更多模型（三维几何、函数…）规划中</span>
+    <button class="tab-btn" data-tab="geometry3d">三维几何</button>
+    <button class="tab-btn" data-tab="number-theory">数论</button>
   </nav>
 
   <main class="tab-container">
@@ -221,6 +222,12 @@
             <textarea id="g2-rects-text" class="form-control rt-textarea" rows="3" spellcheck="false" placeholder="每行 x1 y1 x2 y2（对角线两端点，轴对齐）\n例如：\n-3 -2 1 1"></textarea>
           </details>
 
+          <!-- 圆 -->
+          <details class="geom-input-block">
+            <summary>圆 <span class="geom-hint">cx cy r 每行</span></summary>
+            <textarea id="g2-circles-text" class="form-control rt-textarea" rows="3" spellcheck="false" placeholder="每行 cx cy r（圆心坐标与半径）\n半径按绝对值处理（负值视为正）\n例如：\n0 0 2\n3 3 1.5"></textarea>
+          </details>
+
           <div class="form-row form-row-inline">
             <button id="g2-parse-btn" class="btn btn-primary">解析</button>
             <button id="g2-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
@@ -266,6 +273,148 @@
 
       </div>
     </section>
+
+    <!-- ===================== 三维几何 Tab ===================== -->
+    <section class="tab-content" id="tab-geometry3d">
+      <div class="geom-layout">
+
+        <!-- 左：输入 -->
+        <section class="geom-panel geom-input">
+          <h2>输入（多类实体可共存）</h2>
+
+          <!-- 点 -->
+          <details class="geom-input-block" open>
+            <summary>点 <span class="geom-hint">x y z 每行</span></summary>
+            <textarea id="g3-points-text" class="form-control rt-textarea" rows="6" spellcheck="false" placeholder="每行 x y z（空格或逗号分隔）&#10;支持 # 与 // 注释行&#10;例如：&#10;0 0 0&#10;1 2 3&#10;-2 3 1"></textarea>
+          </details>
+
+          <!-- 线段 -->
+          <details class="geom-input-block">
+            <summary>线段 <span class="geom-hint">x1 y1 z1 x2 y2 z2 每行；&gt; 前缀=有向</span></summary>
+            <textarea id="g3-segments-text" class="form-control rt-textarea" rows="5" spellcheck="false" placeholder="每行 x1 y1 z1 x2 y2 z2&#10;行首 > 表示有向线段（箭头指向第二点）&#10;例如：&#10;0 0 0 2 2 2&#10;> 1 0 0 1 3 1"></textarea>
+          </details>
+
+          <!-- 面 -->
+          <details class="geom-input-block">
+            <summary>面 <span class="geom-hint">每行一个，平铺 x1 y1 z1 ... xn yn zn</span></summary>
+            <textarea id="g3-faces-text" class="form-control rt-textarea" rows="5" spellcheck="false" placeholder="每行一个多边形面，平铺 x1 y1 z1 x2 y2 z2 ... xn yn zn&#10;至少 9 个数字（3 个顶点）&#10;例如：&#10;0 0 0  3 0 0  3 3 0  0 3 0&#10;1 0 0  1 3 0  1 3 3  1 0 3"></textarea>
+          </details>
+
+          <!-- 立方体 -->
+          <details class="geom-input-block">
+            <summary>立方体 <span class="geom-hint">x1 y1 z1 x2 y2 z2（对角线）</span></summary>
+            <textarea id="g3-cubes-text" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="每行 x1 y1 z1 x2 y2 z2（对角线两端点，轴对齐长方体）&#10;例如：&#10;-3 -2 0  0 1 2&#10;2 2 -1  5 4 2"></textarea>
+          </details>
+
+          <!-- 球体 -->
+          <details class="geom-input-block">
+            <summary>球体 <span class="geom-hint">x y z r 每行（球心+半径）</span></summary>
+            <textarea id="g3-spheres-text" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="每行 x y z r（球心 + 半径）&#10;例如：&#10;0 0 0 2&#10;3 1 1 1.5"></textarea>
+          </details>
+
+          <div class="form-row form-row-inline">
+            <button id="g3-parse-btn" class="btn btn-primary">解析</button>
+            <button id="g3-clear-btn" class="btn btn-ghost" title="清空输入并重置为示例">清理</button>
+          </div>
+          <div id="g3-parse-status" class="rt-status"></div>
+
+          <div class="geom-results-section">
+            <h3>结果</h3>
+            <div id="g3-results" class="geom-results"></div>
+          </div>
+        </section>
+
+        <!-- 右：可视化 -->
+        <section class="geom-panel geom-viz">
+          <h2>可视化</h2>
+          <div class="form-row form-row-inline">
+            <label class="checkbox-label">
+              <input type="checkbox" id="g3-show-grid" checked /> 显示网格
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g3-show-axes" checked /> 显示坐标轴
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g3-show-index" checked /> 显示序号
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="g3-index-from1" /> 序号从1开始
+            </label>
+            <button id="g3-render-btn" class="btn btn-primary">渲染</button>
+          </div>
+          <div class="g3-tip">拖拽旋转 · 滚轮缩放 · 右键平移</div>
+          <div id="g3-graph-output" class="graph-output g3-canvas-wrap"></div>
+        </section>
+
+      </div>
+    </section>
+
+    <!-- ===================== 数论 Tab ===================== -->
+    <section class="tab-content" id="tab-number-theory">
+      <div class="nt-layout">
+
+        <!-- 左：输入与控制 -->
+        <section class="nt-panel nt-input">
+          <h2>输入</h2>
+          <div class="form-row form-row-inline">
+            <label class="form-label">区间</label>
+            <input type="number" id="nt-lo" class="form-control nt-range-input" value="1" min="1" />
+            <span class="nt-range-sep">~</span>
+            <input type="number" id="nt-hi" class="form-control nt-range-input" value="30" min="1" />
+            <button id="nt-compute-btn" class="btn btn-primary">计算</button>
+            <button id="nt-clear-btn" class="btn btn-ghost" title="清空并重置为示例">清理</button>
+          </div>
+          <div id="nt-parse-status" class="rt-status"></div>
+
+          <div class="nt-prime-summary-wrap">
+            <div id="nt-prime-summary" class="nt-prime-summary"></div>
+          </div>
+
+          <div class="nt-cols-section">
+            <h3>显示列</h3>
+            <div id="nt-col-toggle" class="nt-col-toggle"></div>
+          </div>
+
+          <div class="nt-tip">
+            <h3>说明</h3>
+            <ul>
+              <li>支持区间 [L, R]，L &ge; 1，R &le; 10,000,000</li>
+              <li>显示行数上限 3,000（超过仅展示前 3,000 个，统计仍为全量）</li>
+              <li>使用线性筛 O(R) 一次性计算所有数论函数</li>
+              <li>勾选/取消列可即时切换表格列显隐</li>
+              <li>方向切换：横向（每行一个数）/ 竖向（每列一个数，转置）</li>
+              <li>素数个数与最大因数个数为全量统计，与显示行数无关</li>
+            </ul>
+            <h3>函数含义</h3>
+            <ul>
+              <li><b>素数</b>：n 是否为素数</li>
+              <li><b>μ(n)</b> 莫比乌斯函数：素数=−1，含平方因子=0，否则=(−1)^k（k 为不同质因子数）</li>
+              <li><b>φ(n)</b> 欧拉函数：≤ n 且与 n 互素的正整数个数</li>
+              <li><b>d(n)</b> 约数个数：n 的正约数总数</li>
+              <li><b>σ(n)</b> 约数和：n 的所有正约数之和</li>
+              <li><b>ω/Ω</b>：ω=不同质因子个数，Ω=总质因子个数（含重复）</li>
+              <li><b>质因数分解</b>：如 12 → 2²×3（上标用 Unicode）</li>
+              <li><b>约数列表</b>：升序排列的全部正约数</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 右：结果表格 -->
+        <section class="nt-panel nt-viz">
+          <h2>数论函数表</h2>
+          <div class="form-row form-row-inline nt-viz-toolbar">
+            <label class="form-label">方向</label>
+            <div class="arr-base-toggle">
+              <button class="arr-base-btn nt-orient-btn active" data-orient="horizontal">横向</button>
+              <button class="arr-base-btn nt-orient-btn" data-orient="vertical">竖向</button>
+            </div>
+            <span class="nt-orient-hint">横向：每行一个数；竖向：每列一个数（适合小区间对比）</span>
+          </div>
+          <div id="nt-table-wrap" class="nt-table-wrap"></div>
+        </section>
+
+      </div>
+    </section>
   </main>
 
   <!-- ===== 第三方库（CDN） ===== -->
@@ -273,6 +422,8 @@
   <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/viz.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/full.render.js"></script>
   <script src="https://tikzjax.com/dist/tikzjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 
   <!-- ===== 应用脚本（按序加载） ===== -->
   <script src="js/namespace.js?v=23"></script>
@@ -287,10 +438,16 @@
   <script src="js/parsers/array-parsers.js?v=23"></script>
   <script src="js/renderers/array-svg-renderer.js?v=23"></script>
   <script src="js/tabs/array.js?v=23"></script>
-  <script src="js/models/geometry2d-model.js?v=24"></script>
-  <script src="js/parsers/geometry2d-parsers.js?v=25"></script>
-  <script src="js/renderers/geometry2d-svg-renderer.js?v=25"></script>
-  <script src="js/tabs/geometry2d.js?v=25"></script>
-  <script src="js/app.js?v=23"></script>
+  <script src="js/models/geometry2d-model.js?v=27"></script>
+  <script src="js/parsers/geometry2d-parsers.js?v=27"></script>
+  <script src="js/renderers/geometry2d-svg-renderer.js?v=29"></script>
+  <script src="js/tabs/geometry2d.js?v=28"></script>
+  <script src="js/models/geometry3d-model.js?v=26"></script>
+  <script src="js/parsers/geometry3d-parsers.js?v=26"></script>
+  <script src="js/renderers/geometry3d-three-renderer.js?v=26"></script>
+  <script src="js/tabs/geometry3d.js?v=26"></script>
+  <script src="js/models/number-theory-model.js?v=30"></script>
+  <script src="js/tabs/number-theory.js?v=30"></script>
+  <script src="js/app.js?v=30"></script>
 </body>
 </html>

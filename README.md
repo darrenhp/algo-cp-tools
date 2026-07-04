@@ -37,21 +37,27 @@ algo-cp-tools/
 │   ├── tabs/
 │   │   ├── rooted-tree.js           # 图控制器
 │   │   ├── array.js                 # 一维数组控制器
-│   │   └── geometry2d.js            # 二维几何控制器
+│   │   ├── geometry2d.js            # 二维几何控制器
+│   │   ├── geometry3d.js            # 三维几何控制器
+│   │   └── number-theory.js         # 数论控制器
 │   ├── models/
 │   │   ├── tree-model.js            # 图数据模型
 │   │   ├── array-model.js           # 一维数组模型
-│   │   └── geometry2d-model.js      # 二维几何模型
+│   │   ├── geometry2d-model.js      # 二维几何模型
+│   │   ├── geometry3d-model.js      # 三维几何模型
+│   │   └── number-theory-model.js   # 数论模型（线性筛 + 积性函数）
 │   ├── parsers/
 │   │   ├── tree-parsers.js          # 图输入解析
 │   │   ├── array-parsers.js         # 数组解析
-│   │   └── geometry2d-parsers.js    # 二维几何解析
+│   │   ├── geometry2d-parsers.js    # 二维几何解析
+│   │   └── geometry3d-parsers.js    # 三维几何解析
 │   ├── renderers/
 │   │   ├── mermaid-renderer.js
 │   │   ├── graphviz-renderer.js
 │   │   ├── tikz-renderer.js
 │   │   ├── array-svg-renderer.js
-│   │   └── geometry2d-svg-renderer.js
+│   │   ├── geometry2d-svg-renderer.js
+│   │   └── geometry3d-three-renderer.js
 │   └── utils/tree-layout.js         # TikZ 布局算法
 └── README.md
 ```
@@ -79,12 +85,30 @@ algo-cp-tools/
   - 直线：每行 `x1 y1 x2 y2`（两点确定直线，渲染时无限延伸并裁剪到绘图区，虚线样式）
   - 多边形：空行（或 `---`）分隔多个多边形；每个多边形每行一个顶点 `x y`，至少 3 个顶点
   - 长方形：每行 `x1 y1 x2 y2`（对角线两端点，自动轴对齐）
-- **解析与校验**：支持 `#` / `//` 注释行，非法数字报错（含行号），xy 数组长度不一致报错，多边形顶点不足报错
-- **计算**：轴对齐包围盒（AABB，覆盖所有实体顶点）— minX / maxX / minY / maxY / width / height / area；线段总长、多边形周长
-- **可视化**：纯 SVG 自绘，自适应坐标范围（覆盖所有实体），含坐标轴、网格线（可开关）、刻度标签、点（序号/坐标可开关）、AABB 虚线矩形（可开关）；可选「连接点」按输入顺序连成折线
+  - 圆：每行 `cx cy r`（圆心坐标与半径，半径按绝对值处理）
+- **解析与校验**：支持 `#` / `//` 注释行，非法数字报错（含行号），xy 数组长度不一致报错，多边形顶点不足、圆参数不足报错
+- **计算**：轴对齐包围盒（AABB，覆盖所有实体顶点及圆边界）— minX / maxX / minY / maxY / width / height / area；线段总长、多边形周长、圆周长和、圆面积和
+- **可视化**：纯 SVG 自绘，**等比例缩放**（x/y 同一 scale 并居中，圆显示为正圆、角度与比例不变形），自适应坐标范围（覆盖所有实体），含坐标轴、网格线（可开关）、刻度标签、点（序号/坐标可开关）、AABB 虚线矩形（可开关）；可选「连接点」按输入顺序连成折线
 - **结果区**：实体总数/顶点数、各类数量统计表、AABB 属性表
 - **状态持久化**：localStorage + sessionStorage 双写，刷新不丢数据
 - **生成代码**：可展开查看生成的 SVG 源码
+
+### 数论调试器
+
+- **区间输入**：输入整数区间 [L, R]（L ≥ 1，R ≤ 10,000,000），用线性筛（欧拉筛）O(R) 一次性计算区间内所有整数的数论函数值；表格仅展示前 3,000 个数
+- **全量统计**：素数个数与最大因数个数基于全量区间统计，与显示行数无关，计算成功后即时打印
+- **8 项数论函数**（每项一列，通过 checkbox 控制显隐）：
+  - **素数**：是否为素数
+  - **μ(n)**：莫比乌斯函数（素数=−1，含平方因子=0，否则=(−1)^k）
+  - **φ(n)**：欧拉函数（≤ n 且与 n 互素的正整数个数）
+  - **d(n)**：约数个数
+  - **σ(n)**：约数和
+  - **ω/Ω**：ω=不同质因子个数，Ω=总质因子个数（含重复）
+  - **质因数分解**：如 12 → 2²×3（上标用 Unicode）
+  - **约数列表**：升序排列的全部约数
+- **列显隐控制**：n 列固定显示，其余 8 列各有 checkbox，勾选/取消即时切换列显隐
+- **性能**：线性筛使用 Int32Array，10^7 约 200-500ms；区间超过 5000 行时提示但仍允许计算
+- **状态持久化**：localStorage + sessionStorage 双写，刷新不丢数据
 
 ## 后续规划
 

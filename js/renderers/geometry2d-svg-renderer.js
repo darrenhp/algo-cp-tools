@@ -1,8 +1,9 @@
 /**
  * 二维几何 SVG 自绘渲染器
  * 纯原生 SVG 字符串构造，无第三方库。
- * 绘制层次：背景 -> 网格 -> 坐标轴 -> 刻度标签 -> 直线(无限) -> 长方形 -> 多边形 -> 线段 -> AABB -> 点。
+ * 绘制层次：背景 -> 网格 -> 坐标轴 -> 刻度标签 -> 直线(无限) -> 长方形 -> 多边形 -> 圆 -> 线段 -> AABB -> 点。
  * 坐标变换：数学 y 向上 -> SVG y 向下（翻转）。
+ * 采用等比例缩放（x/y 同一 scale）并居中：圆显示为正圆，线段夹角与实体比例不变形。
  */
 (function () {
   'use strict';
@@ -17,12 +18,14 @@
   var COL_LINE = '#0ea5e9';      // 直线（无限）
   var COL_POLY = '#16a34a';      // 多边形
   var COL_RECT = '#f59e0b';      // 长方形
+  var COL_CIRCLE = '#ec4899';    // 圆
 
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  /** nice interval：选取 1/2/5 x 10^k 的刻度间隔。返回 {step, start}。 */
+  /** nice interval：选取 1/2/5 x 10^k 的刻度间隔。返回 {step, start}。
+   *  最小步长强制为 1（整数刻度），避免坐标轴与网格出现小数。 */
   function niceTicks(min, max, target) {
     var range = max - min;
     if (range <= 0) range = 1;
@@ -35,6 +38,7 @@
     else if (norm < 7) step = 5;
     else step = 10;
     step *= mag;
+    if (step < 1) step = 1;   // 禁用小数刻度
     var start = Math.floor(min / step) * step;
     return { step: step, start: start };
   }
@@ -94,7 +98,7 @@
     container.appendChild(wrap);
 
     if (!model || model.isEmpty()) {
-      wrap.innerHTML = '<div class="render-error">无几何数据，请输入点/线段/直线/多边形/长方形后再渲染。</div>';
+      wrap.innerHTML = '<div class="render-error">无几何数据，请输入点/线段/直线/多边形/长方形/圆后再渲染。</div>';
       return Promise.resolve('');
     }
     options = options || {};
@@ -117,16 +121,22 @@
     var dataH = maxY - minY;
     var plotW = VIEW_W - PAD * 2;
     var plotH = VIEW_H - PAD * 2;
+    // 等比例缩放：x/y 使用同一 scale，圆显示为正圆、角度与比例不变形。
+    var scale = Math.min(plotW / dataW, plotH / dataH);
+    var realW = dataW * scale;
+    var realH = dataH * scale;
+    var ox = PAD + (plotW - realW) / 2;   // 实际绘图区左上 x（居中）
+    var oy = PAD + (plotH - realH) / 2;   // 实际绘图区左上 y（居中）
 
-    function sx(x) { return PAD + ((x - minX) / dataW) * plotW; }
-    function sy(y) { return PAD + plotH - ((y - minY) / dataH) * plotH; }
+    function sx(x) { return ox + (x - minX) * scale; }
+    function sy(y) { return oy + realH - (y - minY) * scale; }
 
     var parts = [];
     parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + VIEW_W + ' ' + VIEW_H + '" width="' + VIEW_W + '" height="' + VIEW_H + '">');
 
     // 背景
     parts.push('<rect x="0" y="0" width="' + VIEW_W + '" height="' + VIEW_H + '" fill="#ffffff"/>');
-    parts.push('<rect x="' + PAD + '" y="' + PAD + '" width="' + plotW + '" height="' + plotH + '" fill="#fafbff" stroke="#cbd5e1" stroke-width="1"/>');
+    parts.push('<rect x="' + ox.toFixed(2) + '" y="' + oy.toFixed(2) + '" width="' + realW.toFixed(2) + '" height="' + realH.toFixed(2) + '" fill="#fafbff" stroke="#cbd5e1" stroke-width="1"/>');
 
     // 网格 + 刻度
     var xticks = niceTicks(minX, maxX, 10);
@@ -135,19 +145,19 @@
     var labelParts = [];
     for (var xv = xticks.start; xv <= maxX + xticks.step * 0.001; xv += xticks.step) {
       var px = sx(xv);
-      if (px < PAD - 0.5 || px > PAD + plotW + 0.5) continue;
+      if (px < ox - 0.5 || px > ox + realW + 0.5) continue;
       if (showGrid) {
-        gridParts.push('<line x1="' + px.toFixed(2) + '" y1="' + PAD + '" x2="' + px.toFixed(2) + '" y2="' + (PAD + plotH) + '" stroke="#94a3b8" stroke-width="1" stroke-opacity="0.5"/>');
+        gridParts.push('<line x1="' + px.toFixed(2) + '" y1="' + oy.toFixed(2) + '" x2="' + px.toFixed(2) + '" y2="' + (oy + realH).toFixed(2) + '" stroke="#94a3b8" stroke-width="1" stroke-opacity="0.5"/>');
       }
-      labelParts.push('<text x="' + px.toFixed(2) + '" y="' + (PAD + plotH + 14) + '" font-size="10" fill="#64748b" text-anchor="middle" font-family="monospace">' + esc(fmtNum(xv, xticks.step)) + '</text>');
+      labelParts.push('<text x="' + px.toFixed(2) + '" y="' + (oy + realH + 14).toFixed(2) + '" font-size="10" fill="#64748b" text-anchor="middle" font-family="monospace">' + esc(fmtNum(xv, xticks.step)) + '</text>');
     }
     for (var yv = yticks.start; yv <= maxY + yticks.step * 0.001; yv += yticks.step) {
       var py = sy(yv);
-      if (py < PAD - 0.5 || py > PAD + plotH + 0.5) continue;
+      if (py < oy - 0.5 || py > oy + realH + 0.5) continue;
       if (showGrid) {
-        gridParts.push('<line x1="' + PAD + '" y1="' + py.toFixed(2) + '" x2="' + (PAD + plotW) + '" y2="' + py.toFixed(2) + '" stroke="#94a3b8" stroke-width="1" stroke-opacity="0.5"/>');
+        gridParts.push('<line x1="' + ox.toFixed(2) + '" y1="' + py.toFixed(2) + '" x2="' + (ox + realW).toFixed(2) + '" y2="' + py.toFixed(2) + '" stroke="#94a3b8" stroke-width="1" stroke-opacity="0.5"/>');
       }
-      labelParts.push('<text x="' + (PAD - 6) + '" y="' + (py + 3).toFixed(2) + '" font-size="10" fill="#64748b" text-anchor="end" font-family="monospace">' + esc(fmtNum(yv, yticks.step)) + '</text>');
+      labelParts.push('<text x="' + (ox - 6).toFixed(2) + '" y="' + (py + 3).toFixed(2) + '" font-size="10" fill="#64748b" text-anchor="end" font-family="monospace">' + esc(fmtNum(yv, yticks.step)) + '</text>');
     }
     parts.push(gridParts.join(''));
 
@@ -155,15 +165,15 @@
     var axisColor = '#334155', axisW = 1.5;
     if (0 >= minX && 0 <= maxX) {
       var ax0 = sx(0);
-      parts.push('<line x1="' + ax0.toFixed(2) + '" y1="' + PAD + '" x2="' + ax0.toFixed(2) + '" y2="' + (PAD + plotH) + '" stroke="' + axisColor + '" stroke-width="' + axisW + '"/>');
+      parts.push('<line x1="' + ax0.toFixed(2) + '" y1="' + oy.toFixed(2) + '" x2="' + ax0.toFixed(2) + '" y2="' + (oy + realH).toFixed(2) + '" stroke="' + axisColor + '" stroke-width="' + axisW + '"/>');
     }
     if (0 >= minY && 0 <= maxY) {
       var ay0 = sy(0);
-      parts.push('<line x1="' + PAD + '" y1="' + ay0.toFixed(2) + '" x2="' + (PAD + plotW) + '" y2="' + ay0.toFixed(2) + '" stroke="' + axisColor + '" stroke-width="' + axisW + '"/>');
+      parts.push('<line x1="' + ox.toFixed(2) + '" y1="' + ay0.toFixed(2) + '" x2="' + (ox + realW).toFixed(2) + '" y2="' + ay0.toFixed(2) + '" stroke="' + axisColor + '" stroke-width="' + axisW + '"/>');
     }
     parts.push(labelParts.join(''));
-    parts.push('<text x="' + (PAD + plotW) + '" y="' + (PAD + plotH + 30) + '" font-size="10" fill="#475569" text-anchor="end" font-family="monospace">x</text>');
-    parts.push('<text x="' + (PAD - 30) + '" y="' + (PAD + 4) + '" font-size="10" fill="#475569" text-anchor="start" font-family="monospace">y</text>');
+    parts.push('<text x="' + (ox + realW).toFixed(2) + '" y="' + (oy + realH + 30).toFixed(2) + '" font-size="10" fill="#475569" text-anchor="end" font-family="monospace">x</text>');
+    parts.push('<text x="' + (ox - 30).toFixed(2) + '" y="' + (oy + 4).toFixed(2) + '" font-size="10" fill="#475569" text-anchor="start" font-family="monospace">y</text>');
 
     // 直线（无限延伸，裁剪到绘图区）
     for (var li = 0; li < model.lines.length; li++) {
@@ -184,8 +194,8 @@
       var rx1 = Math.min(r.a.x, r.b.x), rx2 = Math.max(r.a.x, r.b.x);
       var ry1 = Math.min(r.a.y, r.b.y), ry2 = Math.max(r.a.y, r.b.y);
       var rx = sx(rx1), ry = sy(ry2);
-      var rw = ((rx2 - rx1) / dataW) * plotW;
-      var rh = ((ry2 - ry1) / dataH) * plotH;
+      var rw = (rx2 - rx1) * scale;
+      var rh = (ry2 - ry1) * scale;
       parts.push('<rect x="' + rx.toFixed(2) + '" y="' + ry.toFixed(2) + '" width="' + rw.toFixed(2) + '" height="' + rh.toFixed(2) + '" fill="rgba(245,158,11,0.08)" stroke="' + COL_RECT + '" stroke-width="1.5"/>');
     }
 
@@ -203,6 +213,20 @@
       if (showIndex) {
         pcx /= poly.length; pcy /= poly.length;
         parts.push('<text x="' + (sx(pcx) + 4).toFixed(2) + '" y="' + (sy(pcy) - 4).toFixed(2) + '" font-size="9" fill="' + COL_POLY + '" font-family="monospace">P#' + (pi + indexBase) + '</text>');
+      }
+    }
+
+    // 圆（圆心 + 半径；等比例缩放下显示为正圆）
+    for (var ci = 0; ci < model.circles.length; ci++) {
+      var circ = model.circles[ci];
+      var cr = Math.abs(circ.r);
+      var ccx = sx(circ.cx), ccy = sy(circ.cy);
+      var crs = cr * scale;
+      parts.push('<circle cx="' + ccx.toFixed(2) + '" cy="' + ccy.toFixed(2) + '" r="' + crs.toFixed(2) + '" fill="rgba(236,72,153,0.08)" stroke="' + COL_CIRCLE + '" stroke-width="1.5"/>');
+      // 圆心小圆点
+      parts.push('<circle cx="' + ccx.toFixed(2) + '" cy="' + ccy.toFixed(2) + '" r="2.5" fill="' + COL_CIRCLE + '"/>');
+      if (showIndex) {
+        parts.push('<text x="' + (ccx + crs + 4).toFixed(2) + '" y="' + (ccy - 4).toFixed(2) + '" font-size="9" fill="' + COL_CIRCLE + '" font-family="monospace">C#' + (ci + indexBase) + '</text>');
       }
     }
 
@@ -228,7 +252,7 @@
       var aabb = model.getAABB();
       if (aabb) {
         var aax = sx(aabb.minX), aay = sy(aabb.maxY);
-        var aaw = (aabb.width / dataW) * plotW, aah = (aabb.height / dataH) * plotH;
+        var aaw = aabb.width * scale, aah = aabb.height * scale;
         parts.push('<rect x="' + aax.toFixed(2) + '" y="' + aay.toFixed(2) + '" width="' + aaw.toFixed(2) + '" height="' + aah.toFixed(2) + '" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="6 4"/>');
         parts.push('<text x="' + (aax + 4).toFixed(2) + '" y="' + (aay + 12).toFixed(2) + '" font-size="9" fill="#a855f7" font-family="monospace">(' + esc(fmtNum(aabb.minX, 1)) + ',' + esc(fmtNum(aabb.maxY, 1)) + ')</text>');
         parts.push('<text x="' + (aax + aaw - 4).toFixed(2) + '" y="' + (aay + aah + 12).toFixed(2) + '" font-size="9" fill="#a855f7" text-anchor="end" font-family="monospace">(' + esc(fmtNum(aabb.maxX, 1)) + ',' + esc(fmtNum(aabb.minY, 1)) + ')</text>');

@@ -28,6 +28,11 @@
     contents.forEach(function (c) {
       c.classList.toggle('active', c.id === 'tab-' + target);
     });
+    // 切换到三维几何 tab 时触发 Three.js 重新读取容器尺寸
+    if (target === 'geometry3d' && NS.state.geometry3d && typeof NS.state.geometry3d.resize === 'function') {
+      // 等待 CSS 显示生效后再 resize
+      requestAnimationFrame(function () { NS.state.geometry3d.resize(); });
+    }
   }
 
   function initTabs() {
@@ -73,12 +78,28 @@
     }
   }
 
+  function initGeometry3D() {
+    var el = document.getElementById('tab-geometry3d');
+    if (el && NS.tabs.Geometry3DTab) {
+      NS.state.geometry3d = new NS.tabs.Geometry3DTab(el);
+    }
+  }
+
+  function initNumberTheory() {
+    var el = document.getElementById('tab-number-theory');
+    if (el && NS.tabs.NumberTheoryTab) {
+      NS.state.numberTheory = new NS.tabs.NumberTheoryTab(el);
+    }
+  }
+
   function init() {
     initMermaid();
     initTabs();
     initRootedTree();
     initArray();
     initGeometry2D();
+    initGeometry3D();
+    initNumberTheory();
   }
 
   if (document.readyState === 'loading') {
