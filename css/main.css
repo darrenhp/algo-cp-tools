@@ -14,8 +14,10 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 /* ===== 页头 ===== */
 .app-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  width: 100%;
   background: linear-gradient(90deg, #0b1120 0%, #1e1b4b 100%);
   color: #e2e8f0;
   padding: 12px 20px;
@@ -23,6 +25,46 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .app-header h1 { font-size: 17px; color: #c7d2fe; }
 .app-sub { color: #818cf8; font-size: 12px; letter-spacing: 0.5px; }
+
+/* 页头右侧 GitHub 链接与提示 */
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.header-tip {
+  font-size: 12px;
+  color: #94a3b8;
+  max-width: 360px;
+  text-align: right;
+  line-height: 1.4;
+}
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid #4f46e5;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.github-link:hover {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  color: #c7d2fe;
+}
+.github-icon { color: #c7d2fe; }
+@media (max-width: 720px) {
+  .header-tip { display: none; }
+}
 
 /* ===== Tab 栏 ===== */
 .tab-bar {
