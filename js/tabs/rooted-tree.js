@@ -8,8 +8,7 @@
   var P = NS.parsers.treeParsers;
   var renderers = {
     mermaid: NS.renderers.mermaidRenderer,
-    graphviz: NS.renderers.graphvizRenderer,
-    tikz: NS.renderers.tikzRenderer
+    graphviz: NS.renderers.graphvizRenderer
   };
 
   function makeTh(text) {
@@ -109,8 +108,11 @@
     }
     if (saved.nodeAttrsText != null) this.nodeAttrsText.value = saved.nodeAttrsText;
     if (saved.rendererName != null) {
-      this.rendererName = saved.rendererName;
-      this.rendererSel.value = saved.rendererName;
+      // tikz 渲染引擎已禁用，回退到 mermaid
+      var rn = saved.rendererName;
+      if (rn === 'tikz') rn = 'mermaid';
+      this.rendererName = rn;
+      this.rendererSel.value = rn;
     }
     if (saved.autoRender != null) this.autoRenderChk.checked = saved.autoRender;
     this._savedFieldVis = saved.fieldVis || null;
