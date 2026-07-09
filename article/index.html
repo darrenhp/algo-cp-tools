@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Algo CP Tools · 文章索引</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --border: #2a2f3a;
+      --text: #e6e8ec;
+      --muted: #9aa3b2;
+      --accent: #4f8cff;
+      --accent-2: #6ee7b7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 28px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .app-header h1 { font-size: 20px; margin: 0; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .header-right a:hover { color: var(--accent); }
+    main { max-width: 920px; margin: 0 auto; padding: 28px; }
+    .desc { color: var(--muted); margin: 0 0 24px; }
+    .group { margin-bottom: 32px; }
+    .group h2 {
+      font-size: 16px;
+      color: var(--accent-2);
+      border-left: 3px solid var(--accent-2);
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+    .page-list { list-style: none; margin: 0; padding: 0; }
+    .page-list li {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      transition: border-color .15s, transform .15s;
+    }
+    .page-list li:hover {
+      border-color: var(--accent);
+      transform: translateX(2px);
+    }
+    .page-list a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .page-list a:hover { color: var(--accent); }
+    .path {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin-top: 4px;
+    }
+    .empty { color: var(--muted); }
+    code {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+    }
+    footer {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 28px 40px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Algo CP Tools · 文章索引</h1>
+    <div class="header-right">
+      <a href="../index.html" rel="noopener noreferrer">← 返回主站</a>
+      <a href="https://github.com/darrenhp/algo-cp-tools" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="desc">算法竞赛相关文章合集（含 maspypy 系列中文讲解）</p>
+    <section class="group">
+      <h2>集合幂级数</h2>
+      <ul class="page-list">
+        <li><a href="maspypy/%E9%9B%86%E5%90%88%E5%B9%82%E7%BA%A7%E6%95%B0/%E9%9B%86%E5%90%88%E5%B9%82%E7%BA%A7%E6%95%B0%E8%AE%B2%E8%A7%A3_%E4%B8%AD%E6%96%87.html" target="_blank" rel="noopener noreferrer">集合幂级数讲解（maspy 博客中文翻译）</a><span class="path">maspypy/集合幂级数/集合幂级数讲解_中文.html</span></li>
+      </ul>
+    </section>
+    <section class="group">
+      <h2>形式幂级数</h2>
+      <ul class="page-list">
+        <li><a href="maspypy/%E5%BD%A2%E5%BC%8F%E5%B9%82%E7%BA%A7%E6%95%B0/%E5%BD%A2%E5%BC%8F%E5%B9%82%E7%BA%A7%E6%95%B0%E8%AE%B2%E8%A7%A3_%E4%B8%AD%E6%96%87.html" target="_blank" rel="noopener noreferrer">形式幂级数讲解（maspy 博客中文翻译）</a><span class="path">maspypy/形式幂级数/形式幂级数讲解_中文.html</span></li>
+      </ul>
+    </section>
+    <section class="group">
+      <h2>algorithm_math</h2>
+      <ul class="page-list">
+        <li><a href="maspypy/algorithm_math/algorithm_math%E8%AE%B2%E8%A7%A3_%E4%B8%AD%E6%96%87.html" target="_blank" rel="noopener noreferrer">算法与数学讲解（maspy 博客中文翻译）</a><span class="path">maspypy/algorithm_math/algorithm_math讲解_中文.html</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    由 gen_index.py 自动生成 · 最后更新 2026-07-09 16:08 · 仅处理 article 目录
+  </footer>
+</body>
+</html>

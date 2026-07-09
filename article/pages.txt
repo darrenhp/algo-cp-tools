@@ -1,0 +1,23 @@
+# pages.txt — article/index.html 的页面清单
+#
+# 每一行是一个相对地址（相对于本 article 目录，即脚本所在目录）。
+# 以 # 开头的行是注释；空行会被忽略。
+# 可用特殊指令（必须独占一行，写在清单顶部附近）：
+#   # @title        索引页标题
+#   # @description  索引页副标题/说明
+#
+# 维护方式（在本目录下执行）：
+#   python gen_index.py add    路径      # 添加一页
+#   python gen_index.py remove 路径      # 移除一页
+#   python gen_index.py scan             # 自动发现 *_讲解_中文.html 并加入
+#   python gen_index.py list             # 列出已登记页面
+#   python gen_index.py build            # 生成 index.html（默认命令）
+#
+# 注：本工具只处理 article 目录内的内容，不会触碰上级工程。
+
+# @title Algo CP Tools · 文章索引
+# @description 算法竞赛相关文章合集（含 maspypy 系列中文讲解）
+
+maspypy/集合幂级数/集合幂级数讲解_中文.html
+maspypy/形式幂级数/形式幂级数讲解_中文.html
+maspypy/algorithm_math/algorithm_math讲解_中文.html
