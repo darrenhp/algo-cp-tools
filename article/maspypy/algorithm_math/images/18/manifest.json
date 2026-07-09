@@ -1,0 +1,32 @@
+[
+ {
+  "local": "images/18/seg_build.png",
+  "alt": "seg_build",
+  "gfrac": 0.4985515643105446,
+  "caption": ""
+ },
+ {
+  "local": "images/18/seg_set_val.png",
+  "alt": "seg_set_val",
+  "gfrac": 0.5483777520278099,
+  "caption": ""
+ },
+ {
+  "local": "images/18/seg_fold.png",
+  "alt": "seg_fold",
+  "gfrac": 0.6688876013904983,
+  "caption": ""
+ },
+ {
+  "local": "images/18/seg_not_pow2.png",
+  "alt": "seg_not_pow2",
+  "gfrac": 0.813441483198146,
+  "caption": ""
+ },
+ {
+  "local": "images/18/seg_fold_11.png",
+  "alt": "seg_fold_11",
+  "gfrac": 0.8745654692931634,
+  "caption": ""
+ }
+]

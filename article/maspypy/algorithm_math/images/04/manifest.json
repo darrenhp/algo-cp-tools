@@ -1,0 +1,38 @@
+[
+ {
+  "local": "images/04/unicyc.drawio.png",
+  "alt": "unicyc.drawio",
+  "gfrac": 0.281738415135728,
+  "caption": ""
+ },
+ {
+  "local": "images/04/bridgelesss_2.drawio-3.png",
+  "alt": "bridgelesss_2.drawio-3",
+  "gfrac": 0.46284617493830543,
+  "caption": ""
+ },
+ {
+  "local": "images/04/bridgeless_1.drawio-1.png",
+  "alt": "画像に alt 属性が指定されていません。ファイル名: bridgeless_1.drawio-1.png",
+  "gfrac": 0.5342747463668769,
+  "caption": ""
+ },
+ {
+  "local": "images/04/biconn_2.png",
+  "alt": "biconn_2",
+  "gfrac": 0.6069372086646558,
+  "caption": ""
+ },
+ {
+  "local": "images/04/biconn_1.png",
+  "alt": "biconn_1",
+  "gfrac": 0.6268165615574445,
+  "caption": ""
+ },
+ {
+  "local": "images/04/unlabeled_tree.drawio.png",
+  "alt": "unlabeled_tree.drawio",
+  "gfrac": 0.7397175760899369,
+  "caption": ""
+ }
+]

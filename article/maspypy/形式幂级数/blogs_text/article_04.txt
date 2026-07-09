@@ -1,0 +1,1282 @@
+前提知識
+
+
+
+
+（１）数え上げとの対応付け
+
+
+（２）式変形による解法の導出
+
+
+（３）線形漸化式と形式的べき級数
+
+
+
+上の 3 つの記事では，ほとんど他サイト等を参照せずに私の記事だけで解説を完結させるようにしていましたが，本記事については，この記事だけですべての議論が追えるということは意図していません．
+
+
+解説はあまりしない or 簡単な一言解説のみ．ただしなるべく検索方法などが分かる形にはしようと心がけているので，そうなっていなさそうな場所があれば教えてください．
+
+
+
+
+多項式・形式的べき級数関連で計算量を落とすテクニックの類を，なるべく一ヶ所にまとめておきたいと思い立って，とりあえず主に記憶を頼りに作成．何かあれば不定期更新していくと思います．更新コストを下げて，網羅度を高めることを目指したいため，並べる順番の整備とかはあまりしていません．
+
+
+
+
+$p$ と書いたときには，係数が有理数（分母が $p$ と素）でそれを $\bmod p$ で求める問題を考えています．入力や出力の長さを断りなく $N$ と書くことがあります．
+
+
+しばしば暗黙に $N < p$ を仮定しています（特に $\exp, \log$ を使う場合）．FFT / NTT のことを，FFT 表記で統一しています．
+
+
+資料
+
+
+
+
+https://judge.yosupo.jp/
+
+
+
+verify 用の問題集．問題ごとの Forum を見ると，解説や資料が存在することもあります．
+
+
+
+
+https://nyaannyaan.github.io/library/
+
+
+
+Nyaan さんのライブラリ．特に本記事の範囲では，2022年4月時点でのLibrary Checker 最速実装が多いです．
+
+
+アルゴリズムの解説も充実していて，本記事の解説が欲しい場合にまず調べてみると良いと思います（例えば https://nyaannyaan.github.io/library/fps/formal-power-series.hpp）．
+
+
+
+
+
+目次
+
+
+
+積（畳み込み）
+
+$ 1 / f $
+
+$\log f$
+
+$\exp f$
+
+$\exp, \log$ の代表的な利用
+
+べき乗
+
+疎な場合の高速化
+
+合成 $f(g(x))$
+
+逆関数
+
+多項式の除算
+
+多項式の gcd
+
+$f^k \bmod g$
+
+$x^k \bmod f$
+
+$f^k \bmod (1-x^N)$, $N$ は $ 2 $ べき
+
+分割の数え上げ (1)
+
+分割の数え上げ (2)
+
+多項式の総積
+
+有理式の総和
+
+$i$ 乗和の $i$ に関する列挙
+
+基本対称式の列挙
+
+$(1-x)(1-qx)\cdots (1-q^{n-1}x)$
+
+$F_n^k$ （Fibonacci 数列の $k$ 乗）が満たす線形漸化式
+
+Polynomial Taylor Shift
+
+Bell 数
+
+第 1 種 Stirling 数
+
+第 2 種 Stirling 数
+
+$\sum A_i(x+a)^i(x+b)^{N-i}$
+
+多点評価
+
+多項式補間
+
+多項式の評価点シフト
+
+部分分数分解
+
+Vandermonde 行列の作用
+
+$\sum_{n=0}^N n^k$
+
+$\sum_{n=0}^{N-1} n^k$ の $k$ に関する列挙
+
+$\sum_{n=0}^{N-1} f(n)$ の計算
+
+$\sum_{k=L}^{R-1} f(kx)$ の計算
+
+$\prod_{k=L}^{R-1} f(kx)$ の計算
+
+分割の数え上げ (3)
+
+$\sum_{n=0}^N n^kr^n$, $\sum_{n=0}^{\infty} n^kr^n$
+
+$[x^M]1/(1-x-x^2)(1-x)^N$
+
+relaxed multiplication
+
+$\prod_{i}(a_ix+b_i)^{c_i}$
+
+$\sum_{i}a_i \exp(b_ix)$
+
+疎な微分方程式
+
+疎な場合の高速化 (2)
+
+特殊な合成
+
+Catalan’s Convolution Formula
+
+Prefix Sum Polynomial
+
+
+
+
+
+積（畳み込み）
+
+
+$f$, $g$ の積を，$O(N\log N)$ 時間で計算できます．FFT を使います．
+
+
+
+
+https://judge.yosupo.jp/problem/convolution_mod
+
+
+
+いろいろな計算量改善の基礎．とはいえここがめちゃくちゃすごい．
+
+
+
+
+$ 1 / f $
+
+
+$[x^0]f\neq 0$ を仮定します．Newton 法で $O(N\log N)$ 時間．特に，除算 $g/f$ も $g\cdot (1/f)$ とすることで $O(N\log N)$ 時間で計算できます．
+
+
+
+
+https://judge.yosupo.jp/problem/inv_of_formal_power_series
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$\log f$
+
+
+$[x^0]f = 1$ および $N<p$ を仮定します．$O(N\log N)$ 時間．
+
+
+例えば $\log(1-f) = -\sum_{n=1}^{\infty} \dfrac{f^n}{n}$ と定義します．$\dfrac{1}{1-x} = \sum x^n$ を積分すると思うと覚えやすいです．$\log(1+f)$ の形で定義する文献の方が多いかもしれません．
+
+
+$\log(f)’ = f’/f$，$\log(fg) = \log f + \log g$ を満たします．したがって $f’/f$ を積分することで計算可能です（性質の証明：定義や式変形の正当性の確認）．
+
+
+
+
+
+https://judge.yosupo.jp/problem/log_of_formal_power_series
+
+
+
+分母に $n$ があることから，$N > p$ では普通には扱えません．「$\mathbb{F}_p$ 係数形式的べき級数の log」というものは定義すらしていないということになります．
+
+
+$N$ 次未満のみに注目した多項式環 $\mathbb{F}_p[x]/(x^N)$ で定義する，あるいは $\Q[[x]]$ で定義されていて係数が $\mathbb{Z}_p$ に入るところ考察対象にしていると見なすなど．
+
+
+
+
+
+
+
+$\exp f$
+
+
+$[x^0]f = 0$ および $N< p$ を仮定します．Newton 法で $O(N\log N)$ 時間．
+
+
+$\exp f$ は，$\sum_{n=0}^{\infty} \dfrac{f^n}{n!}$ によって定まり，$(\exp f)’ = (\exp f) f’$ や $\exp(f+g) = \exp(f)\exp(g)$ を満たします（性質の証明：定義や式変形の正当性の確認）．
+
+
+
+
+https://judge.yosupo.jp/problem/exp_of_formal_power_series
+
+
+
+$\exp, \log$ の代表的な利用
+
+
+$\exp, \log$ は互いに逆関数です．これらを合わせて
+
+
+
+
+$\prod f_i = \exp(\sum \log f_i)$
+
+
+
+という式変形により，総積やべき乗が高速化できる場合があります．これを利用するに際して，$f$ の定数項が $1$ でない場合には次数をずらしたり定数倍して定数項が $1$ の場合に帰着する必要があります（そうしないと $\log f_i$ が定義できない）．
+
+
+またこの種の議論ではやはり $N < p$ が前提となります．例えば定数項が $1$ の多項式 $f$ について，$f^p \equiv \exp(p\log f) \equiv \exp(0) \equiv 1\pmod{p}$ という議論は $p$ 次以上の係数も考えると誤りです（結論も明らかにおかしい）．
+
+
+
+
+
+べき乗
+
+
+次の $f$, $n$ に対して $f^n$ が定義できて，$O(N\log N)$ 時間で計算可能です（繰り返し $2$ 乗法よりも高速）．
+
+
+
+
+$n$ が非負整数
+
+
+$n$ が有理数で，分母が $p$ と素．$[x^0]f=1$ を仮定．
+
+
+
+後者は $f^n = \exp (n\log f)$ と定義できて，$\exp, \log$ の性質から $f^{ab} = (f^a)^b, f^{a+b}=f^af^b$ が分かります．例えば $n=1/2$ として$\sqrt{f}$ が定義できますが，べき乗の特殊ケースとして扱うよりも sqrt 専用の実装した方が定数倍がよいです．$[x^0]f \neq 1$ のときに $g^2 = f$ となる $g$ のことを $\sqrt{f}$ と書くことは，通常しないと思います．
+
+
+
+
+https://judge.yosupo.jp/problem/pow_of_formal_power_series
+
+
+https://judge.yosupo.jp/problem/sqrt_of_formal_power_series
+
+
+
+
+
+
+
+
+
+
+疎な場合の高速化
+
+
+
+
+https://judge.yosupo.jp/problem/inv_of_formal_power_series_sparse
+
+
+https://judge.yosupo.jp/problem/exp_of_formal_power_series_sparse
+
+
+https://judge.yosupo.jp/problem/log_of_formal_power_series_sparse
+
+
+https://judge.yosupo.jp/problem/pow_of_formal_power_series_sparse
+
+
+https://judge.yosupo.jp/problem/sqrt_of_formal_power_series_sparse
+
+
+
+$g$ の $0$ でない係数が $K$ 個であるとき，$fg$, $f/g$ が $O(NK)$ 時間で計算できます（後者は $[x^0]g \neq 0$ を仮定します）．
+
+
+積の定義にしたがって愚直に計算すればよいです．コンテストでは結局これが問われているということも多いと思います．
+
+
+また，$f$ の $0$ でない係数が $K$ 個であるとき，次が $O(NK)$ 時間で計算できます．
+
+
+
+
+$1/f$
+
+
+$\exp f$
+
+
+$\log f$
+
+
+$f^n$
+
+
+
+$\log f$ は $f’/f$ を積分．$\exp f$ と $f^n$ は，微分を考えると係数の間の疎な漸化式が得られて下から計算していくことができます．より具体的には $F=e^f$ とすると $F’=Ff’$ であり，$F=f^n$ とすると $fF’=nFf’$ であることを利用します．次の issue 内の解説も参照してください．
+
+
+
+
+https://github.com/yosupo06/library-checker-problems/issues/767
+
+
+
+また $f$ が $d$ 次多項式で，計算結果の $N$ 次の係数にだけ興味がある場合，やはり同じ $F, F’$ の関係式から $F$ は P-recursive であることが分かるので，$O(\sqrt{N}\log N \mathrm{poly}(d))$ 時間で計算できます．
+
+
+
+
+https://atcoder.jp/contests/abc222/editorial/2742
+
+
+
+合成 $f(g(x))$
+
+
+
+
+https://judge.yosupo.jp/problem/composition_of_formal_power_series
+
+
+
+$g$ のべき乗を baby step, giant step に分ける平方分割で，$O(N^2)$ 時間などでできます．$O((N\log N)^{1.5})$ にもなりますが，競プロ制約下では区別が困難か？2022年4月現在，Library checker の最速は $O(N^2)$ です．
+
+
+
+
+https://nyaannyaan.github.io/library/fps/fps-composition.hpp
+
+
+
+
+
+だったのですが，2024年3月に noshi91 さんにより，合成および逆関数が $O(N\log^2N)$ 時間で求まることを示す次の記事が発表されました．
+
+
+
+
+https://noshi91.hatenablog.com/entry/2024/03/16/224034
+
+
+
+アルゴリズムもかなり簡単です．具体的な実装については，次の問題への提出を参考にしてください．
+
+
+
+
+https://judge.yosupo.jp/problem/composition_of_formal_power_series_large
+
+
+
+私も詳しく解説しました：
+
+
+
+
+FPS 合成・逆関数の解説（１）逆関数と Power Projection
+
+
+FPS 合成・逆関数の解説（2）転置原理による合成アルゴリズムの導出
+
+
+
+逆関数
+
+
+
+
+https://judge.yosupo.jp/problem/compositional_inverse_of_formal_power_series
+
+
+
+$f$ を $[x^0] f = 0$ かつ $[x^1] f \neq 0$ となる形式的べき級数とするとき，$f(g(x)) = g(f(x)) = x$ となる $g$ を $f$ の逆関数といいます．$f$ の $N$ 次までが与えられているとき，$g$ の $N$ 次までを $O(N^2)$ や $O((N\log N)^{1.5})$ 時間でできます．$f(g(x)) – x = 0$ という方程式について Newton 法をすることを考えると，いろいろな $p(x)$ に対して合成 $f(p(x))$ や $f'(p(x))$ などが計算できればよくて，合成の計算は上で述べた通りです．$1, 2, 4, \ldots, 2^k$ ($2^k\geq N$) の場合の合成を計算することになって，合成を $O(N^2)$ や $O((N\log N)^{1.5})$ 時間で行うことで，逆関数も同様の計算量で計算できます．
+
+
+
+
+http://www.eecs.harvard.edu/~htk/publication/1978-jacm-brent-kung.pdf
+
+
+
+またこの議論を踏まえると，$f(g(x))$ が $O(N\log N)$ 時間で求まるならば，$f$ の逆関数も $O(N\log N)$ 時間で求められることが分かります．例えば $f$ が低次の多項式や有理式である場合などに利用できます．
+
+
+
+
+だったのですが，2024年3月に noshi91 さんにより，合成および逆関数が $O(N\log^2N)$ 時間で求まることを示す次の記事が発表されました．上の合成の項目も参考にしてください．具体的な実装については，次の問題への提出を参考にしてください．
+
+
+
+
+https://judge.yosupo.jp/problem/compositional_inverse_of_formal_power_series_large
+
+
+
+
+
+多項式の除算
+
+
+多項式除算の商を求めることは，reverse して形式的べき級数の除算をすることに帰着できて，$O(N\log N)$ 時間でできます．
+
+
+
+
+https://judge.yosupo.jp/problem/division_of_polynomials
+
+
+
+多項式の gcd
+
+
+half-gcd という手法で $O(N\log^2N)$ 時間．細かい議論や実装が結構大変だと思います（個人的には 2022年4月現在の Library Checker の 多項式・形式的べき級数まわりの問題で一番難しかったです）．
+
+
+
+
+https://judge.yosupo.jp/problem/inv_of_polynomials
+
+
+https://scrapbox.io/37zigen-43465887/half-GCD
+
+
+
+$f^k \bmod g$
+
+
+$f, g$ を $N$ 次多項式として，$O(N\log N\log k)$ 時間でできます．多項式乗算・多項式除算ができるので，あとは繰り返し $2$ 乗法を利用するだけです．
+
+
+繰り返し $2$ 乗法にはよく知られたアルゴリズムが $2$ 種ありますが，$f$ が疎である（$f$ との乗算が高速）場合は $f$ 倍と $2$ 乗に分解する再帰的な方法の方が定数倍がよいです．
+
+
+$x^k \bmod f$
+
+
+上述の通り $O(N\log N \log k)$ 時間でできますが，繰り返し $2$ 乗法よりも定数倍がよい方法もあります．
+
+
+
+
+https://qiita.com/ryuhe1/items/c18ddbb834eed724a42b
+
+
+
+$f^k \bmod (1-x^N)$, $N$ は $ 2 $ べき
+
+
+FFT は，$\bmod 1-x^N$ での畳み込みを各点積に変えるという性質があって，この形の畳み込みは非常に扱いやすいです．そもそも多項式の積を FFT で求めるときにはこの性質を用いているのでした．
+
+
+したがって長さ $N$ の FFT をして，各点ごとに $k$ 乗してから iFFT すればよいです．$O(N\log N + N\log k)$ 時間．
+
+
+$N$ を一般化しようとすると，長さ $N$ の離散フーリエ変換を十分高速に行うことが課題となります．例えば $\mod p$ で $1$ の原始 $N$ 乗根がとれるならば，この方法が使えるということになります．
+
+
+
+
+https://dic.kimiyuki.net/chirp-z-transform
+
+
+https://judge.yosupo.jp/problem/multipoint_evaluation_on_geometric_sequence
+
+
+https://judge.yosupo.jp/problem/polynomial_interpolation_on_geometric_sequence
+
+
+
+$N$ が小さければ，$O(N^2)$ 時間で愚直にフーリエ変換することも考えられます．例えば次の問題は，複素数体で長さ $10$ 以下のフーリエ変換をする方法でも解けます．
+
+
+
+
+https://atcoder.jp/contests/s8pc-6/tasks/s8pc_6_f
+
+
+
+
+
+分割の数え上げ (1)
+
+
+$N$ 以下の整数の列 $(A_1,\ldots, A_M)$ に対して，$\prod (1 + x^{A_i})$ や $\prod (1-x^{A_i})^{-1}$ の $N$ 次までが $O(M + N\log N)$ 時間で計算できます．
+
+
+
+
+https://judge.yosupo.jp/problem/sharp_p_subset_sum
+
+
+
+$\prod f_i = \exp(\sum \log f_i)$ を使います．$\log (1+x^{A_i})$ には $0$ でない係数が $N/A_i$ 個程度あります．各 $n$ に対して $A_i = n$ となる $i$ の個数を求めておけば，$\sum N/n \in O(N\log N)$ 時間で $\sum \log f_i$ を計算できます．
+
+
+特に，$N$ 番目までの分割数が $O(N\log N)$ 時間で計算できます．が，分割数に関しては五角数定理と $1/f$ の計算を利用した方が定数倍がよいです．
+
+
+
+
+https://judge.yosupo.jp/problem/partition_function
+
+
+
+
+
+
+
+
+分割の数え上げ (2)
+
+
+$A_1,\ldots, A_M$ が与えられていて $S = \sum A_i$ とするとき，$[x^N] \prod (1-x^{A_i})^{-1}$ が $O(SM\log N)$ 時間または $O(S\log S\log N)$ 時間．
+
+
+有理式の係数 $[x^N] f/g$ に帰着されますが，Bostan-Mori をやっていこうとすると $g(x)g(-x) = g(x^2)$ （$1-x^2=(1-x)(1+x)$ なので）より常に分母が変化しないというのがびっくりポイント．分子は $g$ と畳み込むことが必要ですが，FFT で $O(S\log S)$ 時間または疎な多項式の積に分解してひとつずつかければ $O(SM)$ 時間です．
+
+
+
+
+https://yukicoder.me/problems/no/137
+
+
+
+桁 dp と見なすことでも，同様の $O(SM\log N)$ 時間の解法が得られます（出題者の解説）．同じ解法を形式的べき級数で考察しようとしたときの導出が面白かったです．
+
+
+
+
+
+
+
+多項式の総積
+
+
+$f_1, \ldots, f_M$ を多項式として，次数の総和が $N$ であるとします．総積を $O(N\log^2 N)$ 時間で計算できます．分割統治により計算します．
+
+
+
+
+https://atcoder.jp/contests/abl/tasks/abl_f
+
+
+https://judge.yosupo.jp/problem/product_of_polynomial_sequence
+
+
+
+$f_i$ が低次だとしても $\log f_i$ が疎になるわけではないので，$\exp, \log$ による高速化は一般にはできないことに注意してください（$O(NM\log N)$ 時間になってしまう）．
+
+
+なお，$1$ 次式を $2^N$ 個かけるという状況では，「$2^n$ 次の多項式を $2$ つかける」類の計算を繰り返すことになり，この多項式の次数の組合せは $2$ べきの FFT による畳み込みのワーストケースを引き続けます．長さ $2^{n+1}$ の巡回畳み込みを計算したあと定数項・$2n$ 次の係数を補正するなどの手段で定数倍が良くなります．
+
+
+
+
+
+
+
+
+
+有理式の総和
+
+
+$f_1, \ldots, f_M, g_1, \ldots, g_M$ を多項式として，次数の総和が $N$ であるとします．$\sum_i f_i / g_i$ は，$N$ 次以下の多項式 $g, h$ を用いて $g/h$ と書けます．この $g, h$ が $O(N\log^2N)$ 時間で計算できます．やはり分割統治すればこの計算量になります．
+
+
+
+
+https://yukicoder.me/problems/no/1857
+
+
+
+
+
+
+
+
+$i$ 乗和の $i$ に関する列挙
+
+
+$A_1, \ldots, A_N$ が与えられたとき，$\sum_n A_n^i$ を $i=0, 1, \ldots, N$ で列挙することが $O(N\log^2 N)$ 時間でできます．求めるべきは $\sum (1-A_ix)^{-1}$ ですが，これを有理式として計算したあとで形式的べき級数除算をすればよいです．
+
+
+より定数倍がよい方法として，積分して $\sum \log (1-A_i x) = \log \prod(1-A_i x)$ の計算に帰着するというものがあります．多項式の総積と $\log f$ の計算に帰着して $O(N\log^2N)$ 時間です．
+
+
+
+
+https://yukicoder.me/problems/no/1145
+
+
+
+基本対称式の列挙
+
+
+$A_1, \ldots, A_N$ が与えられたとき，$d$ 次の基本対称式 $\sum_{i_1 < \cdots < i_d} \prod_j A_{i_j}$ の列挙が $O(N\log^2 N)$ 時間でできます．$\prod(1+A_ix)$ の計算をすればよいので，多項式の総積で述べた通りです．
+
+
+
+
+$(1-x)(1-qx)\cdots (1-q^{n-1}x)$
+
+
+$f(x) = 1-x$, $F(x) = f(x)f(qx)f(q^2x)\cdots f(q^{n-1}x)$ とすると，関数等式 $F(x) f(q^nx) = F(qx) f(x)$ が成り立ちます．ここから係数間の疎な関係式が得られて順番に計算できます．
+
+
+特に，$q$ 二項係数が $\binom{N}{i}_q$ の列挙が $O(N)$ 時間でできます．
+
+
+
+
+https://github.com/yosupo06/library-checker-problems/issues/980
+
+
+
+より一般の $f$ で $f(x)f(qx)\cdots f(q^{n-1}x)$ を計算することを考えます．$f$ が疎ならば同様にできます．$f$ が密ならば， $\log, \exp$ を利用すれば $O(N\log N)$ 時間です．
+
+
+
+
+
+$F_n^k$ （Fibonacci 数列の $k$ 乗）が満たす線形漸化式
+
+
+Fibonacci 数列に限らず，$3$ 項間漸化式を持つならば同様です．
+
+
+C-recursive な数列の積は C-recursive なので，特に $k$ 乗も C-recursive です．この数列が持つ線形漸化式を求めましょう．
+
+
+$1-x-x^2 = (1-ax)(1-bx)$ となる $a, b$ をとって，以下 $a\neq b$ であるとします．$F_n$ は $a^n, b^n$ の線形結合であるから，$F_n^k$ は $a^k, a^{k-1}b, \ldots, ab^{k-1}, b^k$ の $n$ 乗の線形結合です．したがって $F_n^k$ は $k+2$ 項間漸化式を持つことが分かります．その漸化式を復元するには次の積を計算すればよいです：$(1-a^kx)(1-a^{k-1}bx)\cdots (1-ab^{k-1}x)(1-b^kx)$.
+
+
+これは上に述べた $(1-x)\cdots (1-q^N x)$ の計算と同じことになります．積を $f(x)$ とすれば，関数等式 $f(ax)(1-b^{k+1}x) = f(bx)(1-a^{k+1}x)$ から，隣接する係数の比が $a^n-b^n$ の形の数の比として計算できることが分わかります．$(a^n-b^n)/(a-b)$ は元の $3$ 項間漸化式と同じ漸化式を満たすので，この比も順に計算できます．$a,b$ は $\Q$ や $\mathbb{F}_p$ の元としてとれるとは限りませんが，そこも結局問題とならず，$(1-a^kx)(1-a^{k-1}bx)\cdots (1-b^kx)$ は $O(k)$ 時間で計算できます．
+
+
+結局，係数は連続するフィボナッチ数の積の商で表され，Fibonacci 二項係数ということもあるらしいです．
+
+
+
+
+
+
+Polynomial Taylor Shift
+
+
+$O(N\log N)$ 時間．素直に $O(N^2)$ で計算する式を作ると畳み込みで計算できることが分かります．
+
+
+
+
+https://judge.yosupo.jp/problem/polynomial_taylor_shift
+
+
+
+特に，$\sum_n A_n\binom{n}{i}$ の $i$ に関する列挙ができます．
+
+
+
+Bell 数
+
+
+Bell 数とは $n$ 個のものをグループに分ける方法の数え上げです．指数型母関数が $\exp(\exp x – 1)$ なので $O(N\log N)$ 時間で計算できます．
+
+
+第 1 種 Stirling 数
+
+
+符号なし第 $1$ 種 Stirling 数 $c(n,k)$ とは，$n$ 個のものを $k$ 個のサイクルに分ける方法の総数です．したがって例えば $\sum_k c(n,k) = n!$ が成り立ちます．これに適切な符号をつけたもの $s(n,k)$ を第 $1$ 種 Stirling 数と呼び分けることもあります．
+
+
+$\sum_k c(n,k)x^k = x(x+1)\cdots (x+n-1)$ です．$c(N,k)$ の $k$ に関する列挙が $O(N\log N)$ 時間でできます．分割統治をして片側半分の計算を polynomial shift で再利用することで，$O(N\log N)$ 時間が達成できます．
+
+
+
+
+https://judge.yosupo.jp/problem/stirling_number_of_the_first_kind
+
+
+
+下記の $\prod_{k} f(kx)$ を利用する別解法もあります．reverse すると $\prod_{n=0}^{N-1} (1 + nx)$ の係数が $c(N, N – k)$ であることが分かるので，$k = 0, 1, \ldots, K$ に対する $c(N, N – k)$ の列挙が $O(K\log K)$ 時間でできます．この別解は巨大な $N$ に対しても $c(N, N-k)$ を列挙できるところが優れています．
+
+
+$K$ を固定したときの $c(n, K)$ の $n$ に関する列挙もできます．$c(n,k)$ には $2$ 変数指数型母関数 $\sum_{n,k}c(n,k)t^k\dfrac{x^n}{n!} = (1-x)^{-t} = \exp t(-\log (1-x))$ があります．$K$ を固定して $t^K$ の係数を見ると $\sum_{n}\dfrac{c(n,K)}{n!} x^n = \dfrac{1}{K!}\bigl(-\log(1-x)\bigr)^K$ が得られるので，$c(n,K)$ の $n$ に関する列挙が形式的べき級数のべき乗を利用して $O((N-K)\log (N-K))$ 時間でできます．
+
+
+
+
+第 2 種 Stirling 数
+
+
+第 $2$ 種 Stirling 数 $S(n,k)$ とは，$n$ 個のものを $k$ 個の空でない部分集合に分ける方法の総数です．したがって例えば $\sum_{k} S(n,k)$ は Bell 数に等しいです．
+
+
+包除原理などから $S(n,k) = \dfrac{1}{k!} \sum_{i=0}^k (-1)^{k-i}\binom{k}{i}i^n$ や $\sum_{n} S(n,k)\dfrac{x^n}{n!} = \dfrac{1}{k!}(e^x-1)^k$ が成り立ちます．$S(N,k)$ の $k$ に関する列挙が前者の式と畳み込みで $O(N\log N)$ 時間でできる．$S(n,K)$ の $n$ に関する列挙は後者の式から $O((N-K)\log (N-K))$ 時間でできる．
+
+
+
+
+https://judge.yosupo.jp/problem/stirling_number_of_the_second_kind
+
+
+
+
+
+
+$\sum A_i(x+a)^i(x+b)^{N-i}$
+
+
+分割統治を考えると $\Theta(N\log^2N)$ 時間ですが，polynomial taylor shift をうまく使うと $O(N\log N)$ 時間になります（ARC 133 F で参加者の提出から）．
+
+
+polynomial taylor shift をすると，$\sum A_i(x+a)^ix^{N-i}$ の形の計算に帰着できます．これは $x^N\sum A_i(1+ax^{-1})^i = x^N\sum a^iA_i (1/a + x^{-1})^i$ ということになるので，$\sum a^iA_ix^i$ を $1/a$ だけ shift してから reverse するような形で計算できます．
+
+
+
+
+
+
+多点評価
+
+
+簡単のため多項式の次数，評価点ともに $N$ 個とします．$N$ 次多項式を $M$ 個の点で評価する問題です．例えば評価点を固定して多点評価写像の転置を考え，転置原理を用いるという計算方法の導出があります．$O(N\log^2N)$ 時間で計算できます．
+
+
+
+
+https://judge.yosupo.jp/problem/multipoint_evaluation
+
+
+https://37zigen.com/multipoint-evaluation/
+
+
+https://codeforces.com/blog/entry/100279
+
+
+
+評価点が等比数列の場合には，$O(N\log N)$ 時間になります．
+
+
+
+
+https://dic.kimiyuki.net/chirp-z-transform
+
+
+https://judge.yosupo.jp/problem/multipoint_evaluation_on_geometric_sequence
+
+
+
+多項式補間
+
+
+$N$ 次多項式および，$N+1$ 個の相異なる評価点での値 $(x_i, f(x_i))$ が与えられていて，$f$ の係数列を復元する問題です．分割統治により $O(N\log^2N)$ 時間で計算できます．
+
+
+
+
+https://judge.yosupo.jp/problem/polynomial_interpolation
+
+
+https://37zigen.com/lagrange-interpolation/
+
+
+
+評価点が等比数列の場合には $O(N\log N)$ 時間になります．
+
+
+
+
+https://noshi91.github.io/algorithm-encyclopedia/polynomial-interpolation-geometric#noredirect
+
+
+https://judge.yosupo.jp/problem/polynomial_interpolation_on_geometric_sequence
+
+
+
+多項式の評価点シフト
+
+
+これも「多項式補間」というと個人的に思っていたんですが，分からなくなったので，Library checker の問題名から評価点シフトと表記します．
+
+
+$f$ が $N$ 次多項式であり，$f(0), \ldots, f(N)$ が与えられているとき，$f(a)$ が $O(N)$ 時間で計算できます．Lagrange 補間の式を考えて，評価点が等間隔であることを用いると，適当な列の区間積を求めることに帰着できます．
+
+
+$M$ 個の点 $f(a), \ldots, f(a+M-1)$ で同時に評価することも，$O((N+M)\log(N+M))$ 時間あるいは長さ $N$, $M$ の列を畳み込む時間でできます．
+
+
+
+
+https://judge.yosupo.jp/problem/shift_of_sampling_points_of_polynomial
+
+
+
+$f$ の係数列そのものは復元しません（$f$ の係数列が $o(N\log^2N)$ になるという話は聞いたことがありません）．
+
+
+
+
+部分分数分解
+
+
+最も単純な場合について述べます．$f(x)$ を $N$ 次未満の多項式，$a_i$ を相異なる $N$ 個の評価点とするとき，$\dfrac{f(x)}{\prod_i (1-a_ix)}=\sum_i\dfrac{c_i}{1-a_ix}$ を満たす $c_i$ を求めることが $O(N\log^2N)$ 時間でできます．
+
+
+reverse などにより $\dfrac{f(x)}{\prod_i (x-a_i)}=\sum_i\dfrac{c_i}{x-a_i}$ という問題に帰着しておきます．$f(x) = \sum_ic_i \prod_{j\neq i}(x-a_j)$ と変形し $x=a_i$ を代入することを考えます．左辺 $f(a_i)$ は多点評価により計算できます．右辺に代入したものも $g(x) = \prod_i(x-a_i)$ とすると $g'(a_i)$ と書けるので，これも多点評価により計算できます．
+
+
+
+
+https://atcoder.jp/contests/abc241/tasks/abc241_h
+
+
+
+Vandermonde 行列の作用
+
+
+$a_i$ を相異なる $N$ 個の点とし，$N\times N$ 行列 $A$ を $A_{i,j} = a_i^j$ により定めます．次の 4 つのものがいずれも $O(N\log^2N)$ で計算できます．
+
+
+
+
+列ベクトル $v$ が与えられ，$Av$ を求める．
+
+
+列ベクトル $v$ が与えられ，$A^{\mathsf{T}}v$ を求める．
+
+
+列ベクトル $v$ が与えられ，$A^{-1}v$ を求める．
+
+
+列ベクトル $v$ が与えられ，$(A^{\mathsf{T}})^{-1}v$ を求める．
+
+
+
+最初の 2 つが順に，多点評価，有理式の総和 $\sum_{i}\dfrac{v_i}{1-a_i x}$ に対応します．したがって残りの 2 つは多項式補間，部分分数分解です．これらが $O(N\log^2N)$ 時間でできることは既に解説しました．
+
+
+$\sum_{n=0}^N n^k$
+
+
+$O(k)$ 時間で計算できます．
+
+
+この総和は $N$ の $k+1$ 次多項式です．よって $N=0,1,\ldots,k+1$ の値を求めたあと，評価点シフトすればよいです．$n^k$ の $n$ に関する列挙は，素数のところ（約 $k/\log k$ 個）を繰り返し $2$ 乗法で求めたあと $(ap)^k=a^kp^k$ で補間すれば，全体として $O(k)$ 時間で行えます．
+
+
+なお，$\sum_{n=0}^N n^k = S_k(N)$ となる $k+1$ 次多項式 $S_k$ そのものが欲しい場合，Faulhaber の公式 により Bernoulli 数 の計算に帰着できます．Bernoulli 数を定義通りの形式的べき級数除算で列挙することで，$S_k$ を $O(k\log k)$ 時間で求められます．
+
+
+
+
+https://judge.yosupo.jp/problem/bernoulli_number
+
+
+
+答が多項式になると分かれば小さいところを計算したあと評価点シフトすればよいというアイデアは，単純な $k$ 乗和以外でも利用可能です．例えば$\sum_{n=0}^N(3+4n+5n^2)^k$ なども $O(k\log k)$ 時間の前計算のもと $N$ ごとに $O(k)$ 時間でできます．
+
+
+$\sum_{n=0}^{N-1} n^k$ の $k$ に関する列挙
+
+
+$N$ を固定したときに $\sum_{n=0}^{N-1} n^k$ を $k=0, 1, \ldots, K$ に対して列挙しましょう．$\sum A_i^k$ の列挙が $O(N\log^2N)$ などの時間でできることは既に述べましたが，その特殊ケースであるこちらはより高速にできます．
+
+
+必要な和は $1 + e^x + e^{2x} + \cdots + e^{(N-1)x}$ の計算の係数から取り出せます．したがってこの和を計算すればよいですが，これは等比数列の和なので $\dfrac{e^{Nx}-1}{e^x-1}$ と式変形をすることで $O(K\log K)$ 時間でできます．分母の定数項が $0$ であるので，先に分子・分母を $x$ で割っておくことで形式的べき級数の除算の形にします．
+
+
+$\sum_{n=0}^{N-1} f(n)$ の計算
+
+
+$f$ を $K$ 次多項式とするとき， $\sum_{n=0}^{N-1}f(n)$ が $O(K\log K)$ 時間で計算できます．上で述べた通り，$\sum_{n=0}^{N-1} n^k$ が $k$ について列挙できるのでよいです．
+
+
+
+
+$\sum_{k=L}^{R-1} f(kx)$ の計算
+
+
+$\sum_{k=L}^{R-1} f(kx)$ の $N$ 次までが $O(N\log N)$ 時間で計算できます．
+
+
+$n$ 次の係数を求めることを考えると，$\sum_{k=0}^{K-1}k^n$ が求められればよく，これは上述の通り $n=0,\ldots,N$ に対する列挙が可能です．
+
+
+$\sum_{k=L}^{R-1} f(k^2x)$ なども同じようにできます．
+
+
+
+
+$\prod_{k=L}^{R-1} f(kx)$ の計算
+
+
+$\prod_{k=L}^{R-1} f(kx)$ の $N$ 次までが $O(N\log N)$ 時間で計算できます．$\exp, \log$ を用いて $\sum_{k=L}^{R-1} f(kx)$ を求める問題に帰着すればよいです．
+
+
+$[x^0]f \neq 1$ の場合に $\exp, \log$ を利用する議論を確認しておきます．$f\neq 0$としてよく，$f(x) = cx^dg(x)$ となる $c\neq 0$, $d\geq 0$ および $[x^0]g=1$ となる $g$ がとれます．$\prod f(kx) = \prod c(kx)^d\cdot \prod g(kx)$ であり，このうち $\prod g(kx)$ は $\exp, \log$ で処理できます．
+
+
+$\prod c(kx)^d = c^{R-L}x^{d(R-L)}\cdot (\prod k)^d$ であり，$\prod_{k=L}^{R-1} k$ の形の計算が必要そうに見えます．しかし $d=0$ ならばこの部分は計算不要ですし，$d>0$ ならば，$x^{d(R-L)}$ の項があるため $R-L > N$ の場合にはそもそも答が $0$ になります．結局 $\prod_{k=L}^{R-1} k$ の計算が必要なのは $R-L\leq N$ の場合だけであり，この部分は $O(N)$ 時間で計算できます．
+
+
+分割の数え上げ (3)
+
+
+$N$ を $1, 5, 10, 50, 100, 500$ に分割する方法の数え上げが，$N$ について定数時間でできます．
+
+
+これは，分母が $(1-x)(1-x^5)(1-x^{10})(1-x^{50})(1-x^{100})(1-x^{500})$ の有理式の係数を求める問題でです．この分母の倍数として $(1-x^{500})^6$ がとれるので，答は $f(x) / (1-x^{500})^6$ の形の有理式の係数列です．特に，$500$ 項ごとに見て $5$ 次多項式の規則があります．したがって，事前に $3000$ 次まで係数を求めておけば，$5$ 次多項式の評価点シフトに帰着できます．
+
+
+
+
+https://yukicoder.me/problems/no/42
+
+
+
+
+
+$\sum_{n=0}^N n^kr^n$, $\sum_{n=0}^{\infty} n^kr^n$
+
+
+まず，$n^kr^n$ という数列は，$f(x) / (1-rx)^{k+1}$ の形の有理式を母関数に持ちます．したがってその累積和は $f(x) / (1-x)(1-rx)^{k+1}$ の形の有理式を母関数に持ちます．
+
+
+$r=1$ ならば係数列は多項式なので，評価点シフトに帰着できます．以下 $r\neq 1$ とします．
+
+
+$f(x) / (1-x)(1-rx)^{k+1} = c/(1-x) + g(x) / (1-rx)^{k+1}$ （$c$ は定数，$g$ は $k$ 次以下）という部分分数分解を考えます．$(1-rx)^{k+1}$ をかけたときの $k+1$ 次の係数を見ることで $c$ が復元できます（係数ひとつ得るだけなので畳み込む必要はなく，$c$ は $O(k)$ 時間で手に入ります）．
+
+
+$g(x)/(1-rx)^{k+1}$ の係数 $k+1$ が求まります．この係数列は $r^N$ と多項式の積なので，$N$ 次の係数は多項式の評価点シフトに帰着して $O(k)$ 時間で計算できます．
+
+
+
+
+https://judge.yosupo.jp/problem/sum_of_exponential_times_polynomial
+
+
+
+この理解に基づくと，次の問題の方が簡単である．$g(x) / (1-rx)^{k+1}$ の係数は $r^N$ と多項式の積なので $0$ に収束して，$c$ が答です．
+
+
+
+
+https://judge.yosupo.jp/problem/sum_of_exponential_times_polynomial_limit
+
+
+
+
+
+$r\neq 1$ のとき，$\sum_{n=0}^{N-1}r^nn^k = c + r^Nf(N)$ となる定数 $c$ と $k$ 次多項式が存在します．この $c, f$ を求めることもできます．やりたいことは Faulhaber の公式と似ているでしょうか．導出も同じようにできます．
+
+
+$$\sum_{n=0}^{N-1}r^nn^k=k!\cdot [x^k]\left(\sum_{n=0}^{N-1}(re^x)^n\right) = k!\cdot [x^k]\frac{1-r^Ne^{Nx}}{1-re^x}$$
+
+
+です．$r\neq 1$ のとき $\dfrac{1}{1-re^x} = \sum_{i=0}b_ix^i$ となる列 $b$ があります．$k!\cdot [x^k](1-r^Ne^{Nx})\cdot (\sum b_ix^i)$ から，求める和を $c+r^Nf(N)$ の形にすることができます．列 $b$ を求めるのは形式的べき級数逆元で，$O(k\log k)$ 時間で $c,f$ が得られます．
+
+
+$[x^M]1/(1-x-x^2)(1-x)^N$
+
+
+単に線形漸化式補間だと思うと $O(N\log N\log M)$ 時間ですが，これも $(a+bx)/(1-x-x^2) + f(x) / (1-x)^N$ の形の部分分数分解を考えることで高速化できます．$a, b$ は $(1-x)^N$ をかけたときの $N, N+1$ 次の係数から復元できます．$[x^M] (a+bx)/(1-x-x^2)$ は $O(M\log M)$ 時間で計算できます．$[x^M] f(x) / (1-x)^N$ の部分は $M$ の $N+1$ 次多項式なので，評価点シフトにより $O(N)$ 時間で計算できます．結局 $[x^M]1/(1-x-x^2)(1-x)^N$ は $O(N + \log M)$ 時間で解けます．
+
+
+
+
+https://atcoder.jp/contests/s8pc-3/tasks/s8pc_3_g
+
+
+
+
+
+
+relaxed multiplication
+
+
+$h = fg$ があり，$i=0, 1, \ldots, $ の順に次を行うことが $O(N\log^2N)$ 時間でできます．
+
+
+
+
+$i$ について昇順に次を行う：$[x^i] f$, $[x^i] g$ が与えられるので，$[x^i] h$ を求める．
+
+
+
+$[x^i]h$ を求めるまで $[x^{i+1}]f$, $[x^{i+1}]g$ が与えられないという制限があります．
+
+
+分割統治の要領で $O(N\log^2N)$ 時間で $h$ を計算できます．
+
+
+
+
+https://atcoder.jp/contests/abc230/editorial/3036
+
+
+https://qiita.com/Kiri8128/items/1738d5403764a0e26b4c
+
+
+ほぼそのものが出題：https://atcoder.jp/contests/abc315/tasks/abc315_h
+
+
+
+例えば $f = (xf + \ldots)g$ や $f’ = (f + \ldots) g$ のように，両辺に同じ未知数 $f$ がある方程式ができたときに利用できます．
+
+
+
+
+$\prod_{i}(a_ix+b_i)^{c_i}$
+
+
+$M$ 個の $1$ 次式のべき乗の積 $\prod_{i}(a_i+b_ix)^{c_i}$ を $N$ 次まで求めることが，$O(M\log^2M + N\log N)$ 時間でできます．
+
+
+まず $a_i=0$ の場合と定数倍を適切に扱うことで $a_i = 1$ の場合 $\prod_{i}(1+b_ix)^{c_i}$ に帰着しておきます．$F = \prod_{i}(1+b_ix)^{c_i}$ としたとき
+
+
+$$(\log F)’ = \sum_i \dfrac{b_ic_i}{1+b_ix}$$
+
+
+が成り立ちます．右辺は有理式としての分子・分母が $O(M\log^2M)$ 時間で計算できます．その $N$ 次までを $O(N\log N)$ 時間で求めたあと，それを積分して $\exp$ すれば $F$ が得られます．
+
+
+より一般に低次の多項式・有理式のべき乗の総積という状況で同じことができます．
+
+
+$\sum_{i}a_i \exp(b_ix)$
+
+
+$M$ 個の $\exp(bx)$ の線形結合 $\sum_{i}a_i \exp(b_ix)$ の $N$ 次までを求めることが，$O(M\log^2M + N\log N)$ 時間でできます．
+
+
+$\exp(bx) = \sum_{n} \dfrac{b^n}{n!}x^n$ が，係数ごとの $n!$ 倍により $\sum_{n} b^nx^n = \dfrac{1}{1-bx}$ に対応することを利用します．結局 $\dfrac{a_i}{1-b_ix}$ を計算したあと係数ごとに $n!$ で割ればよいです．有理式としての分子・分母が $O(M\log^2M)$ 時間で計算できるので，その $N$ 次までを除算すればよいです．
+
+
+$b_i$ が小さな非負整数の場合には，多項式 $f$ に対して $f(\exp x)$ を計算できたという見方もできます．
+
+
+疎な微分方程式
+
+
+$a(x), b(x)$ が疎な形式的べき級数とし，$[x^0]a=1$ を満たすとします．このとき $1$ 階線形微分方程式
+
+
+$$a(x)F'(x) + b(x)F(x) = 0,\qquad [x^0]F=1$$
+
+
+の解が一意存在し，$O(NK)$ 時間で求められます（$K$ は $a,b$ の非零項の個数）．係数を $a_i, b_j$ などと書くことにして両辺の $[x^n]$ の比べると
+
+
+$$\sum_i a_i(n-i+1)F_{n-i+1} + \sum_j b_jF_{n-j} = 0$$
+
+
+となり，左辺は $a_0(n+1)F_{n+1}$ および $F_n$ までから計算できる値からなるので $F_n$ を順に計算できます．
+
+
+疎な場合の高速化 (2)
+
+
+$f, g$ が疎な形式的べき級数で，非零項が $K_1, K_2$ 個であるとする．簡単のため $[x^0]f=[x^0]g=1$ とします．このとき $f^ng^m$ や $\exp(f/g)$ などの計算が $O(NK_1K_2)$ 時間でできます．
+
+
+まず $F = f^ng^m$ は，$\log F = n\log f + m\log g$ より $\dfrac{F’}{F} = \dfrac{nf’}{f} + \dfrac{mg’}{g}$ から $F$ についての疎な線形微分方程式が得られます．
+
+
+$f^ng^m$ の $n, m$ は負でもよいです．例えば $\dfrac{(x+x^2)^{N}}{(1-x^3)^N}$ が線形時間で計算できます（https://atcoder.jp/contests/abc276/tasks/abc276_g）．
+
+
+$F = \exp(f/g)$ も，$\log F = f/g$, $\dfrac{F’}{F} = \dfrac{f’g-fg’}{g^2}$ より同様です．
+
+
+
+
+$\exp(f/g)$ の例題：https://yukicoder.me/problems/no/1080
+
+
+
+$fgF$ などを $gF$, $g’F$ などを介してこれらの計算量を $O(N(K_1+K_2))$ にすることも可能です：https://twitter.com/noshi91/status/1588918117417512963
+
+
+特殊な合成
+
+
+$f$ を $N$ 次以下の多項式，$g$ を形式的べき級数とし，$f(g(x))$ を $N$ 次まで計算する問題を考えます．特別な制約がない場合には上で扱っており，ここではそれよりも計算量が良くなる場合について扱います．特別な制約がない場合の合成が $O(N\log^2N)$ 時間で行えることが判明したため，以下で述べるものは特別な制約がない場合と比べて計算量が改善するとは限りません．
+
+
+$f$ は多項式としていることに注意してください．実際，以下のいくつか（例えば $f(a+bx)$ や $f(e^x)$）は一般の形式的べき級数 $f$ については定義できません．$a,b,c$ などは特に断らなければ適当な定数です．
+
+
+
+
+$f(g(x))$ で $g(x)$ が低次の多項式：自然な分割統治で $O(N\log^2N)$ 時間．区間 $[L,R)$ に対して $g(x)^{R-L}$ と $\sum_{i=L}^{R-1} f_ig(x)^{i-L}$ の組を計算するという要領です．
+
+
+$f(g(x))$ で $g(x)$ が分子・分母が低次数の有理式である場合も，同様の計算方法・計算量でできます．
+
+
+$f(ax+b)$：$1$ 次以下の多項式の場合には $O(N\log N)$ 時間でできます．$a=0$ の場合は明らかです．そうでないとき $f(ax+b) = f(a(x+b/a))$ とすれば，$f(ax)$ および $f(x+c)$ の形の計算に帰着できます．前者は係数ごとの $a^i$ 倍，後者は Polynomial Taylor Shift が利用できます．
+
+
+$f((a+bx)/(c+dx))$：これも $O(N\log N)$ 時間でできます．適当な定数倍の処理により，$f((1+ax)/(1+bx))$ の形の計算に帰着します．$(1+bx)^N$ を分母としたときの分子を考えると，$\sum f_i(1+ax)^i(1+bx)^{N-i}$ の計算に帰着されますが，これは $\sum A_i(x+a)^i(x+b)^{N-i}$ の項目 で述べたのと全く同様にして $O(N\log N)$ 時間で計算できます．
+
+
+$f(ax^2+bx+c)$：$O(N\log N)$ 時間．平方完成を考慮すれば，polynomial taylor shift と $f(ax+b)$ の計算に帰着できます（SSRS さん情報）．
+
+
+$f(e^x)$：$\sum_{i}a_i \exp(b_ix)$ の項目で扱ったように $O(N\log^2N)$ 時間でできます．
+
+
+$f(\log(1-x))$：$F(x)=f(\log(1-x))$ とすれば $F(1-e^x)=f(x)$ が成り立ちます．つまり $F(1-e^x) \bmod x^N$ が与えられたときに $F(x)\bmod x^N$ を求める問題が解ければよいです．この問題の解法は，$F(1-e^x)$ を計算するときの手順の逆手順を考えることで導出できます．
+
+
+
+$F(1-e^x)$ の計算は，$F(x)$ から $F_1(x)=F(1-x)$ を計算し，$F_1(x)$ から $F_2(x)=F_1(e^x)$ を計算するという手順に分解できます．
+
+
+$F_1$ から $F_2$ を計算する手順は，係数ごとに $n!$ 倍などの調整をしたあと $\sum_i b_ix^i \equiv \sum_i \dfrac{a_i}{1-ix}\pmod {x^N}$ の形の計算（$a$ を与えて $b$ を求める）するというものです．$F_2$ から $F_1$ を計算するには同じ式で $b$ を与えて $a$ を求めるという問題を解けばよく，部分分数分解すればよいです．
+
+
+$F_1$ から $F$ を計算するのは $F(x)=F_1(1-x)$ より簡単です．
+
+
+
+
+$f((1-e^x)/(1+e^x))$：$f((1-t)/(1+t))$ を $(1+t)^{-N}F(t)$ の形になおしたあと $t=e^x$ を代入すればよいです．
+
+
+$f\biggl(\log\dfrac{1-x}{1+x}\biggr)$：$y=\dfrac{1-e^x}{1+e^x} \iff x = \log \dfrac{1-y}{1+y}$ なので，これはひとつ上の操作の逆操作です．$\log(1-x)$ のときと同様に，$f((1-e^x)/(1+e^x))$ を代入するときの手順の逆手順を考えると計算方法が導出できます．
+
+
+
+https://qoj.ac/contest/1195/problem/6184 がこの合成を計算する問題に帰着できます．
+
+
+
+
+$f((1+x)^r-1)$：$O(N\log^2N)$ 時間でできます．$f_1(x) = f(e^x-1)$, $f_2(x) = f_1(rx)$, $f_3(x) = f_2(\log(1+x))$ とすれば，$f_3(x)$ が求めるものです．$f$ から $f_1$，$f_1$ から $f_2$，$f_2$ から $f_3$ を得る操作については既に解説されている通り（または自明な応用）で計算できます．（この合成はこの問題で利用できます．）
+
+
+
+
+
+$f$ が低次の多項式でない場合の合成を $N$ 次まで計算したいということもあるのでこの場合の考え方にも触れておきます．この場合には，適当な変数変換により $f$ が低次の多項式の場合に帰着すると上手くいくことがあります．
+
+
+例えば $K$ が $N$ に比べて非常に大きいとし，$f(x) = (1+x)^K, g(x) = e^x$ とします．$f(g(x))=(1+e^x)^K$ です．$[x^0]g(x) \neq 0$ なので，$f^{(N)}(x) = f(x)\bmod x^N$ としても $f(g(x))\equiv f^{(N)}(g(x))\pmod{x^N}$ は成り立ちません．これを平行移動により $f(x)=(2+x)^K$ と $g(x)=-1+e^x$ の合成として扱えば，$[x^0]g(x) = 0$ なので $f(x)$ を $f(x)\bmod x^N$ に置き換えてもよいことになります．したがってこれは多項式と $-1+e^x$ の合成に帰着でき，さらに Polynomial taylor shift により多項式と $e^x$ の合成に帰着して計算することができます．有理式への $e^x$ を代入なども同様の手法で計算できることがあります．
+
+
+
+
+$f\biggl(\log\dfrac{1-x}{1+x}\biggr)$ の計算について，この問題の解説で見たびっくり手法も簡単に紹介しておきます．一般に $g(x)$ を $[x^0]g=0$ かつ $g'(x) = b(x)/a(x)$ が低次の有理式（$a(0)\neq 0$）であるような形式的べき級数とします．
+
+
+次の $2$ 変数形式的べき級数を考えます：$H(x,z) = \exp(zg(x)) = \sum_{n=0}^{\infty} H_n(z)x^n$．
+
+
+$\dfrac{\partial}{\partial x}H(x,z)=zH(x,z)g'(x)$ より $a(x)\dfrac{\partial}{\partial x}H(x,z)=zb(x)H(x,z)$ が得られます．
+
+
+これは，$H_n(z)$ の間に疎な微分方程式を定めており，ある $d\times d$ 行列 $A_0, A_1, \ldots$ を用いて $A_i [H_i,\ldots,H_{i-d+1}]^{\mathsf{T}} = [H_{i+1},\ldots,H_{i-d+2}]^{\mathsf{T}}$ と表すことができます．$A_i$ の成分は $z$ の $1$ 次以下の多項式です．
+
+
+結局次の問題に帰着できます．
+
+
+
+
+多項式 $f$ および，$z$ の $1$ 次以下の多項式を成分とする $d\times d$ 行列 $A_0, A_1, \ldots$ が与えられる．列ベクトル $v, w$ が与えられる．
+
+
+$z$ の多項式 $H_n(z)$ を $H_n(z) = v^{\mathsf{T}}(\prod_{i<n} A_i) w$ として定める．
+
+
+$\sum_n \biggl(\sum_i f_i [z^i]H_n(z)\biggr)x^n$ を求めよ．
+
+
+
+参照した解説では，この問題の転置を解説してあとは転置原理を適用すればよいと説明されていました．ここでは，転置原理を使わずに解法を説明します．
+
+
+$\sum_i f_i[z^i] H_n(z) = [z^0] f(1/z) H_n(z)$ です．分割統治により解きます．区間 $[L,R)$ 内では，次のような問題を解きます．
+
+
+
+
+Laurent 多項式からなる列ベクトル $v$ と多項式行列 $A_L, \ldots, A_{R-1}$ が与えられる．
+
+
+$\prod_{L\leq i<R}A_i$ および $\sum_{L\leq i < R} [z^0]v^{\mathsf{T}} (\prod_{L\leq j<i} A_j) w$ を計算する．
+
+
+
+$[L,M)$ に対して計算した $\prod A_i$ を $v$ にかけて，その $v$ を $[M, R)$ に持ち込むという要領で計算します．長さ $n$ の区間において $v$ の $-n, \ldots, 0$ 次部分しか必要ないことを利用すれば，長さ $n$ の区間で $n$ 次以下の多項式以外不要になり，計算量 $O(N\log^2N)$ が達成できます．
+
+
+Catalan’s Convolution Formula
+
+
+$C(x)$ を Catalan 数の母関数とする．つまり $C(x) = \sum_{n=0}^{\infty}C_nx^n = \sum_{n=0}^{\infty}\dfrac{1}{n+1}\binom{2n}{n}x^n$ とする．
+
+
+$[x^N]C^k(x)$ の計算は，形式的べき級数 pow を使うと $O(N\log N)$ 時間かかってしまう．これをより高速に計算したい．
+
+
+$f(x) = xC(x)$ が $f(x)-f(x)^2=x$ を満たすことから，$f(x)$ は合成逆元 $g(x) = x-x^2$ を持つ．よって $[x^n]C(x)^k=[x^{n+k}]f(x)^k$ を Lagrange 反転して，$[x^n]C(x)^k=\dfrac{k}{n+k}[x^n](x/g(x))^{n+k}=\dfrac{k}{n+k}[x^n](1-x)^{-(n+k)}$ となり，$[x^n]C(x)^k=\dfrac{k}{n+k}\binom{2n+k-1}{n}$ が得られる．
+
+
+よって $C(x)^k$ の $N$ 次までが，階乗前計算あるいは二項係数の差分更新を利用して係数ごとに $O(1)$ 時間で計算できる．
+
+
+Prefix Sum Polynomial
+
+
+$f$ を $d$ 次多項式とするとき，$F(n)=\sum_{k=0}^nf(k)$ が成り立つような $d+1$ 次多項式が存在する．$f$ から $F$ を求めることが $O(d\log d)$ 時間でできる．
+
+
+Faulhaber の公式を利用すれば，$f$ の係数列とBernolli 数の列を適切に畳み込めばよいことが分かる．
+
+
+
+
+https://codeforces.com/blog/entry/98563

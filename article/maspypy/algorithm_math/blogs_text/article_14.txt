@@ -1,0 +1,251 @@
+以下の、解説編を読んでいることを仮定とします。使う記号などは共通で、改めて説明していません。
+
+
+前 → (1) 解説編
+
+
+
+
+
+目次
+
+
+
+ABC 127 [F] Absolute minima
+
+第2回 ドワンゴからの挑戦状 予選 [E] 花火
+
+UTPC 2012 [L] じょうしょうツリー
+
+KUPC 2015 [H] 壁壁壁壁壁壁壁
+
+ARC 070 [E] NarrowRectangles
+
+その他の問題
+
+
+
+
+
+ABC 127 [F] Absolute minima
+
+
+F - Absolute Minima
+
+AtCoder is a programming contest site for anyone from beginners to experts. We hold weekly programming contests online.
+
+atcoder.jp
+
+
+
+解説編で述べたものをそのまま実装すればよいです。
+
+
+解答例：https://atcoder.jp/contests/abc127/submissions/20969428
+
+
+この問題の場合には、集合への追加と中央値の取得が行えたと見なすこともできます。ひとつの要素を追加するために $L\cup R$ を $2$ 元増やしています。優先度付きキューの操作回数を半分にした解法も存在しますが、要素数の偶奇などの場合分けが不要で実装は簡潔になっているかもしれません。
+
+
+（$2$ つずつ挿入することで中央値が要素数の偶奇によらず常に $l_0, r_0$ として見えているの、綺麗で気に入りました）
+
+
+第2回 ドワンゴからの挑戦状 予選 [E] 花火
+
+
+E - 花火
+
+AtCoder is a programming contest site for anyone from beginners to experts. We hold weekly programming contests online.
+
+atcoder.jp
+
+
+
+AC 人数が 3 人のボス問ですが、結構簡単です。ここでは、全ての $t_i$ が相異なる場合について説明します（同時刻の花火の扱いは簡単です、考えてみてください）。結局、次の問題に帰着されます。
+
+
+数列 $p_1, p_2, \ldots, p_N$ が与えられる。単調増加数列 $a_1, a_2, \ldots, a_N$ を上手く作って $\sum_{i}|p_i – a_i|$ を最小化せよ。
+
+
+例えば $a_i$ を $-A, -(A-1), \ldots, A-1, A$ から選ぶとして、$O(NA)$ 時間の DP による解法がすぐに分かると思います。$a_i = x$ まで選んだ時点でのコスト最小値を、$\dp_i(x)$ と書くことにすると、例えば次の要領ですべての $\dp_i(x)$ を計算できますね。
+
+
+$$\dp_{i}(x) = |x-p_i| + \min_{y\leq x} \dp_{i-1}(y)$$
+
+
+で、この式をよく見ると、実は slope trick やるだけ問題であることが分かります。DP による計算結果を、「各点での値を並べたテーブルを計算している」と見るのではなく、「関数を計算している」という見方をしてあげる感じでしょうか。この関数は常に区分線形凸関数になって、slope trick により管理してあげればあとは簡単です。
+
+
+結局、次のようにすれば答が求まります。
+
+
+定数関数 $f(x) = 0$ から始める。
+
+$i=1,2,\ldots$ 順に、以下を繰り返す。
+
+$f(x)$ を、累積 $\min$ に取り換える。
+
+$f(x)$ に、$|x-p_i|$ を加算する
+
+最後に、$f$ の最小値を出力する。
+
+
+
+解答例：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969672
+
+
+なおこの問題では、$|x-p|$ を加算するや否や、累積 min をとって $R$ を初期化するため、$R$ を持つ必要はありません。
+
+
+解答例 2：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969720
+
+
+UTPC 2012 [L] じょうしょうツリー
+
+
+L - じょうしょうツリー
+
+AtCoder is a programming contest site for anyone from beginners to experts. We hold weekly programming contests online.
+
+atcoder.jp
+
+
+
+はじめに、深さ分だけ値を加えておくことで、親から子に向かって広義単調減少列を作る問題に読み替えておきます。木 dp を考えましょう。
+
+
+部分木 $v$ を「じょうしょうツリー」にする操作であって、さらに頂点 $v$ の値が $x$ になるものに対する最小コストを $f_v(x)$ と書くことにします。$v$ の子全体を $C(v)$ と書くことにすると、
+
+
+$$f_v(x) = |x-a_v| + \sum_{w\in C(v)}\min_{y\leq x}f_w(y)$$
+
+
+であることが容易に分かります。これらの関数 $f_v$ を、すべて slope trick で管理しましょう。また、$g_v(x) = \min_{y\leq x} f_v(y)$ と書きます。
+
+
+$g_v$ は $f_v$ から $O(1)$ 時間で計算できる（右側集合を捨てる）。
+
+$f_v$ は、$\sum_{w\in C(v)}g_w$ に $|x-a_v|$ を加算したもの。
+
+
+
+$\sum_{w\in C(v)} g_w$ の処理が問題です。
+
+
+一般に、区分線形凸関数 $f$ に、区分線形凸関数 $g$ を加算することを考えましょう。$f, g$ のデータサイズを $N_f$, $N_g$ とします（各々が持つ $L$, $R$ の要素数の和などと定義してください）。
+
+
+区分線形凸関数 $g$ は、$g(x) = \text{min}_{g} + \sum_{l\in L_g} (l-x)_{+} + \sum_{r \in R_g} (x-r)_{+}$ のような表示を持つのでした。したがって、$g$ を加算することは、
+
+
+$(x-a)_+$ の加算
+
+$(a-x)_+$ の加算
+
+$\min_g$ の加算
+
+
+
+を $N_g$ 回程度行うことと置き換えることができます。よって、$f$ への $g$ の加算は、時間計算量 $O(N_g\log(N_f+N_g))$ 時間で行えることが分かりました。
+
+
+weighted union heuristic を用いて $\sum_{w\in C(v)} g_w$ を計算することで、本問題の木 dp は、全体として $O(N\log^2N)$ 時間で計算できることが分かります。なお、この問題でも右側集合 $R$ は持たないでよいです。
+
+
+解答例：https://atcoder.jp/contests/utpc2012/submissions/20970281
+
+
+解答例の merge 部分を見ると分かりますが、$R$ が空なこともあって、区分線形凸関数の加算は優先度付きキューをマージする操作と完全に一致しています。したがって、meldable な priority queue を利用すると、$O(N\log N)$ 時間で解くこともできると思います。公式解説はそんな感じのことをやっているのかな？
+
+
+KUPC 2015 [H] 壁壁壁壁壁壁壁
+
+
+H - WAAAAAAAAAAAAALL
+
+AtCoder is a programming contest site for anyone from beginners to experts. We hold weekly programming contests online.
+
+atcoder.jp
+
+
+
+やはり、すぐに思いつく DP を式にしてみます。補強材の移動という操作は、各 $i$ に対して、位置 $i$ から $i-1$ に移動させる荷物の個数 $n_i$ を定めることとしてとらえられます（正なら左への移動、負ならば $|n_i|$ 個の右側への移動など）。
+
+
+$n_i = x$ まで定めて、位置 $i-1$ までの補強材が十分になるようにするときの最小コストを、$f_i(x)$ と書く
+
+
+
+ことにしましょう。このとき、$$f_{i+1}(x) = |x| + \min_{A_i – y + x \geq B_i}f_i(y)$$ が成り立つことが分かります。$C_i = A_i – B_i$ として書き直すと $$f_{i+1}(x) = |x| + \min_{y\leq x + C_i} f_i(y)$$ となります。
+
+
+初期状態は、$f_0(x) = \begin{cases}0 & (x=0)\\\infty & (x\neq 0)\end{cases}$ で、求めるものは $f_{N}(0)$ です。
+
+
+$f_0$ は、区分線形凸関数ではなさそうに見えますが、 $L = R = [0,0,0,\ldots]$ と $x=0$ で無限回傾きが変化していると見なして、区分線形凸関数として扱うことができます。
+
+
+$g_i(x) = \min_{y\leq x+C_i} f_i(y)$ はどのように計算できるでしょうか？$z = y – C_i$ とおくと、$g_i(x) = \min_{z\leq x} f_i(z + C_i)$ なので、$g_i$ は $f_i$ を平行移動して累積 min をとったものであることが分かります。
+
+
+結局、$f_i$ から $f_{i+1}$ を計算するステップは、次のように分解できます。
+
+
+$-C_i$ 平行移動する
+
+累積 $\min$ をとる
+
+$|x|$ を加算する
+
+
+
+これは全て、slope trick により簡潔に扱うことができます。平行移動操作が含まれるため、$\text{add}_L$, $\text{add}_R$ も持たせて実装します。
+
+
+最後に計算したいものは $f_N(0)$ です。これは $f_N$ を $(a-x)_{+}$, $(x-a)_+$ に分解することで $O(N)$ 時間で計算できます。
+
+
+はじめに、$L = [0,0,0,\ldots]$ （十分たくさん）から始めることを忘れないようにしましょう。$2N$ 個程度入れておけば大丈夫です。
+
+
+解答例：https://atcoder.jp/contests/kupc2016/submissions/20983323
+
+
+なお、この問題でも $R$ は持たなくてよいです。
+
+
+解答例：https://atcoder.jp/contests/kupc2016/submissions/20983382
+
+
+ARC 070 [E] NarrowRectangles
+
+
+E - NarrowRectangles
+
+AtCoder is a programming contest site for anyone from beginners to experts. We hold weekly programming contests online.
+
+atcoder.jp
+
+
+
+個人的に、4 問 ARC の 3 問目の中で最難でした。dp テーブルを関数と見なすという考え方は、当時に私にはとても斬新に感じられ、強く印象に残っている好き問です。
+
+
+とはいえ、ここまでの解説を踏まえれば、もはやかなり解きやすいと思います。やはり自然な dp を考えます。$i$ 個目までの長方形を連結させ、$i$ 個目の長方形の左端の $x$ 座標が $x$ であるときの、そこまでの最小コストを $f_i(x)$ と書きます。長方形の幅を $w_i = r_i – l_i$ と書きます。
+
+
+$$f_{i}(x) = |x-l_i| + \min_{[x, x+w_i]\cap[y,y+w_{i-1}]\neq \emptyset}f_{i-1}(y)$$ と書けることはすぐに分かります。ほとんど問題文そのままです。区間の交わる条件は $x-w_{i-1}\leq y\leq x + w_i$ と書き変えられて、$$f_i(x) = |x-l_i| + \min_{y\in [x-w_{i-1}, x+w_i]} f_{i-1}(y)$$ と書けることが分かります。
+
+
+この操作は、左側集合・右側集合への定数の加算により行えるのでした。$\text{add}_L$, $\text{add}_R$ を持たせれば実装できます。
+
+
+解答例：https://atcoder.jp/contests/arc070/submissions/20983784
+
+
+その他の問題
+
+
+ARC 123 [D] Inc, Dec – Decomposition
+
+ABC 217 [H] Snuketoon

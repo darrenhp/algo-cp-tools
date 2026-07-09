@@ -1,0 +1,26 @@
+[
+ {
+  "local": "images/06/centroid.png",
+  "alt": "centroid",
+  "gfrac": 0.06030515863405183,
+  "caption": ""
+ },
+ {
+  "local": "images/06/centroid_tree.png",
+  "alt": "centroid_tree",
+  "gfrac": 0.10801646887866312,
+  "caption": ""
+ },
+ {
+  "local": "images/06/one_third_1.png",
+  "alt": "one_third_1",
+  "gfrac": 0.5618793896827319,
+  "caption": ""
+ },
+ {
+  "local": "images/06/one_third.drawio-2.png",
+  "alt": "one_third.drawio-2",
+  "gfrac": 0.8471784935819812,
+  "caption": ""
+ }
+]

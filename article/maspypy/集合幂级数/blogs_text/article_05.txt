@@ -1,0 +1,220 @@
+目次
+
+
+
+Distinct Multiples (ABC 236 Ex)
+
+Connectivity 2 (ABC 213 G)
+
+Lights Out on Connected Graph (ARC 105 F)
+
+Hierarchical Phylogeny (Xmas Contest 2020)
+
+We Love Forest (ABC 253 Ex)
+
+マッチングの数え上げに関する問題
+
+彩色多項式
+
+Balance Scale (ABC 306 Ex)
+
+
+
+
+
+Distinct Multiples (ABC 236 Ex)
+
+
+
+
+https://atcoder.jp/contests/abc236/tasks/abc236_h
+
+
+
+ユーザー解説に書いた通り．集合べき級数の $\exp$ で $O(N^22^N)$ 時間で解ける．
+
+
+Connectivity 2 (ABC 213 G)
+
+
+
+
+https://atcoder.jp/contests/abc213/tasks/abc213_g
+
+
+
+$O(N^22^N)$ 時間で解ける．集合べき級数 $f, g$ を，
+
+
+
+
+$f_s$：$s$ を頂点集合とする $G$ の部分グラフの個数
+
+
+$g_s$：$s$ を頂点集合とする $G$ の連結部分グラフの個数
+
+
+
+とする．$f$ は簡単に計算できる．$g$ が計算したいものである．
+
+
+$s$ を頂点集合とする連結成分がちょうど $k$ 個になるような部分グラフが $\frac{g^k}{k!}$ になり，$f = \exp g$ である．よって $g = \log f$ により $g$ が求まる．よって $\log(1-x) = -\sum_{k>0}\frac{x^k}{k}$ と $1-f$ の合成を計算すればよい．
+
+
+Lights Out on Connected Graph (ARC 105 F)
+
+
+
+
+https://atcoder.jp/contests/arc105/tasks/arc105_f
+
+
+
+$O(n^22^n)$ 時間で解けます．
+
+
+少し考察する，または有名知識を用いると，次の問題になります：$G$ の全域部分グラフであって，連結二部グラフであるものを数え上げよ．
+
+
+やはり，連結性を落とした問題を考えて $\exp$ の関係を見つけます．単に「二部グラフ」というだけでは不十分なので，少し工夫します．
+
+
+$2$ つの色 $A,B$ を考えます．グラフ $G$ の頂点を $A,B$ で塗り分けて，同じ色の頂点同士が隣接しないようにしたものを色付き二部グラフと呼びましょう．次の集合べき級数を考えます．
+
+
+
+
+$f$：$s$ を頂点全体の部分集合とする．$s$ の各頂点を $A,B$ のどちらかで塗り，$G$ の辺をいくつか選んで $s$ 上の色付き二部グラフを作る方法の数え上げを $f_s$ とする．
+
+
+$g$：上の数え上げのうち，$S$ 全体が連結になる方法の数え上げを $g_s$ とする．
+
+
+
+すると，$f = \exp g$ であることが容易に分かります．また求めるべきものは $\frac12 g = \frac12 \log f$ なので，$f$ が計算できればよいということになります．
+
+
+$f$ を計算しましょう．頂点への色の塗り方を考えれば，subset convolution の形になります．集合 $s$ 内の辺の個数を $h_s$ とすれば，$f_s = \sum_{s = t_A \amalg t_B} 2^{h_s – h_{t_A} – h_{t_B}}$ となるので，$2^{-h_s}$ を集合べき級数にして $2$ 乗する形で $f$ を計算できます．
+
+
+
+
+Hierarchical Phylogeny (Xmas Contest 2020)
+
+
+
+
+https://atcoder.jp/contests/xmascon20/tasks/xmascon20_h
+
+
+
+集合べき級数の sqrt に帰着できる．公式解説参照．
+
+
+
+
+We Love Forest (ABC 253 Ex)
+
+
+
+
+https://atcoder.jp/contests/abc253/tasks/abc253_h
+
+
+
+Nyaan さんのユーザー解説 で $O(N^22^N)$ 時間で解く方法が説明されています．この解説における「$g_S$ の列挙」では，集合べき級数 $g$ の $[0, 2^m)$ 部分から $[2^m, 2^{m+1})$ を exp を使って求めるという方法が用いられています．
+
+
+「$[X^V]\frac{G(X)^t}{t!}$ の列挙」は，EGF との合成の転置の形なので $O(N^22^N)$ 時間で計算できます．
+
+
+マッチングの数え上げに関する問題
+
+
+
+
+Hafnian of Matrix （Library Checker）
+
+
+Fast as Ryser (Yuhao Du Contest 7)
+
+
+Fast as Fast as Ryser (Xmas Contest 2022)
+
+
+
+なお，Hafnian of Matrix は，「隣接行列の形でグラフが与えられるので，完全マッチングを数え上げよ」という問題です．
+
+
+解法は，Xmas Contest 2022 の解説 に詳しいです．簡単に概要を書きます．
+
+
+まずマッチングの数え上げにおいて，グラフの頂点数は偶数としてよいです（孤立点を追加する）．
+
+
+マッチングとは辺をいくつか選んで各頂点の次数が $0, 1$ のどちらかになるようにする方法です．これに $(0,1), (2,3), \ldots$ という辺を追加すると各頂点の次数が $1, 2$ になるので，連結成分はパス・サイクルのどちらかになります．
+
+
+追加辺の集合に関する集合べき級数を考えて，追加辺の作る連結成分が path, cycle となるマッチングの選び方の数え上げを持たせます．
+
+
+path が $i$ 個，cycle $j$ 個であるようなマッチングの数え上げが，集合べき級数 $\frac{path^i}{i!}\frac{cycle^j}{j!}$ になります．path の個数が次数 $1$ の頂点の個数の $2$ 倍であることから，これは大きさ $N/2-i$ のマッチングを数えていることに対応します．
+
+
+興味の対象が完全マッチングならば，$\sum_{j}\frac{cycle^j}{j!} = \exp (cycle)$ を求めればよいことになります（Hafnian，Ryzer）．
+Xmas Contest 2022 ではマッチングを大きさごとに数える必要があるため，$i$ ごとの $\exp (cycle)\cdot \frac{path^i}{i!}$ を考えることになり，EGF と集合べき級数の合成の転置を利用して計算できます．
+
+
+彩色多項式
+
+
+
+
+https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%A9%E3%83%95%E5%BD%A9%E8%89%B2#%E5%BD%A9%E8%89%B2%E5%A4%9A%E9%A0%85%E5%BC%8F
+
+
+Library Checker （多分そのうち入る）
+
+
+
+単純グラフ $G$ を色 $1,2,\ldots,k$ で点彩色する方法の総数は，$k$ の多項式になることが知られており，これを彩色多項式といいます．$|G|=n$ のとき $n$ 次以下の多項式になるため，$k=0, 1, \ldots, n$ での値を求めれば彩色多項式が復元できます．
+
+
+$k$ 色での点彩色というのは，$k$ 個の独立集合への分割というのと等価です．よって集合べき級数 $a$ を $s$ が独立集合であるか否かに従って $a_s = 1, 0$ 等で定めれば，各 $k$ で $[x^{2^n-1}]a^k$ を求める問題に帰着されます．これは多項式と集合べき級数の合成の転置により計算できます．
+
+
+以上により，$n$ 頂点のグラフの彩色多項式は $\Theta(n^22^n)$ 時間で計算できます．
+
+
+
+
+関連：https://atcoder.jp/contests/abc294/tasks/abc294_h
+
+
+
+
+
+Balance Scale (ABC 306 Ex)
+
+
+等号がなかったら，DAG 数え上げです．DAG 数え上げにはグラフの数え上げで解説した，source component の個数に関する上手い包除原理を用いる方法があるのでした．
+
+
+求めるグラフの集合べき級数を $G$ とします．
+
+
+$F$ を等号関係で頂点を縮約した結果 DAG かつ source component が $0$ 個になるようなものの数え上げの集合べき級数とします（当然，空集合でのみ $1$ をとります）．これを包除原理で立式することを考えます．source component の縮約前の頂点全体を $T$ とすれば，縮約後の source component の個数は 与えられたグラフを $T$ に誘導した場合の連結成分の個数です．これを $\mathrm{comp}(T)$ とします．$T$ の頂点同士を結ぶ辺には等号を書き込むことになり，$T$ と $S\setminus T$ の間を結ぶ辺には $T$ から見て $<$ となる不等号を書き込むことになります．よって
+
+
+$$F(S) = \sum_{T\subset S}(-1)^{\mathrm{comp}(T)}G(S\setminus T)$$
+
+
+という式が得られます．$F=1$ より $G$ は $(-1)^{\mathrm{comp}(S)}$ という集合べき級数の inv として得られます．これは subset convolution のように ranked zeta, pointwise inv, ranked mobius の順に計算してもよいですし，$\frac{1}{1+F}=1-F+F^2-\cdots$ との合成として計算してもよいです．
+
+
+結局本問は $O(N^22^N)$ 時間で解くことができます．
+
+
+
+
+解答例：https://atcoder.jp/contests/abc306/submissions/52005605

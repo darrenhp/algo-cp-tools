@@ -1,0 +1,291 @@
+目次
+
+
+
+参考文献
+
+記号の準備
+
+部分集合畳み込み，集合べき級数
+
+多項式との関係，多項式記法
+
+計算例・補足
+
+subset convolution の計算
+
+ゼータ変換・メビウス変換
+
+Bitwise OR Convolution
+
+subset convolution
+
+
+
+
+
+参考文献
+
+
+
+
+(arXiv) Fourier meets Mobius : Fast subset convolutionFourier Meets Mobius: Fast Subset Convolution
+
+
+
+
+
+Elegia さん：https://codeforces.com/blog/entry/92183
+
+
+37zigen さん：https://37zigen.com/subset-convolution/
+
+
+suisen さん：https://suisen-kyopro.hatenablog.com/entry/2023/04/07/041318
+
+
+Library Checker 関連問題：
+
+
+
+https://judge.yosupo.jp/problem/bitwise_and_convolution
+
+
+
+本記事では Bitwise OR Convolution が出てきますが，列を反転することで Bitwise And Convolution と対応します．
+
+
+
+
+https://judge.yosupo.jp/problem/subset_convolution
+
+
+https://judge.yosupo.jp/problem/polynomial_composite_set_power_series
+
+
+https://judge.yosupo.jp/problem/exp_of_set_power_series
+
+
+https://judge.yosupo.jp/problem/hafnian_of_matrix
+
+
+
+
+
+記号の準備
+
+
+$n$ を非負整数とします．環 $K$ を固定します．（代数に詳しくない場合，$K=\mathbb{Z}$ （整数全体）と考えてください．）また，$K$ の演算の計算量は $O(1)$ とします．
+
+
+$0$ 以上 $2^n-1$ 以下の非負整数を通常の方法で $\{0,1,\ldots,n-1\}$ の部分集合と同一視し，非負整数に対して次の集合の記号を用います：
+
+
+
+
+$\emptyset$：空集合．$0$ に対応する．
+
+
+$s\cap t$：$s$ と $t$ の共通部分．ビット演算 $s \& t$ に対応する．
+
+
+$s\cup t$：$s$ と $t$ の和集合．ビット演算 $s | t$ に対応する．
+
+
+$s\subset t$：$s$ は $t$ の部分集合．$s = s \& t$ や $t = s | t$ と同値である．
+
+
+$s = t \amalg u$：$s = t\cup u$ かつ $\emptyset=t\cap u$，つまり$s$ は $t, u$ の交わりのない和であるということ．
+
+
+$|s|$：集合 $s$ の要素数．ビット演算 $\mathrm{popcount}(s)$ に対応する．（絶対値の記号でもあるが，本記事においては混乱がないと考えています．）
+
+
+
+また，$K$ の元からなる長さ $2^n$ の列全体の集合を $K^{2^n}$ と書きます．
+
+
+部分集合畳み込み，集合べき級数
+
+
+$K$ の元の列 $a = (a_0, \ldots, a_{2^{n}-1})$ および $b = (b_0, \ldots, b_{2^{n}-1})$ に対して，$a, b$ の部分集合畳み込み（subset convolution） $c = (c_0, \ldots, c_{2^n-1})$ を次で定義します：
+
+
+$$c_k = \sum_{k = i\amalg j}a_ib_j$$
+
+
+この関係を $a\star b = c$ とすることで，$K^{2^n}$ 上の二項演算 $\star\colon K^{2^n}\times K^{2^n}\longrightarrow K^{2^n}$ を定めます．
+
+
+$\star$ は結合的です，つまり $a,b,c \in K^{2^n}$ に対して次が成り立ちます：$(a\star b)\star c = a\star(b\star c)$．このことを示すには，任意の $s$ に対して両辺の $s$ 番目が等しいことを示せばよいです．左辺，右辺ともに $s$ 番目が $s = t_1\amalg t_2\amalg t_3$ となる組 $(t_1, t_2, t_3)$ すべてに対する $a_{t_1}b_{t_2}c_{t_3}$ の総和であることから確かめられます.（$t_3$ が定数のところをまとめて足すと考えると左辺，$t_1$ が定数のところをまとめて足すと考えると右辺になります．）
+
+
+$K^{2^n}$に，加法と定数倍を成分ごとのもの，乗法を subset convolution として定めたものを集合べき級数 (set power series) と呼びます．（呼称についてはここに少し議論があります．）
+第 $0$ 項のみが $1$ であるような列が乗法単位元を与えます．
+
+
+代数学の言葉でいえば，$(K^{2^n}, +, \star)$ は $K$ 代数である（構造射 $K\longrightarrow K^{2^n}$ は $x\longmapsto (x,0,0,\ldots)$）ということになります．
+
+
+多項式との関係，多項式記法
+
+
+$n$ 個の変数 $x_0, \ldots, x_{n-1}$ を用意して，集合 $s$ に対して $x^s = \prod_{i\in s}x_i$ と書くことにします．さらに列 $a = (a_0, a_1, \ldots, a_{2^n-1})$ のことを代わりに $a(x) = \sum_{s=0}^{2^n-1} a_sx^s$ と書くことにしましょう．
+
+
+このとき，subset convolution $a\star b$ は，多項式を用いて次のように記述できることが分かります：
+
+
+
+
+多項式の積 $a(x)b(x)$ を計算する．ただし，ある $i$ に対して $x_i^2$ で割り切れるような項は無視する．
+
+
+
+代数学の言葉でいえば，集合べき級数全体は多項式環の剰余環 $K[x_0, \ldots, x_{n-1}]/(x_0^2, \ldots, x_{n-1}^2)$ に同型であるということになります．例えば https://judge.yosupo.jp/problem/polynomial_composite_set_power_series の問題文は，集合べき級数をこの方法により多項式と見なして記述しています．
+
+
+この記法と合わせて，次の記号を用います：$a$ の第 $s$ 項 $a_s$ を $[x^s]a$ とも書く．
+
+
+
+
+多項式表記をする場合，集合と非負整数の同一視による混乱に注意してください．
+
+
+例えば，$a(x) = \sum_s a_sx^s = a_0 + a_1x_0 + a_2x_1 + a_3x_1x_2$ のことを $a_0 + a_1x^1 + a_2x^2 + a_3x^3$ と書くのは上の定義からは間違いではないですが，$x^2$ は $x\star x$ や $x\cdot x$ などと解釈してはいけません．
+
+
+計算例・補足
+
+
+$n=2$ として，長さ $2^2=4$ の列を扱います．
+
+
+$a = (0,1,2,3)$, $b = (4,5,6,7)$ とします．
+
+
+
+
+$a + 2b = (8,11,14,17)$, $3a-b = (-4,-2,0,2)$．（成分ごとの加法と定数倍）
+
+
+$a\star b = c$ とすると，$c = (0,4,8,28)$．（$c_2=0\cdot 6+2\cdot 4$, $c_3=0\cdot 7 + 1\cdot 6 + 2\cdot 5 + 3\cdot 4$ など．）
+
+
+$a + 10 = (10,1,2,3)$（$(1,0,0,0)$ が単位元であったことから，$0$ 番目の要素が「定数項」として $(10,0,0,0) = 10$ のような表記も行うことがあります．）
+
+
+$b^2 = b\star b = (16,40,48,116)$．（同一の列の $k$ 個の $\star$ として $k$ 乗を定義します．）
+
+
+$a^{10} = 0$．（$[x^0]a = 0$ と $n < 10$ から容易に分かります．）
+
+
+
+subset convolution の計算
+
+
+$a, b\in K^{2^n}$ に対して $a\star b$ は $\Theta(n^22^n)$ 時間で計算できます．定義式のまま計算しようとすると $\Theta(3^n)$ 時間が必要なので，工夫した計算が必要です．
+
+
+まずは Bitwise OR Convolution について述べます．
+
+
+ゼータ変換・メビウス変換
+
+
+競技プログラミングでは有名で，検索も容易かと思うので，詳細は省略します．（「ゼータ変換」「メビウス変換」は順序集合上で定義される概念で，同じ言葉でも文脈により指す内容が変わる可能性があることに注意してください．）
+
+
+
+
+$a\in K^{2^n}$ に対して $\zeta a \in K^{2^n}$ を $[x^s]\zeta a = \sum_{t\subset s}a_t$ により定める．$\zeta\colon K^{2^n}\longrightarrow K^{2^n}$ をゼータ変換という．
+
+
+$\zeta$ の逆変換を $\mu$ と書き，メビウス変換という．
+
+
+
+$a$ が与えられたとき，$\zeta a$ や $\mu a$ は $\Theta(n2^n)$ 時間で計算できます．
+
+
+Bitwise OR Convolution
+
+
+$a, b\in K^{2^n}$ に対して，その Bitwise OR Convolution $c\in K^{2^n}$ を $[x^s]c = \sum_{s = t_1\cup t_2}a_{t_1}b_{t_2}$ により定めます．
+
+
+subset convolution とよく似ていますが，こちらには $t_1\cap t_2 = \emptyset$ という制約はないことに注意してください．
+
+
+Bitwise OR Convolution は，$O(n2^n)$ 時間で計算できます．次のようにすればよいです．
+
+
+$\zeta c$ がどのような列かを考えます．
+
+
+$$[x^s]\zeta c = \sum_{t\subset s}c_t = \sum_{t_1\cup t_2\subset s}a_{t_1}b_{t_2} = \sum_{t_1\subset s}a_{t_1}\sum_{t_2\subset s}b_{t_2} = (\zeta a)_s (\zeta_b)_s$$
+
+
+となります．この式によって，$\zeta c$ は $\Theta(n2^n)$ 時間で計算できるので，それをメビウス変換すれば $c$ が $\Theta(n2^n)$ 時間で計算できます．
+
+
+
+
+subset convolution
+
+
+これを用いて subset convolution を計算しましょう．
+
+
+列 $a = (a_0, a_1, \ldots, a_{2^{n-1}})$ の代わりに，$X$ の 1 変数多項式の列 $a’$ を $a’_s = a’_sX^{|s|}$ により定めます．例えば $n=2$ ならば，$a’ = (a_0, a_1X, a_2X, a_3X^2)$ となります．列 $b$ に対しても同様に $b’$ を考えます．
+
+
+$a’$ と $b’$ の Bitwise OR Convolution を $c’$ とします．（環が $K$ ではなく多項式環 $K[X]$ になりますが，同様に定義・計算できます．）つまり各 $s$ に対して
+
+
+$$c’_s = \sum_{s=t_1\cup t_2} a’_{t_1}b’_{t_2} = \sum_{s = t_1\cup t_2}a_{t_1}b_{t_2}X^{|t_1|+|t_2|}$$
+
+
+です．$s = t_1\cup t_2$ であるような $t_1, t_2$ に対して，$t_1\cap t_2 = \emptyset \iff |t_1|+|t_2|=|s|$ なので，$c’_s$ における $X^{|s|}$ の係数をとれば $c_s$ が得られます．
+
+
+結局，subset convolution $c = a\star b$ は以下の手順で計算できます．
+
+
+
+
+$a, b$ の各要素を，$1$ 変数多項式 $a_sX^{|s|}$, $b_sX^{|s|}$ に取り換えたあと，そのゼータ変換 $\zeta a$, $\zeta b$ を計算する．
+
+
+各 $s$ に対して $X$ の多項式の積 $(\zeta a)_s(\zeta b)_s$ を計算し，得られた列をメビウス変換する．
+
+
+得られた列 $c’$ の各要素 $c’_s$ から $X^{|s|}$ の係数を取り出したものを $c_s$ とする．
+
+
+
+上でゼータ変換・メビウス変換の計算量は $\Theta(n2^n)$ であると述べましたが，この場合には計算量は，操作対象が $n$ 次以下の多項式に対するものなので，再考します．次のようになります：
+
+
+
+
+ゼータ・メビウス変換：$n$ 次以下の多項式の $\Theta(n2^n)$ 回の加減算が必要である．$\Theta(n^22^n)$ 時間．
+
+
+各 $s$ ごとの多項式積：多項式積の計算が $O(n^2)$ 時間でできて，$O(n^22^n)$ 時間．
+
+
+
+以上により subset convolution は $\Theta(n^22^n)$ 時間で行えます．
+
+
+
+
+この計算で現れた，集合の大きさ（ランク）という乗法を付加した上でゼータ変換・メビウス変換を行う操作はランク付きゼータ変換，ランク付きメビウス変換といいます．
+
+
+
+
+実装例：https://judge.yosupo.jp/submission/137660
