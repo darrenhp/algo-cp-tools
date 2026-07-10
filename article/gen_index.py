@@ -258,10 +258,11 @@ def build():
 <body>
   <header class="app-header">
     <h1>{html.escape(title)}</h1>
-    <div class="header-right">
-      <a href="../index.html" rel="noopener noreferrer">← 返回主站</a>
-      <a href="https://github.com/darrenhp/algo-cp-tools" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </div>
+      <div class="header-right">
+        <a href="cf/cf-catalog.html" rel="noopener noreferrer">CF Catalog</a>
+        <a href="../index.html" rel="noopener noreferrer">← 返回主站</a>
+        <a href="https://github.com/darrenhp/algo-cp-tools" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
   </header>
 
   <main>
