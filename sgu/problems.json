@@ -1,0 +1,3173 @@
+[
+  {
+    "id": "553",
+    "enName": "Sultan's Pearls",
+    "zhName": "苏丹的珍珠",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/553",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-553#author=translator:1281309:zh"
+  },
+  {
+    "id": "552",
+    "enName": "Database Optimization",
+    "zhName": "数据库优化",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/552",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-552#author=translator:1281309:zh"
+  },
+  {
+    "id": "551",
+    "enName": "Preparing Problem",
+    "zhName": "准备题目",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/551",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-551#author=translator:1281309:zh"
+  },
+  {
+    "id": "549",
+    "enName": "Dumbbells",
+    "zhName": "哑铃",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/549",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-549#author=translator:1281309:zh"
+  },
+  {
+    "id": "548",
+    "enName": "Dragons and Princesses",
+    "zhName": "龙与公主",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/548",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-548#author=translator:1281309:zh"
+  },
+  {
+    "id": "547",
+    "enName": "Divide the Kingdom",
+    "zhName": "分割王国",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/547",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-547#author=translator:1281309:zh"
+  },
+  {
+    "id": "546",
+    "enName": "Ternary Password",
+    "zhName": "三进制密码",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/546",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-546#author=translator:1281309:zh"
+  },
+  {
+    "id": "545",
+    "enName": "Cut the rope, another rope and so on!",
+    "zhName": "剪绳、再剪一条，如此往复",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/545",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-545#author=translator:1281309:zh"
+  },
+  {
+    "id": "544",
+    "enName": "Chess Championship",
+    "zhName": "国际象棋锦标赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/544",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-544#author=translator:1281309:zh"
+  },
+  {
+    "id": "543",
+    "enName": "Cafe",
+    "zhName": "咖啡馆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/543",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-543#author=translator:1281309:zh"
+  },
+  {
+    "id": "542",
+    "enName": "Gena vs Petya",
+    "zhName": "根纳对佩佳",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/542",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-542#author=translator:1281309:zh"
+  },
+  {
+    "id": "541",
+    "enName": "BR Privatization",
+    "zhName": "BR私有化",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/541",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-541#author=translator:1281309:zh"
+  },
+  {
+    "id": "540",
+    "enName": "Traffic Lights",
+    "zhName": "交通信号灯",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/540",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-540#author=translator:1281309:zh"
+  },
+  {
+    "id": "539",
+    "enName": "Multiswap Sorting",
+    "zhName": "多重交换排序",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/539",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-539#author=translator:1281309:zh"
+  },
+  {
+    "id": "538",
+    "enName": "Emoticons",
+    "zhName": "表情符号",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/538",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-538#author=translator:1281309:zh"
+  },
+  {
+    "id": "537",
+    "enName": "Divisibility",
+    "zhName": "整除性",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/537",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-537#author=translator:1281309:zh"
+  },
+  {
+    "id": "536",
+    "enName": "Berland Chess",
+    "zhName": "伯兰象棋",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/536",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-536#author=translator:1281309:zh"
+  },
+  {
+    "id": "535",
+    "enName": "Dirty Dishes",
+    "zhName": "脏盘子",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/535",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-535#author=translator:1281309:zh"
+  },
+  {
+    "id": "534",
+    "enName": "Computer Network",
+    "zhName": "计算机网络",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/534",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-534#author=translator:1281309:zh"
+  },
+  {
+    "id": "533",
+    "enName": "Dice Tower",
+    "zhName": "骰子塔",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/533",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-533#author=translator:1281309:zh"
+  },
+  {
+    "id": "532",
+    "enName": "Building Foundation",
+    "zhName": "建筑地基",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/532",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-532#author=translator:1281309:zh"
+  },
+  {
+    "id": "531",
+    "enName": "Bonnie and Clyde",
+    "zhName": "邦妮与克莱德",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/531",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-531#author=translator:1281309:zh"
+  },
+  {
+    "id": "530",
+    "enName": "Recruiting",
+    "zhName": "招募",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/530",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-530#author=translator:1281309:zh"
+  },
+  {
+    "id": "529",
+    "enName": "It's Time to Repair the Roads",
+    "zhName": "该修路了",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/529",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-529#author=translator:1281309:zh"
+  },
+  {
+    "id": "528",
+    "enName": "Bencoding",
+    "zhName": "Bencode编码",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/528",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-528#author=translator:1281309:zh"
+  },
+  {
+    "id": "527",
+    "enName": "Explode 'Em All",
+    "zhName": "全部引爆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/527",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-527#author=translator:1281309:zh"
+  },
+  {
+    "id": "526",
+    "enName": "Running Hero",
+    "zhName": "奔跑的英雄",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/526",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-526#author=translator:1281309:zh"
+  },
+  {
+    "id": "525",
+    "enName": "Revolutionary Roads",
+    "zhName": "革命之路",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/525",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-525#author=translator:1281309:zh"
+  },
+  {
+    "id": "524",
+    "enName": "Buoys",
+    "zhName": "浮标",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/524",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-524#author=translator:1281309:zh"
+  },
+  {
+    "id": "523",
+    "enName": "Elevator",
+    "zhName": "电梯",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/523",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-523#author=translator:1281309:zh"
+  },
+  {
+    "id": "522",
+    "enName": "Oil Wells",
+    "zhName": "油井",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/522",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-522#author=translator:1281309:zh"
+  },
+  {
+    "id": "521",
+    "enName": "\"North-East\"",
+    "zhName": "东北",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/521",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-521#author=translator:1281309:zh"
+  },
+  {
+    "id": "520",
+    "enName": "Fire in the Country",
+    "zhName": "国家之火",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/520",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-520#author=translator:1281309:zh"
+  },
+  {
+    "id": "519",
+    "enName": "3D City Model",
+    "zhName": "三维城市模型",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/519",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-519#author=translator:1281309:zh"
+  },
+  {
+    "id": "518",
+    "enName": "Kidnapping",
+    "zhName": "绑架",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/518",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-518#author=translator:1281309:zh"
+  },
+  {
+    "id": "517",
+    "enName": "Cornerless Tiling",
+    "zhName": "无角平铺",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/517",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-517#author=translator:1281309:zh"
+  },
+  {
+    "id": "516",
+    "enName": "Schedule",
+    "zhName": "日程安排",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/516",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-516#author=translator:1281309:zh"
+  },
+  {
+    "id": "515",
+    "enName": "Recover Path",
+    "zhName": "恢复路径",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/515",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-515#author=translator:1281309:zh"
+  },
+  {
+    "id": "514",
+    "enName": "Polygon",
+    "zhName": "多边形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/514",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-514#author=translator:1281309:zh"
+  },
+  {
+    "id": "513",
+    "enName": "Maximal Clique",
+    "zhName": "最大团",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/513",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-513#author=translator:1281309:zh"
+  },
+  {
+    "id": "512",
+    "enName": "Friendly Points",
+    "zhName": "友好的点",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/512",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-512#author=translator:1281309:zh"
+  },
+  {
+    "id": "511",
+    "enName": "Fermat's Last Theorem",
+    "zhName": "费马大定理",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/511",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-511#author=translator:1281309:zh"
+  },
+  {
+    "id": "510",
+    "enName": "Distinct Substrings",
+    "zhName": "不同子串",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/510",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-510#author=translator:1281309:zh"
+  },
+  {
+    "id": "509",
+    "enName": "Chameleons All Around",
+    "zhName": "周遭的变色龙",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/509",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-509#author=translator:1281309:zh"
+  },
+  {
+    "id": "508",
+    "enName": "Black-White Balls",
+    "zhName": "黑白小球",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/508",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-508#author=translator:1281309:zh"
+  },
+  {
+    "id": "507",
+    "enName": "Treediff",
+    "zhName": "树差异",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/507",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-507#author=translator:1281309:zh"
+  },
+  {
+    "id": "506",
+    "enName": "Subsequences Of Substrings",
+    "zhName": "子串的子序列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/506",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-506#author=translator:1281309:zh"
+  },
+  {
+    "id": "505",
+    "enName": "Prefixes and suffixes",
+    "zhName": "前缀与后缀",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/505",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-505#author=translator:1281309:zh"
+  },
+  {
+    "id": "504",
+    "enName": "Square Palindrome",
+    "zhName": "平方回文",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/504",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-504#author=translator:1281309:zh"
+  },
+  {
+    "id": "503",
+    "enName": "Running City",
+    "zhName": "奔跑的城市",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/503",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-503#author=translator:1281309:zh"
+  },
+  {
+    "id": "502",
+    "enName": "Digits Permutation",
+    "zhName": "数字排列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/502",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-502#author=translator:1281309:zh"
+  },
+  {
+    "id": "501",
+    "enName": "Octahedron And Dominoes",
+    "zhName": "八面体与多米诺骨牌",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/501",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-501#author=translator:1281309:zh"
+  },
+  {
+    "id": "500",
+    "enName": "Circular Island",
+    "zhName": "环形岛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/500",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-500#author=translator:1281309:zh"
+  },
+  {
+    "id": "499",
+    "enName": "Greatest Greatest Common Divisor",
+    "zhName": "最大的最大公约数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/499",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-499#author=translator:1281309:zh"
+  },
+  {
+    "id": "498",
+    "enName": "Coins",
+    "zhName": "硬币",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/498",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-498#author=translator:1281309:zh"
+  },
+  {
+    "id": "497",
+    "enName": "Abelian Groups",
+    "zhName": "阿贝尔群",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/497",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-497#author=translator:1281309:zh"
+  },
+  {
+    "id": "496",
+    "enName": "L-Shapes",
+    "zhName": "L形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/496",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-496#author=translator:1281309:zh"
+  },
+  {
+    "id": "495",
+    "enName": "Kids and Prizes",
+    "zhName": "孩子与奖品",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/495",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-495#author=translator:1281309:zh"
+  },
+  {
+    "id": "494",
+    "enName": "Journal",
+    "zhName": "杂志",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/494",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-494#author=translator:1281309:zh"
+  },
+  {
+    "id": "493",
+    "enName": "Illumination of Buildings",
+    "zhName": "建筑物的照明",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/493",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-493#author=translator:1281309:zh"
+  },
+  {
+    "id": "492",
+    "enName": "Hotel in Ves Lagos",
+    "zhName": "维斯拉各斯的酒店",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/492",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-492#author=translator:1281309:zh"
+  },
+  {
+    "id": "491",
+    "enName": "Game for Little Johnny",
+    "zhName": "小约翰尼的游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/491",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-491#author=translator:1281309:zh"
+  },
+  {
+    "id": "490",
+    "enName": "Figure and Spots",
+    "zhName": "图形与斑点",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/490",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-490#author=translator:1281309:zh"
+  },
+  {
+    "id": "489",
+    "enName": "Extremal Permutations",
+    "zhName": "极值排列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/489",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-489#author=translator:1281309:zh"
+  },
+  {
+    "id": "488",
+    "enName": "Dales and Hills",
+    "zhName": "山谷与丘陵",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/488",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-488#author=translator:1281309:zh"
+  },
+  {
+    "id": "487",
+    "enName": "Courier",
+    "zhName": "信使",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/487",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-487#author=translator:1281309:zh"
+  },
+  {
+    "id": "486",
+    "enName": "Bulls and Cows",
+    "zhName": "公牛与奶牛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/486",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-486#author=translator:1281309:zh"
+  },
+  {
+    "id": "485",
+    "enName": "Arrays",
+    "zhName": "数组",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/485",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-485#author=translator:1281309:zh"
+  },
+  {
+    "id": "484",
+    "enName": "Kola",
+    "zhName": "可乐",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/484",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-484#author=translator:1281309:zh"
+  },
+  {
+    "id": "483",
+    "enName": "Jealous Cucumber",
+    "zhName": "嫉妒的黄瓜",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/483",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-483#author=translator:1281309:zh"
+  },
+  {
+    "id": "482",
+    "enName": "Impudent Thief",
+    "zhName": "无礼的小偷",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/482",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-482#author=translator:1281309:zh"
+  },
+  {
+    "id": "481",
+    "enName": "Hero of Our Time",
+    "zhName": "当代英雄",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/481",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-481#author=translator:1281309:zh"
+  },
+  {
+    "id": "480",
+    "enName": "Gena`s Soul Cakes",
+    "zhName": "根纳的灵魂蛋糕",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/480",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-480#author=translator:1281309:zh"
+  },
+  {
+    "id": "479",
+    "enName": "Funny Feature",
+    "zhName": "有趣的特色",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/479",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-479#author=translator:1281309:zh"
+  },
+  {
+    "id": "478",
+    "enName": "Excursion",
+    "zhName": "游览",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/478",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-478#author=translator:1281309:zh"
+  },
+  {
+    "id": "477",
+    "enName": "Doors",
+    "zhName": "门",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/477",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-477#author=translator:1281309:zh"
+  },
+  {
+    "id": "476",
+    "enName": "Coach`s trouble",
+    "zhName": "教练的麻烦",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/476",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-476#author=translator:1281309:zh"
+  },
+  {
+    "id": "475",
+    "enName": "Be a Smart Raftsman",
+    "zhName": "做个聪明的筏夫",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/475",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-475#author=translator:1281309:zh"
+  },
+  {
+    "id": "474",
+    "enName": "All for Love",
+    "zhName": "一切为了爱",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/474",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-474#author=translator:1281309:zh"
+  },
+  {
+    "id": "473",
+    "enName": "Droid formation",
+    "zhName": "机器人阵型",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/473",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-473#author=translator:1281309:zh"
+  },
+  {
+    "id": "472",
+    "enName": "Sokoban",
+    "zhName": "推箱子",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/472",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-472#author=translator:1281309:zh"
+  },
+  {
+    "id": "471",
+    "enName": "Funny Game",
+    "zhName": "有趣的游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/471",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-471#author=translator:1281309:zh"
+  },
+  {
+    "id": "470",
+    "enName": "The Death Cube",
+    "zhName": "死亡方块",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/470",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-470#author=translator:1281309:zh"
+  },
+  {
+    "id": "469",
+    "enName": "Ghostbusters",
+    "zhName": "捉鬼敢死队",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/469",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-469#author=translator:1281309:zh"
+  },
+  {
+    "id": "468",
+    "enName": "A bit of classic",
+    "zhName": "一点经典",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/468",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-468#author=translator:1281309:zh"
+  },
+  {
+    "id": "467",
+    "enName": "Chessmaster",
+    "zhName": "象棋大师",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/467",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-467#author=translator:1281309:zh"
+  },
+  {
+    "id": "466",
+    "enName": "Parking at Secret Object",
+    "zhName": "秘密设施的停车",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/466",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-466#author=translator:1281309:zh"
+  },
+  {
+    "id": "465",
+    "enName": "Fire Station Building",
+    "zhName": "消防站建设",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/465",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-465#author=translator:1281309:zh"
+  },
+  {
+    "id": "464",
+    "enName": "Optimal bribing",
+    "zhName": "最优贿赂",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/464",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-464#author=translator:1281309:zh"
+  },
+  {
+    "id": "463",
+    "enName": "Walking around Berhattan",
+    "zhName": "在伯哈坦漫步",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/463",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-463#author=translator:1281309:zh"
+  },
+  {
+    "id": "462",
+    "enName": "Electrician",
+    "zhName": "电工",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/462",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-462#author=translator:1281309:zh"
+  },
+  {
+    "id": "461",
+    "enName": "Wiki Lists",
+    "zhName": "维基列表",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/461",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-461#author=translator:1281309:zh"
+  },
+  {
+    "id": "460",
+    "enName": "Plural Form of Nouns",
+    "zhName": "名词的复数形式",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/460",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-460#author=translator:1281309:zh"
+  },
+  {
+    "id": "459",
+    "enName": "Choreographer Problem",
+    "zhName": "编舞师问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/459",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-459#author=translator:1281309:zh"
+  },
+  {
+    "id": "458",
+    "enName": "The Monochrome Picture",
+    "zhName": "单色画",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/458",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-458#author=translator:1281309:zh"
+  },
+  {
+    "id": "457",
+    "enName": "Snow in Berland",
+    "zhName": "伯兰的雪",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/457",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-457#author=translator:1281309:zh"
+  },
+  {
+    "id": "456",
+    "enName": "Annuity Payment Scheme",
+    "zhName": "年金支付方案",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/456",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-456#author=translator:1281309:zh"
+  },
+  {
+    "id": "455",
+    "enName": "Sequence analysis",
+    "zhName": "序列分析",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/455",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-455#author=translator:1281309:zh"
+  },
+  {
+    "id": "454",
+    "enName": "Kakuro",
+    "zhName": "数墙谜题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/454",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-454#author=translator:1281309:zh"
+  },
+  {
+    "id": "453",
+    "enName": "Meetings",
+    "zhName": "会议",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/453",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-453#author=translator:1281309:zh"
+  },
+  {
+    "id": "452",
+    "enName": "Colony Maintenance",
+    "zhName": "殖民地维护",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/452",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-452#author=translator:1281309:zh"
+  },
+  {
+    "id": "451",
+    "enName": "Cousin's Aunt",
+    "zhName": "表亲的阿姨",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/451",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-451#author=translator:1281309:zh"
+  },
+  {
+    "id": "450",
+    "enName": "Ramen Shop",
+    "zhName": "拉面店",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/450",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-450#author=translator:1281309:zh"
+  },
+  {
+    "id": "449",
+    "enName": "Dendrograms",
+    "zhName": "树状图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/449",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-449#author=translator:1281309:zh"
+  },
+  {
+    "id": "448",
+    "enName": "Controlled Tournament",
+    "zhName": "受控锦标赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/448",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-448#author=translator:1281309:zh"
+  },
+  {
+    "id": "447",
+    "enName": "Optimal Rest",
+    "zhName": "最优休息",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/447",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-447#author=translator:1281309:zh"
+  },
+  {
+    "id": "446",
+    "enName": "Rotation Estimation",
+    "zhName": "旋转估计",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/446",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-446#author=translator:1281309:zh"
+  },
+  {
+    "id": "445",
+    "enName": "Dig or Climb",
+    "zhName": "挖或爬",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/445",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-445#author=translator:1281309:zh"
+  },
+  {
+    "id": "444",
+    "enName": "Headstrong Student",
+    "zhName": "固执的学生",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/444",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-444#author=translator:1281309:zh"
+  },
+  {
+    "id": "443",
+    "enName": "Everlasting...?",
+    "zhName": "永恒……？",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/443",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-443#author=translator:1281309:zh"
+  },
+  {
+    "id": "442",
+    "enName": "X + R(X) = N",
+    "zhName": "X + R(X) = N",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/442",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-442#author=translator:1281309:zh"
+  },
+  {
+    "id": "441",
+    "enName": "Set Division",
+    "zhName": "集合划分",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/441",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-441#author=translator:1281309:zh"
+  },
+  {
+    "id": "440",
+    "enName": "Moles and Holes",
+    "zhName": "鼹鼠与洞穴",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/440",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-440#author=translator:1281309:zh"
+  },
+  {
+    "id": "439",
+    "enName": "A Secret Book",
+    "zhName": "秘密之书",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/439",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-439#author=translator:1281309:zh"
+  },
+  {
+    "id": "438",
+    "enName": "The Glorious Karlutka River =)",
+    "zhName": "光荣的卡鲁图卡河",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/438",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-438#author=translator:1281309:zh"
+  },
+  {
+    "id": "437",
+    "enName": "Hexodoku",
+    "zhName": "十六宫数独",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/437",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-437#author=translator:1281309:zh"
+  },
+  {
+    "id": "436",
+    "enName": "The Diputs notation",
+    "zhName": "Diputs记数法",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/436",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-436#author=translator:1281309:zh"
+  },
+  {
+    "id": "435",
+    "enName": "UFO Circles",
+    "zhName": "飞碟圆环",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/435",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-435#author=translator:1281309:zh"
+  },
+  {
+    "id": "434",
+    "enName": "Chemists",
+    "zhName": "化学家",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/434",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-434#author=translator:1281309:zh"
+  },
+  {
+    "id": "433",
+    "enName": "Japhshan and Ramshut",
+    "zhName": "贾夫尚与拉姆舒特",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/433",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-433#author=translator:1281309:zh"
+  },
+  {
+    "id": "432",
+    "enName": "XYZX 2009",
+    "zhName": "XYZX 2009",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/432",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-432#author=translator:1281309:zh"
+  },
+  {
+    "id": "431",
+    "enName": "Wildcards",
+    "zhName": "通配符",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/431",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-431#author=translator:1281309:zh"
+  },
+  {
+    "id": "430",
+    "enName": "Unit-distance Graph",
+    "zhName": "单位距离图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/430",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-430#author=translator:1281309:zh"
+  },
+  {
+    "id": "429",
+    "enName": "Problem Stacks",
+    "zhName": "题目栈",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/429",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-429#author=translator:1281309:zh"
+  },
+  {
+    "id": "428",
+    "enName": "Rebus",
+    "zhName": "画谜",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/428",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-428#author=translator:1281309:zh"
+  },
+  {
+    "id": "427",
+    "enName": "Hamiltonian Polyhedron",
+    "zhName": "哈密顿多面体",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/427",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-427#author=translator:1281309:zh"
+  },
+  {
+    "id": "426",
+    "enName": "Double Cyclic",
+    "zhName": "双循环",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/426",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-426#author=translator:1281309:zh"
+  },
+  {
+    "id": "425",
+    "enName": "Control Function",
+    "zhName": "控制函数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/425",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-425#author=translator:1281309:zh"
+  },
+  {
+    "id": "424",
+    "enName": "Beautiful Graph",
+    "zhName": "美丽的图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/424",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-424#author=translator:1281309:zh"
+  },
+  {
+    "id": "423",
+    "enName": "Battle",
+    "zhName": "战斗",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/423",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-423#author=translator:1281309:zh"
+  },
+  {
+    "id": "422",
+    "enName": "Fast Typing",
+    "zhName": "快速打字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/422",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-422#author=translator:1281309:zh"
+  },
+  {
+    "id": "421",
+    "enName": "k-th Product",
+    "zhName": "第k个乘积",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/421",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-421#author=translator:1281309:zh"
+  },
+  {
+    "id": "420",
+    "enName": "Number Permutations",
+    "zhName": "数字排列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/420",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-420#author=translator:1281309:zh"
+  },
+  {
+    "id": "419",
+    "enName": "Hexagonal Walkaround",
+    "zhName": "六边形漫步",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/419",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-419#author=translator:1281309:zh"
+  },
+  {
+    "id": "418",
+    "enName": "Deducing Grammar",
+    "zhName": "推导文法",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/418",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-418#author=translator:1281309:zh"
+  },
+  {
+    "id": "417",
+    "enName": "Heavy Disc",
+    "zhName": "重盘",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/417",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-417#author=translator:1281309:zh"
+  },
+  {
+    "id": "416",
+    "enName": "Optimal Dartboard",
+    "zhName": "最优飞镖盘",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/416",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-416#author=translator:1281309:zh"
+  },
+  {
+    "id": "415",
+    "enName": "Necessary Coins",
+    "zhName": "必需的硬币",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/415",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-415#author=translator:1281309:zh"
+  },
+  {
+    "id": "414",
+    "enName": "Orthogonal Circles",
+    "zhName": "正交圆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/414",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-414#author=translator:1281309:zh"
+  },
+  {
+    "id": "413",
+    "enName": "Berland Division",
+    "zhName": "伯兰分区",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/413",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-413#author=translator:1281309:zh"
+  },
+  {
+    "id": "412",
+    "enName": "Expedition",
+    "zhName": "远征",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/412",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-412#author=translator:1281309:zh"
+  },
+  {
+    "id": "411",
+    "enName": "Petya the Hero",
+    "zhName": "英雄佩佳",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/411",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-411#author=translator:1281309:zh"
+  },
+  {
+    "id": "410",
+    "enName": "Galaxy in danger",
+    "zhName": "危险的星系",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/410",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-410#author=translator:1281309:zh"
+  },
+  {
+    "id": "409",
+    "enName": "Berland Flag",
+    "zhName": "伯兰国旗",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/409",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-409#author=translator:1281309:zh"
+  },
+  {
+    "id": "408",
+    "enName": "Game with Points",
+    "zhName": "点游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/408",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-408#author=translator:1281309:zh"
+  },
+  {
+    "id": "407",
+    "enName": "Number of Paths in the Empire",
+    "zhName": "帝国中的路径数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/407",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-407#author=translator:1281309:zh"
+  },
+  {
+    "id": "406",
+    "enName": "Goggle",
+    "zhName": "护目镜",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/406",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-406#author=translator:1281309:zh"
+  },
+  {
+    "id": "405",
+    "enName": "Totalizator",
+    "zhName": "博彩机",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/405",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-405#author=translator:1281309:zh"
+  },
+  {
+    "id": "404",
+    "enName": "Fotrune-telling with camomile",
+    "zhName": "雏菊占卜",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/404",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-404#author=translator:1281309:zh"
+  },
+  {
+    "id": "403",
+    "enName": "Scientific Problem",
+    "zhName": "科学问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/403",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-403#author=translator:1281309:zh"
+  },
+  {
+    "id": "402",
+    "enName": "Terrorists in Berland",
+    "zhName": "伯兰的恐怖分子",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/402",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-402#author=translator:1281309:zh"
+  },
+  {
+    "id": "401",
+    "enName": "Geologist Dubrovsky",
+    "zhName": "地质学家杜布罗夫斯基",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/401",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-401#author=translator:1281309:zh"
+  },
+  {
+    "id": "400",
+    "enName": "The last hour of the contest",
+    "zhName": "竞赛的最后一小时",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/400",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-400#author=translator:1281309:zh"
+  },
+  {
+    "id": "399",
+    "enName": "Berodoskar Development",
+    "zhName": "贝罗多斯卡尔发展",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/399",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-399#author=translator:1281309:zh"
+  },
+  {
+    "id": "398",
+    "enName": "Friends of Friends",
+    "zhName": "朋友的朋友",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/398",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-398#author=translator:1281309:zh"
+  },
+  {
+    "id": "397",
+    "enName": "Text Editor",
+    "zhName": "文本编辑器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/397",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-397#author=translator:1281309:zh"
+  },
+  {
+    "id": "396",
+    "enName": "Dance it up!",
+    "zhName": "舞起来！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/396",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-396#author=translator:1281309:zh"
+  },
+  {
+    "id": "395",
+    "enName": "\"Binary Cat\" Club",
+    "zhName": "“二进制猫”俱乐部",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/395",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-395#author=translator:1281309:zh"
+  },
+  {
+    "id": "394",
+    "enName": "Berhatton",
+    "zhName": "伯哈顿",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/394",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-394#author=translator:1281309:zh"
+  },
+  {
+    "id": "393",
+    "enName": "Bergamot Problem",
+    "zhName": "佛手柑问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/393",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-393#author=translator:1281309:zh"
+  },
+  {
+    "id": "392",
+    "enName": "Cyclic Troubles",
+    "zhName": "循环麻烦",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/392",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-392#author=translator:1281309:zh"
+  },
+  {
+    "id": "391",
+    "enName": "Mr. X",
+    "zhName": "X先生",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/391",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-391#author=translator:1281309:zh"
+  },
+  {
+    "id": "390",
+    "enName": "Tickets",
+    "zhName": "车票",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/390",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-390#author=translator:1281309:zh"
+  },
+  {
+    "id": "389",
+    "enName": "Strange Planet",
+    "zhName": "奇怪的星球",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/389",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-389#author=translator:1281309:zh"
+  },
+  {
+    "id": "388",
+    "enName": "Soap Opera",
+    "zhName": "肥皂剧",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/388",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-388#author=translator:1281309:zh"
+  },
+  {
+    "id": "387",
+    "enName": "Lazy Judges",
+    "zhName": "懒惰的裁判",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/387",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-387#author=translator:1281309:zh"
+  },
+  {
+    "id": "386",
+    "enName": "Happy Birthday, Jedi Knight!",
+    "zhName": "生日快乐，绝地骑士！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/386",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-386#author=translator:1281309:zh"
+  },
+  {
+    "id": "385",
+    "enName": "Highlander",
+    "zhName": "高地人",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/385",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-385#author=translator:1281309:zh"
+  },
+  {
+    "id": "384",
+    "enName": "Country",
+    "zhName": "国家",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/384",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-384#author=translator:1281309:zh"
+  },
+  {
+    "id": "383",
+    "enName": "Caravans",
+    "zhName": "商队",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/383",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-383#author=translator:1281309:zh"
+  },
+  {
+    "id": "382",
+    "enName": "Cantor Function",
+    "zhName": "康托尔函数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/382",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-382#author=translator:1281309:zh"
+  },
+  {
+    "id": "381",
+    "enName": "Bidirected Graph",
+    "zhName": "双向图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/381",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-381#author=translator:1281309:zh"
+  },
+  {
+    "id": "380",
+    "enName": "Synchronised Alpinism",
+    "zhName": "同步登山",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/380",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-380#author=translator:1281309:zh"
+  },
+  {
+    "id": "379",
+    "enName": "Elevator",
+    "zhName": "电梯",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/379",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-379#author=translator:1281309:zh"
+  },
+  {
+    "id": "378",
+    "enName": "Save the Fisher",
+    "zhName": "拯救渔夫",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/378",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-378#author=translator:1281309:zh"
+  },
+  {
+    "id": "377",
+    "enName": "The Lesson of Physical Culture",
+    "zhName": "体育课",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/377",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-377#author=translator:1281309:zh"
+  },
+  {
+    "id": "376",
+    "enName": "Berland All-Round Competitions",
+    "zhName": "伯兰全能竞赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/376",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-376#author=translator:1281309:zh"
+  },
+  {
+    "id": "375",
+    "enName": "Amplifiers",
+    "zhName": "放大器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/375",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-375#author=translator:1281309:zh"
+  },
+  {
+    "id": "374",
+    "enName": "Save Vasya",
+    "zhName": "拯救瓦西亚",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/374",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-374#author=translator:1281309:zh"
+  },
+  {
+    "id": "373",
+    "enName": "Carlsson vs. Winnie-the-Pooh",
+    "zhName": "卡尔松对小熊维尼",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/373",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-373#author=translator:1281309:zh"
+  },
+  {
+    "id": "372",
+    "enName": "Tea Party",
+    "zhName": "茶会",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/372",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-372#author=translator:1281309:zh"
+  },
+  {
+    "id": "371",
+    "enName": "Subway",
+    "zhName": "地铁",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/371",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-371#author=translator:1281309:zh"
+  },
+  {
+    "id": "370",
+    "enName": "Rifleman",
+    "zhName": "步枪手",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/370",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-370#author=translator:1281309:zh"
+  },
+  {
+    "id": "369",
+    "enName": "Game",
+    "zhName": "游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/369",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-369#author=translator:1281309:zh"
+  },
+  {
+    "id": "368",
+    "enName": "Tests",
+    "zhName": "测试",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/368",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-368#author=translator:1281309:zh"
+  },
+  {
+    "id": "367",
+    "enName": "Contest",
+    "zhName": "竞赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/367",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-367#author=translator:1281309:zh"
+  },
+  {
+    "id": "366",
+    "enName": "Computer Game",
+    "zhName": "电脑游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/366",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-366#author=translator:1281309:zh"
+  },
+  {
+    "id": "365",
+    "enName": "Ships of the Desert",
+    "zhName": "沙漠之舟",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/365",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-365#author=translator:1281309:zh"
+  },
+  {
+    "id": "364",
+    "enName": "Lemmings",
+    "zhName": "旅鼠",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/364",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-364#author=translator:1281309:zh"
+  },
+  {
+    "id": "363",
+    "enName": "Baggage room",
+    "zhName": "行李房",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/363",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-363#author=translator:1281309:zh"
+  },
+  {
+    "id": "362",
+    "enName": "Robot-Annihilator",
+    "zhName": "机器人歼灭者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/362",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-362#author=translator:1281309:zh"
+  },
+  {
+    "id": "361",
+    "enName": "National Flag",
+    "zhName": "国旗",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/361",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-361#author=translator:1281309:zh"
+  },
+  {
+    "id": "360",
+    "enName": "B++ Interpreter",
+    "zhName": "B++解释器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/360",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-360#author=translator:1281309:zh"
+  },
+  {
+    "id": "359",
+    "enName": "Pointers",
+    "zhName": "指针",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/359",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-359#author=translator:1281309:zh"
+  },
+  {
+    "id": "358",
+    "enName": "Median of Medians",
+    "zhName": "中位数的中位数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/358",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-358#author=translator:1281309:zh"
+  },
+  {
+    "id": "357",
+    "enName": "Remote Control",
+    "zhName": "遥控",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/357",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-357#author=translator:1281309:zh"
+  },
+  {
+    "id": "356",
+    "enName": "Extrasensory Perception",
+    "zhName": "超感知觉",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/356",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-356#author=translator:1281309:zh"
+  },
+  {
+    "id": "355",
+    "enName": "Numbers Painting",
+    "zhName": "数字涂色",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/355",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-355#author=translator:1281309:zh"
+  },
+  {
+    "id": "354",
+    "enName": "Just Matrix",
+    "zhName": "只是矩阵",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/354",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-354#author=translator:1281309:zh"
+  },
+  {
+    "id": "353",
+    "enName": "Billing",
+    "zhName": "计费",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/353",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-353#author=translator:1281309:zh"
+  },
+  {
+    "id": "352",
+    "enName": "Beerland Attacks",
+    "zhName": "啤酒国进攻",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/352",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-352#author=translator:1281309:zh"
+  },
+  {
+    "id": "351",
+    "enName": "A Mission for a Scout",
+    "zhName": "侦察兵的任务",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/351",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-351#author=translator:1281309:zh"
+  },
+  {
+    "id": "350",
+    "enName": "XOR-omania",
+    "zhName": "异或狂热",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/350",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-350#author=translator:1281309:zh"
+  },
+  {
+    "id": "349",
+    "enName": "Wolves and Sheep",
+    "zhName": "狼与羊",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/349",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-349#author=translator:1281309:zh"
+  },
+  {
+    "id": "348",
+    "enName": "Twisting the Number",
+    "zhName": "扭转数字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/348",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-348#author=translator:1281309:zh"
+  },
+  {
+    "id": "347",
+    "enName": "Join the Strings",
+    "zhName": "连接字符串",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/347",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-347#author=translator:1281309:zh"
+  },
+  {
+    "id": "346",
+    "enName": "Snooker",
+    "zhName": "斯诺克",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/346",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-346#author=translator:1281309:zh"
+  },
+  {
+    "id": "345",
+    "enName": "Revolution",
+    "zhName": "革命",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/345",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-345#author=translator:1281309:zh"
+  },
+  {
+    "id": "344",
+    "enName": "Weed",
+    "zhName": "杂草",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/344",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-344#author=translator:1281309:zh"
+  },
+  {
+    "id": "343",
+    "enName": "VaR",
+    "zhName": "风险价值",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/343",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-343#author=translator:1281309:zh"
+  },
+  {
+    "id": "342",
+    "enName": "Reihenfolge",
+    "zhName": "序列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/342",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-342#author=translator:1281309:zh"
+  },
+  {
+    "id": "341",
+    "enName": "Circuits",
+    "zhName": "电路",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/341",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-341#author=translator:1281309:zh"
+  },
+  {
+    "id": "340",
+    "enName": "Tex2HTML",
+    "zhName": "Tex转HTML",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/340",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-340#author=translator:1281309:zh"
+  },
+  {
+    "id": "339",
+    "enName": "Segments",
+    "zhName": "线段",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/339",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-339#author=translator:1281309:zh"
+  },
+  {
+    "id": "338",
+    "enName": "Casino",
+    "zhName": "赌场",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/338",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-338#author=translator:1281309:zh"
+  },
+  {
+    "id": "337",
+    "enName": "Keven",
+    "zhName": "凯文",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/337",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-337#author=translator:1281309:zh"
+  },
+  {
+    "id": "336",
+    "enName": "Elections",
+    "zhName": "选举",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/336",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-336#author=translator:1281309:zh"
+  },
+  {
+    "id": "335",
+    "enName": "Thiefs and Cops",
+    "zhName": "小偷与警察",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/335",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-335#author=translator:1281309:zh"
+  },
+  {
+    "id": "334",
+    "enName": "Tiny Puzzle",
+    "zhName": "迷你拼图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/334",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-334#author=translator:1281309:zh"
+  },
+  {
+    "id": "333",
+    "enName": "Random Shooting",
+    "zhName": "随机射击",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/333",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-333#author=translator:1281309:zh"
+  },
+  {
+    "id": "332",
+    "enName": "Largest Circle",
+    "zhName": "最大圆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/332",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-332#author=translator:1281309:zh"
+  },
+  {
+    "id": "331",
+    "enName": "Traffic Jam",
+    "zhName": "交通堵塞",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/331",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-331#author=translator:1281309:zh"
+  },
+  {
+    "id": "330",
+    "enName": "Numbers",
+    "zhName": "数字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/330",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-330#author=translator:1281309:zh"
+  },
+  {
+    "id": "329",
+    "enName": "Black-and-White Triangle",
+    "zhName": "黑白三角形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/329",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-329#author=translator:1281309:zh"
+  },
+  {
+    "id": "328",
+    "enName": "A Coloring Game",
+    "zhName": "一个染色游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/328",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-328#author=translator:1281309:zh"
+  },
+  {
+    "id": "327",
+    "enName": "Yet Another Palindrome",
+    "zhName": "又一个回文",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/327",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-327#author=translator:1281309:zh"
+  },
+  {
+    "id": "326",
+    "enName": "Perspective",
+    "zhName": "透视",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/326",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-326#author=translator:1281309:zh"
+  },
+  {
+    "id": "325",
+    "enName": "Palindrome",
+    "zhName": "回文",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/325",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-325#author=translator:1281309:zh"
+  },
+  {
+    "id": "324",
+    "enName": "The Text Formatting",
+    "zhName": "文本格式化",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/324",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-324#author=translator:1281309:zh"
+  },
+  {
+    "id": "323",
+    "enName": "Aviamachinations",
+    "zhName": "航空诡计",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/323",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-323#author=translator:1281309:zh"
+  },
+  {
+    "id": "322",
+    "enName": "The Great Union",
+    "zhName": "大联合",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/322",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-322#author=translator:1281309:zh"
+  },
+  {
+    "id": "321",
+    "enName": "The Spy Network",
+    "zhName": "间谍网络",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/321",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-321#author=translator:1281309:zh"
+  },
+  {
+    "id": "320",
+    "enName": "The Influence of the Mafia",
+    "zhName": "黑手党的影响力",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/320",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-320#author=translator:1281309:zh"
+  },
+  {
+    "id": "319",
+    "enName": "Kalevich Strikes Back",
+    "zhName": "卡列维奇的反击",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/319",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-319#author=translator:1281309:zh"
+  },
+  {
+    "id": "318",
+    "enName": "Grants",
+    "zhName": "拨款",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/318",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-318#author=translator:1281309:zh"
+  },
+  {
+    "id": "317",
+    "enName": "Fast Ride",
+    "zhName": "飞驰",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/317",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-317#author=translator:1281309:zh"
+  },
+  {
+    "id": "316",
+    "enName": "Code Tanks",
+    "zhName": "代码坦克",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/316",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-316#author=translator:1281309:zh"
+  },
+  {
+    "id": "315",
+    "enName": "The Highway Belt",
+    "zhName": "高速公路带",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/315",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-315#author=translator:1281309:zh"
+  },
+  {
+    "id": "314",
+    "enName": "Shortest Paths",
+    "zhName": "最短路径",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/314",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-314#author=translator:1281309:zh"
+  },
+  {
+    "id": "313",
+    "enName": "Circular Railway",
+    "zhName": "环形铁路",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/313",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-313#author=translator:1281309:zh"
+  },
+  {
+    "id": "312",
+    "enName": "4-3 King",
+    "zhName": "4-3王",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/312",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-312#author=translator:1281309:zh"
+  },
+  {
+    "id": "311",
+    "enName": "Ice-cream Tycoon",
+    "zhName": "冰淇淋大亨",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/311",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-311#author=translator:1281309:zh"
+  },
+  {
+    "id": "310",
+    "enName": "Hippopotamus",
+    "zhName": "河马",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/310",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-310#author=translator:1281309:zh"
+  },
+  {
+    "id": "309",
+    "enName": "Real Fun",
+    "zhName": "真正的快乐",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/309",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-309#author=translator:1281309:zh"
+  },
+  {
+    "id": "308",
+    "enName": "Hyperboloid Distance",
+    "zhName": "双曲面距离",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/308",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-308#author=translator:1281309:zh"
+  },
+  {
+    "id": "307",
+    "enName": "Cipher",
+    "zhName": "密码",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/307",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-307#author=translator:1281309:zh"
+  },
+  {
+    "id": "306",
+    "enName": "Balance",
+    "zhName": "平衡",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/306",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-306#author=translator:1281309:zh"
+  },
+  {
+    "id": "305",
+    "enName": "Exhibition",
+    "zhName": "展览",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/305",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-305#author=translator:1281309:zh"
+  },
+  {
+    "id": "304",
+    "enName": "Mars Stomatology",
+    "zhName": "火星牙科",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/304",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-304#author=translator:1281309:zh"
+  },
+  {
+    "id": "303",
+    "enName": "Great Berland Wall",
+    "zhName": "伟大的伯兰墙",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/303",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-303#author=translator:1281309:zh"
+  },
+  {
+    "id": "302",
+    "enName": "BHTML 1.0",
+    "zhName": "BHTML 1.0",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/302",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-302#author=translator:1281309:zh"
+  },
+  {
+    "id": "301",
+    "enName": "Boring. Hot. Summer...",
+    "zhName": "无聊。炎热。夏天……",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/301",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-301#author=translator:1281309:zh"
+  },
+  {
+    "id": "300",
+    "enName": "Train",
+    "zhName": "火车",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/300",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-300#author=translator:1281309:zh"
+  },
+  {
+    "id": "299",
+    "enName": "Triangle",
+    "zhName": "三角形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/299",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-299#author=translator:1281309:zh"
+  },
+  {
+    "id": "298",
+    "enName": "King Berl VI",
+    "zhName": "伯尔王六世",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/298",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-298#author=translator:1281309:zh"
+  },
+  {
+    "id": "297",
+    "enName": "Fair-play",
+    "zhName": "公平竞赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/297",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-297#author=translator:1281309:zh"
+  },
+  {
+    "id": "296",
+    "enName": "Sasha vs. Kate",
+    "zhName": "萨沙对凯特",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/296",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-296#author=translator:1281309:zh"
+  },
+  {
+    "id": "295",
+    "enName": "Identifier Duplicated!",
+    "zhName": "标识符重复！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/295",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-295#author=translator:1281309:zh"
+  },
+  {
+    "id": "294",
+    "enName": "He's Circles",
+    "zhName": "他的圆圈",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/294",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-294#author=translator:1281309:zh"
+  },
+  {
+    "id": "293",
+    "enName": "Game with Q an C",
+    "zhName": "与Q和C的游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/293",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-293#author=translator:1281309:zh"
+  },
+  {
+    "id": "292",
+    "enName": "Field for the Cemetery",
+    "zhName": "墓地场地",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/292",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-292#author=translator:1281309:zh"
+  },
+  {
+    "id": "291",
+    "enName": "Evolution",
+    "zhName": "进化",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/291",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-291#author=translator:1281309:zh"
+  },
+  {
+    "id": "290",
+    "enName": "Defend the Milky Way",
+    "zhName": "保卫银河系",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/290",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-290#author=translator:1281309:zh"
+  },
+  {
+    "id": "289",
+    "enName": "Challenging Tic-Tac-Toe",
+    "zhName": "挑战性的井字棋",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/289",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-289#author=translator:1281309:zh"
+  },
+  {
+    "id": "288",
+    "enName": "Best Tournament Schedule",
+    "zhName": "最佳锦标赛日程",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/288",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-288#author=translator:1281309:zh"
+  },
+  {
+    "id": "287",
+    "enName": "Amusing Qc Machine",
+    "zhName": "有趣的QC机",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/287",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-287#author=translator:1281309:zh"
+  },
+  {
+    "id": "286",
+    "enName": "Ancient decoration",
+    "zhName": "古老的装饰",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/286",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-286#author=translator:1281309:zh"
+  },
+  {
+    "id": "285",
+    "enName": "What? Where? When?",
+    "zhName": "什么？哪里？何时？",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/285",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-285#author=translator:1281309:zh"
+  },
+  {
+    "id": "284",
+    "enName": "Grammar",
+    "zhName": "文法",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/284",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-284#author=translator:1281309:zh"
+  },
+  {
+    "id": "283",
+    "enName": "Mechanics",
+    "zhName": "力学",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/283",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-283#author=translator:1281309:zh"
+  },
+  {
+    "id": "282",
+    "enName": "Isomorphism",
+    "zhName": "同构",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/282",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-282#author=translator:1281309:zh"
+  },
+  {
+    "id": "281",
+    "enName": "Championship",
+    "zhName": "锦标赛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/281",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-281#author=translator:1281309:zh"
+  },
+  {
+    "id": "280",
+    "enName": "Trade centers",
+    "zhName": "贸易中心",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/280",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-280#author=translator:1281309:zh"
+  },
+  {
+    "id": "279",
+    "enName": "Bipermutations",
+    "zhName": "双排列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/279",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-279#author=translator:1281309:zh"
+  },
+  {
+    "id": "278",
+    "enName": "Fuel",
+    "zhName": "燃料",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/278",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-278#author=translator:1281309:zh"
+  },
+  {
+    "id": "277",
+    "enName": "Heroes",
+    "zhName": "英雄",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/277",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-277#author=translator:1281309:zh"
+  },
+  {
+    "id": "276",
+    "enName": "Andrew's Troubles",
+    "zhName": "安德鲁的麻烦",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/276",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-276#author=translator:1281309:zh"
+  },
+  {
+    "id": "275",
+    "enName": "To xor or not to xor",
+    "zhName": "亦或还是不亦或",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/275",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-275#author=translator:1281309:zh"
+  },
+  {
+    "id": "274",
+    "enName": "Spam-filter",
+    "zhName": "垃圾邮件过滤器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/274",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-274#author=translator:1281309:zh"
+  },
+  {
+    "id": "273",
+    "enName": "Game Po",
+    "zhName": "Po游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/273",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-273#author=translator:1281309:zh"
+  },
+  {
+    "id": "272",
+    "enName": "Evacuation plan",
+    "zhName": "疏散计划",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/272",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-272#author=translator:1281309:zh"
+  },
+  {
+    "id": "271",
+    "enName": "Book Pile",
+    "zhName": "书堆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/271",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-271#author=translator:1281309:zh"
+  },
+  {
+    "id": "270",
+    "enName": "Thimbles",
+    "zhName": "三杯球游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/270",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-270#author=translator:1281309:zh"
+  },
+  {
+    "id": "269",
+    "enName": "Rooks",
+    "zhName": "车",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/269",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-269#author=translator:1281309:zh"
+  },
+  {
+    "id": "268",
+    "enName": "Hyper Almost Permutative String",
+    "zhName": "超几乎置换串",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/268",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-268#author=translator:1281309:zh"
+  },
+  {
+    "id": "267",
+    "enName": "Optimist vs. Pessimist",
+    "zhName": "乐观者对悲观者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/267",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-267#author=translator:1281309:zh"
+  },
+  {
+    "id": "266",
+    "enName": "Berlion",
+    "zhName": "伯利昂",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/266",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-266#author=translator:1281309:zh"
+  },
+  {
+    "id": "265",
+    "enName": "Wizards",
+    "zhName": "巫师",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/265",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-265#author=translator:1281309:zh"
+  },
+  {
+    "id": "264",
+    "enName": "Travel",
+    "zhName": "旅行",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/264",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-264#author=translator:1281309:zh"
+  },
+  {
+    "id": "263",
+    "enName": "Towers",
+    "zhName": "塔",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/263",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-263#author=translator:1281309:zh"
+  },
+  {
+    "id": "262",
+    "enName": "Symbol Recognition",
+    "zhName": "符号识别",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/262",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-262#author=translator:1281309:zh"
+  },
+  {
+    "id": "261",
+    "enName": "Discrete Roots",
+    "zhName": "离散根",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/261",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-261#author=translator:1281309:zh"
+  },
+  {
+    "id": "260",
+    "enName": "Puzzle",
+    "zhName": "拼图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/260",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-260#author=translator:1281309:zh"
+  },
+  {
+    "id": "259",
+    "enName": "Printed PR",
+    "zhName": "印刷公关",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/259",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-259#author=translator:1281309:zh"
+  },
+  {
+    "id": "258",
+    "enName": "Almost Lucky Numbers",
+    "zhName": "几乎幸运数字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/258",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-258#author=translator:1281309:zh"
+  },
+  {
+    "id": "257",
+    "enName": "Debt",
+    "zhName": "债务",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/257",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-257#author=translator:1281309:zh"
+  },
+  {
+    "id": "256",
+    "enName": "Balloons",
+    "zhName": "气球",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/256",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-256#author=translator:1281309:zh"
+  },
+  {
+    "id": "255",
+    "enName": "Winsock 3 Beta",
+    "zhName": "Winsock 3测试版",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/255",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-255#author=translator:1281309:zh"
+  },
+  {
+    "id": "254",
+    "enName": "Strange Random",
+    "zhName": "奇怪的随机数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/254",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-254#author=translator:1281309:zh"
+  },
+  {
+    "id": "253",
+    "enName": "Theodore Roosevelt",
+    "zhName": "西奥多·罗斯福",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/253",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-253#author=translator:1281309:zh"
+  },
+  {
+    "id": "252",
+    "enName": "Railway Communication",
+    "zhName": "铁路通信",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/252",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-252#author=translator:1281309:zh"
+  },
+  {
+    "id": "251",
+    "enName": "Polymania",
+    "zhName": "多边形狂热",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/251",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-251#author=translator:1281309:zh"
+  },
+  {
+    "id": "250",
+    "enName": "Constructive Plan",
+    "zhName": "建设性计划",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/250",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-250#author=translator:1281309:zh"
+  },
+  {
+    "id": "249",
+    "enName": "Matrix",
+    "zhName": "矩阵",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/249",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-249#author=translator:1281309:zh"
+  },
+  {
+    "id": "248",
+    "enName": "Integer Linear Programming",
+    "zhName": "整数线性规划",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/248",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-248#author=translator:1281309:zh"
+  },
+  {
+    "id": "247",
+    "enName": "Difficult Choice",
+    "zhName": "艰难的选择",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/247",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-247#author=translator:1281309:zh"
+  },
+  {
+    "id": "246",
+    "enName": "Black & White",
+    "zhName": "黑白",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/246",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-246#author=translator:1281309:zh"
+  },
+  {
+    "id": "245",
+    "enName": "Black-White Army",
+    "zhName": "黑白军队",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/245",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-245#author=translator:1281309:zh"
+  },
+  {
+    "id": "244",
+    "enName": "Height, Bisector and Median",
+    "zhName": "高、角平分线与中线",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/244",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-244#author=translator:1281309:zh"
+  },
+  {
+    "id": "243",
+    "enName": "Broken Chessboard",
+    "zhName": "破碎的棋盘",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/243",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-243#author=translator:1281309:zh"
+  },
+  {
+    "id": "242",
+    "enName": "Student's Morning",
+    "zhName": "学生的早晨",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/242",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-242#author=translator:1281309:zh"
+  },
+  {
+    "id": "241",
+    "enName": "The United Fields of Chessboardia",
+    "zhName": "棋盘国联合领地",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/241",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-241#author=translator:1281309:zh"
+  },
+  {
+    "id": "240",
+    "enName": "Runaway",
+    "zhName": "逃跑者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/240",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-240#author=translator:1281309:zh"
+  },
+  {
+    "id": "239",
+    "enName": "Minesweeper",
+    "zhName": "扫雷",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/239",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-239#author=translator:1281309:zh"
+  },
+  {
+    "id": "238",
+    "enName": "Uncle Vasya and Bags for Potatoes",
+    "zhName": "瓦西里叔叔与土豆袋",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/238",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-238#author=translator:1281309:zh"
+  },
+  {
+    "id": "237",
+    "enName": "Galaxy X: Episode I - Masters of Mind",
+    "zhName": "银河X：第一集-心灵主宰",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/237",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-237#author=translator:1281309:zh"
+  },
+  {
+    "id": "236",
+    "enName": "Greedy Path",
+    "zhName": "贪婪路径",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/236",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-236#author=translator:1281309:zh"
+  },
+  {
+    "id": "235",
+    "enName": "The Queen",
+    "zhName": "女王",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/235",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-235#author=translator:1281309:zh"
+  },
+  {
+    "id": "234",
+    "enName": "Black-White King Strikes Back",
+    "zhName": "黑白王反击",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/234",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-234#author=translator:1281309:zh"
+  },
+  {
+    "id": "233",
+    "enName": "The Greatest Angle",
+    "zhName": "最大的角",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/233",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-233#author=translator:1281309:zh"
+  },
+  {
+    "id": "232",
+    "enName": "Infinite Fraction",
+    "zhName": "无穷分数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/232",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-232#author=translator:1281309:zh"
+  },
+  {
+    "id": "231",
+    "enName": "Prime Sum",
+    "zhName": "素数之和",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/231",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-231#author=translator:1281309:zh"
+  },
+  {
+    "id": "230",
+    "enName": "Weighings",
+    "zhName": "称重",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/230",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-230#author=translator:1281309:zh"
+  },
+  {
+    "id": "229",
+    "enName": "Divide and conquer",
+    "zhName": "分而治之",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/229",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-229#author=translator:1281309:zh"
+  },
+  {
+    "id": "228",
+    "enName": "Archipelago",
+    "zhName": "群岛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/228",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-228#author=translator:1281309:zh"
+  },
+  {
+    "id": "227",
+    "enName": "The art to the broad masses!",
+    "zhName": "艺术走向大众！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/227",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-227#author=translator:1281309:zh"
+  },
+  {
+    "id": "226",
+    "enName": "Colored graph",
+    "zhName": "染色图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/226",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-226#author=translator:1281309:zh"
+  },
+  {
+    "id": "225",
+    "enName": "Little Knights",
+    "zhName": "小骑士",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/225",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-225#author=translator:1281309:zh"
+  },
+  {
+    "id": "224",
+    "enName": "Little Queens",
+    "zhName": "小皇后",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/224",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-224#author=translator:1281309:zh"
+  },
+  {
+    "id": "223",
+    "enName": "Little Kings",
+    "zhName": "小国王",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/223",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-223#author=translator:1281309:zh"
+  },
+  {
+    "id": "222",
+    "enName": "Little Rooks",
+    "zhName": "小车",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/222",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-222#author=translator:1281309:zh"
+  },
+  {
+    "id": "221",
+    "enName": "Big Bishops",
+    "zhName": "大主教",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/221",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-221#author=translator:1281309:zh"
+  },
+  {
+    "id": "220",
+    "enName": "Little Bishops",
+    "zhName": "小主教",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/220",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-220#author=translator:1281309:zh"
+  },
+  {
+    "id": "219",
+    "enName": "Synchrograph",
+    "zhName": "同步图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/219",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-219#author=translator:1281309:zh"
+  },
+  {
+    "id": "218",
+    "enName": "Unstable Systems",
+    "zhName": "不稳定系统",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/218",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-218#author=translator:1281309:zh"
+  },
+  {
+    "id": "217",
+    "enName": "Two Cylinders",
+    "zhName": "两个圆柱",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/217",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-217#author=translator:1281309:zh"
+  },
+  {
+    "id": "216",
+    "enName": "Royal Federation",
+    "zhName": "皇家联邦",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/216",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-216#author=translator:1281309:zh"
+  },
+  {
+    "id": "215",
+    "enName": "PL/Cool",
+    "zhName": "PL/Cool",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/215",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-215#author=translator:1281309:zh"
+  },
+  {
+    "id": "214",
+    "enName": "Weird Dissimilarity",
+    "zhName": "奇怪的不相似度",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/214",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-214#author=translator:1281309:zh"
+  },
+  {
+    "id": "213",
+    "enName": "Strong Defence",
+    "zhName": "坚固防御",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/213",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-213#author=translator:1281309:zh"
+  },
+  {
+    "id": "212",
+    "enName": "Data Transmission",
+    "zhName": "数据传输",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/212",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-212#author=translator:1281309:zh"
+  },
+  {
+    "id": "211",
+    "enName": "Strange Counter",
+    "zhName": "奇怪的计数器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/211",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-211#author=translator:1281309:zh"
+  },
+  {
+    "id": "210",
+    "enName": "Beloved Sons",
+    "zhName": "心爱的儿子们",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/210",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-210#author=translator:1281309:zh"
+  },
+  {
+    "id": "209",
+    "enName": "Areas",
+    "zhName": "面积",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/209",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-209#author=translator:1281309:zh"
+  },
+  {
+    "id": "208",
+    "enName": "Toral Tickets",
+    "zhName": "环形票",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/208",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-208#author=translator:1281309:zh"
+  },
+  {
+    "id": "207",
+    "enName": "Robbers",
+    "zhName": "强盗",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/207",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-207#author=translator:1281309:zh"
+  },
+  {
+    "id": "206",
+    "enName": "Roads",
+    "zhName": "道路",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/206",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-206#author=translator:1281309:zh"
+  },
+  {
+    "id": "205",
+    "enName": "Quantization Problem",
+    "zhName": "量化问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/205",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-205#author=translator:1281309:zh"
+  },
+  {
+    "id": "204",
+    "enName": "Little Jumper",
+    "zhName": "小跳跃者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/204",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-204#author=translator:1281309:zh"
+  },
+  {
+    "id": "203",
+    "enName": "Hyperhuffman",
+    "zhName": "超哈夫曼",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/203",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-203#author=translator:1281309:zh"
+  },
+  {
+    "id": "202",
+    "enName": "The Towers of Hanoi Revisited",
+    "zhName": "重访汉诺塔",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/202",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-202#author=translator:1281309:zh"
+  },
+  {
+    "id": "201",
+    "enName": "Non Absorbing DFA",
+    "zhName": "非吸收DFA",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/201",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-201#author=translator:1281309:zh"
+  },
+  {
+    "id": "200",
+    "enName": "Cracking RSA",
+    "zhName": "破解RSA",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/200",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-200#author=translator:1281309:zh"
+  },
+  {
+    "id": "199",
+    "enName": "Beautiful People",
+    "zhName": "美丽的人",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/199",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-199#author=translator:1281309:zh"
+  },
+  {
+    "id": "198",
+    "enName": "Get Out!",
+    "zhName": "出去！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/198",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-198#author=translator:1281309:zh"
+  },
+  {
+    "id": "197",
+    "enName": "Nice Patterns Strike Back",
+    "zhName": "漂亮的图案反击",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/197",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-197#author=translator:1281309:zh"
+  },
+  {
+    "id": "196",
+    "enName": "Matrix Multiplication",
+    "zhName": "矩阵乘法",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/196",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-196#author=translator:1281309:zh"
+  },
+  {
+    "id": "195",
+    "enName": "New Year Bonus Grant",
+    "zhName": "新年奖金补助",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/195",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-195#author=translator:1281309:zh"
+  },
+  {
+    "id": "194",
+    "enName": "Reactor Cooling",
+    "zhName": "反应堆冷却",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/194",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-194#author=translator:1281309:zh"
+  },
+  {
+    "id": "193",
+    "enName": "Chinese Girls' Amusement",
+    "zhName": "中国女孩的娱乐",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/193",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-193#author=translator:1281309:zh"
+  },
+  {
+    "id": "192",
+    "enName": "RGB",
+    "zhName": "RGB",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/192",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-192#author=translator:1281309:zh"
+  },
+  {
+    "id": "191",
+    "enName": "Exhibition",
+    "zhName": "展览",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/191",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-191#author=translator:1281309:zh"
+  },
+  {
+    "id": "190",
+    "enName": "Dominoes",
+    "zhName": "多米诺骨牌",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/190",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-190#author=translator:1281309:zh"
+  },
+  {
+    "id": "189",
+    "enName": "Perl-like Substr",
+    "zhName": "类Perl的子串",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/189",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-189#author=translator:1281309:zh"
+  },
+  {
+    "id": "188",
+    "enName": "Factory guard",
+    "zhName": "工厂守卫",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/188",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-188#author=translator:1281309:zh"
+  },
+  {
+    "id": "187",
+    "enName": "Twist and whirl -- want to cheat",
+    "zhName": "扭转与旋转——想作弊",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/187",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-187#author=translator:1281309:zh"
+  },
+  {
+    "id": "186",
+    "enName": "The chain",
+    "zhName": "链条",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/186",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-186#author=translator:1281309:zh"
+  },
+  {
+    "id": "185",
+    "enName": "Two shortest",
+    "zhName": "两条最短路",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/185",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-185#author=translator:1281309:zh"
+  },
+  {
+    "id": "184",
+    "enName": "Patties",
+    "zhName": "馅饼",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/184",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-184#author=translator:1281309:zh"
+  },
+  {
+    "id": "183",
+    "enName": "Painting the balls",
+    "zhName": "给球上色",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/183",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-183#author=translator:1281309:zh"
+  },
+  {
+    "id": "182",
+    "enName": "Open the brackets",
+    "zhName": "展开括号",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/182",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-182#author=translator:1281309:zh"
+  },
+  {
+    "id": "181",
+    "enName": "X-Sequence",
+    "zhName": "X序列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/181",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-181#author=translator:1281309:zh"
+  },
+  {
+    "id": "180",
+    "enName": "Inversions",
+    "zhName": "逆序对",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/180",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-180#author=translator:1281309:zh"
+  },
+  {
+    "id": "179",
+    "enName": "Brackets light",
+    "zhName": "括号灯",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/179",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-179#author=translator:1281309:zh"
+  },
+  {
+    "id": "178",
+    "enName": "Chain",
+    "zhName": "链",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/178",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-178#author=translator:1281309:zh"
+  },
+  {
+    "id": "177",
+    "enName": "Square",
+    "zhName": "正方形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/177",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-177#author=translator:1281309:zh"
+  },
+  {
+    "id": "176",
+    "enName": "Flow construction",
+    "zhName": "网络流构建",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/176",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-176#author=translator:1281309:zh"
+  },
+  {
+    "id": "175",
+    "enName": "Encoding",
+    "zhName": "编码",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/175",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-175#author=translator:1281309:zh"
+  },
+  {
+    "id": "174",
+    "enName": "Walls",
+    "zhName": "墙",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/174",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-174#author=translator:1281309:zh"
+  },
+  {
+    "id": "173",
+    "enName": "Coins",
+    "zhName": "硬币",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/173",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-173#author=translator:1281309:zh"
+  },
+  {
+    "id": "172",
+    "enName": "eXam",
+    "zhName": "考试",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/172",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-172#author=translator:1281309:zh"
+  },
+  {
+    "id": "171",
+    "enName": "Sarov zones",
+    "zhName": "萨罗夫区域",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/171",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-171#author=translator:1281309:zh"
+  },
+  {
+    "id": "170",
+    "enName": "Particles",
+    "zhName": "粒子",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/170",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-170#author=translator:1281309:zh"
+  },
+  {
+    "id": "169",
+    "enName": "Numbers",
+    "zhName": "数字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/169",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-169#author=translator:1281309:zh"
+  },
+  {
+    "id": "168",
+    "enName": "Matrix",
+    "zhName": "矩阵",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/168",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-168#author=translator:1281309:zh"
+  },
+  {
+    "id": "167",
+    "enName": "I-country",
+    "zhName": "I国",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/167",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-167#author=translator:1281309:zh"
+  },
+  {
+    "id": "166",
+    "enName": "Editor",
+    "zhName": "编辑器",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/166",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-166#author=translator:1281309:zh"
+  },
+  {
+    "id": "165",
+    "enName": "Basketball",
+    "zhName": "篮球",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/165",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-165#author=translator:1281309:zh"
+  },
+  {
+    "id": "164",
+    "enName": "Airlines",
+    "zhName": "航空公司",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/164",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-164#author=translator:1281309:zh"
+  },
+  {
+    "id": "163",
+    "enName": "Wise King",
+    "zhName": "睿智的国王",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/163",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-163#author=translator:1281309:zh"
+  },
+  {
+    "id": "162",
+    "enName": "Pyramids",
+    "zhName": "金字塔",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/162",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-162#author=translator:1281309:zh"
+  },
+  {
+    "id": "161",
+    "enName": "Intuitionistic Logic",
+    "zhName": "直觉逻辑",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/161",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-161#author=translator:1281309:zh"
+  },
+  {
+    "id": "160",
+    "enName": "Magic Multiplying Machine",
+    "zhName": "神奇乘法机",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/160",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-160#author=translator:1281309:zh"
+  },
+  {
+    "id": "159",
+    "enName": "Self-Replicating Numbers",
+    "zhName": "自复制数字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/159",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-159#author=translator:1281309:zh"
+  },
+  {
+    "id": "158",
+    "enName": "Commuter Train",
+    "zhName": "通勤列车",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/158",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-158#author=translator:1281309:zh"
+  },
+  {
+    "id": "157",
+    "enName": "Patience",
+    "zhName": "耐心",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/157",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-157#author=translator:1281309:zh"
+  },
+  {
+    "id": "156",
+    "enName": "Strange Graph",
+    "zhName": "奇怪的图",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/156",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-156#author=translator:1281309:zh"
+  },
+  {
+    "id": "155",
+    "enName": "Cartesian Tree",
+    "zhName": "笛卡尔树",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/155",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-155#author=translator:1281309:zh"
+  },
+  {
+    "id": "154",
+    "enName": "Factorial",
+    "zhName": "阶乘",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/154",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-154#author=translator:1281309:zh"
+  },
+  {
+    "id": "153",
+    "enName": "Playing with matches",
+    "zhName": "玩火柴",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/153",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-153#author=translator:1281309:zh"
+  },
+  {
+    "id": "152",
+    "enName": "Making round",
+    "zhName": "取整",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/152",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-152#author=translator:1281309:zh"
+  },
+  {
+    "id": "151",
+    "enName": "Construct a triangle",
+    "zhName": "构造一个三角形",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/151",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-151#author=translator:1281309:zh"
+  },
+  {
+    "id": "150",
+    "enName": "Mr. Beetle II",
+    "zhName": "甲虫先生II",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/150",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-150#author=translator:1281309:zh"
+  },
+  {
+    "id": "149",
+    "enName": "Computer Network",
+    "zhName": "计算机网络",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/149",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-149#author=translator:1281309:zh"
+  },
+  {
+    "id": "148",
+    "enName": "B-Station",
+    "zhName": "B站",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/148",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-148#author=translator:1281309:zh"
+  },
+  {
+    "id": "147",
+    "enName": "Black-white king",
+    "zhName": "黑白王",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/147",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-147#author=translator:1281309:zh"
+  },
+  {
+    "id": "146",
+    "enName": "The Runner",
+    "zhName": "奔跑者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/146",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-146#author=translator:1281309:zh"
+  },
+  {
+    "id": "145",
+    "enName": "Strange People",
+    "zhName": "奇怪的人",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/145",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-145#author=translator:1281309:zh"
+  },
+  {
+    "id": "144",
+    "enName": "Meeting",
+    "zhName": "会议",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/144",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-144#author=translator:1281309:zh"
+  },
+  {
+    "id": "143",
+    "enName": "Long Live the Queen",
+    "zhName": "女王万岁",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/143",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-143#author=translator:1281309:zh"
+  },
+  {
+    "id": "142",
+    "enName": "Keyword",
+    "zhName": "关键字",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/142",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-142#author=translator:1281309:zh"
+  },
+  {
+    "id": "141",
+    "enName": "Jumping Joe",
+    "zhName": "跳跃的乔",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/141",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-141#author=translator:1281309:zh"
+  },
+  {
+    "id": "140",
+    "enName": "Integer Sequences",
+    "zhName": "整数序列",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/140",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-140#author=translator:1281309:zh"
+  },
+  {
+    "id": "139",
+    "enName": "Help Needed!",
+    "zhName": "需要帮助！",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/139",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-139#author=translator:1281309:zh"
+  },
+  {
+    "id": "138",
+    "enName": "Games of Chess",
+    "zhName": "国际象棋游戏",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/138",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-138#author=translator:1281309:zh"
+  },
+  {
+    "id": "137",
+    "enName": "Funny Strings",
+    "zhName": "有趣的字符串",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/137",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-137#author=translator:1281309:zh"
+  },
+  {
+    "id": "136",
+    "enName": "Erasing Edges",
+    "zhName": "擦除边",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/136",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-136#author=translator:1281309:zh"
+  },
+  {
+    "id": "135",
+    "enName": "Drawing Lines",
+    "zhName": "画线",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/135",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-135#author=translator:1281309:zh"
+  },
+  {
+    "id": "134",
+    "enName": "Centroid",
+    "zhName": "质心",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/134",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-134#author=translator:1281309:zh"
+  },
+  {
+    "id": "133",
+    "enName": "Border",
+    "zhName": "边界",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/133",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-133#author=translator:1281309:zh"
+  },
+  {
+    "id": "132",
+    "enName": "Another Chocolate Maniac",
+    "zhName": "又一个巧克力狂热者",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/132",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-132#author=translator:1281309:zh"
+  },
+  {
+    "id": "131",
+    "enName": "Hardwood floor",
+    "zhName": "硬木地板",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/131",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-131#author=translator:1281309:zh"
+  },
+  {
+    "id": "130",
+    "enName": "Circle",
+    "zhName": "圆",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/130",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-130#author=translator:1281309:zh"
+  },
+  {
+    "id": "129",
+    "enName": "Inheritance",
+    "zhName": "继承",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/129",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-129#author=translator:1281309:zh"
+  },
+  {
+    "id": "128",
+    "enName": "Snake",
+    "zhName": "蛇",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/128",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-128#author=translator:1281309:zh"
+  },
+  {
+    "id": "127",
+    "enName": "Telephone directory",
+    "zhName": "电话簿",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/127",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-127#author=translator:1281309:zh"
+  },
+  {
+    "id": "126",
+    "enName": "Boxes",
+    "zhName": "盒子",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/126",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-126#author=translator:1281309:zh"
+  },
+  {
+    "id": "125",
+    "enName": "Shtirlits",
+    "zhName": "什蒂尔利茨",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/125",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-125#author=translator:1281309:zh"
+  },
+  {
+    "id": "124",
+    "enName": "Broken line",
+    "zhName": "折线",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/124",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-124#author=translator:1281309:zh"
+  },
+  {
+    "id": "123",
+    "enName": "The sum",
+    "zhName": "求和",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/123",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-123#author=translator:1281309:zh"
+  },
+  {
+    "id": "122",
+    "enName": "The book",
+    "zhName": "书",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/122",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-122#author=translator:1281309:zh"
+  },
+  {
+    "id": "121",
+    "enName": "Bridges painting",
+    "zhName": "桥的涂色",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/121",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-121#author=translator:1281309:zh"
+  },
+  {
+    "id": "120",
+    "enName": "Arhipelago",
+    "zhName": "群岛",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/120",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-120#author=translator:1281309:zh"
+  },
+  {
+    "id": "119",
+    "enName": "Magic pairs",
+    "zhName": "魔法对",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/119",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-119#author=translator:1281309:zh"
+  },
+  {
+    "id": "118",
+    "enName": "Digital root",
+    "zhName": "数字根",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/118",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-118#author=translator:1281309:zh"
+  },
+  {
+    "id": "117",
+    "enName": "Counting",
+    "zhName": "计数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/117",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-117#author=translator:1281309:zh"
+  },
+  {
+    "id": "116",
+    "enName": "Index of super-prime",
+    "zhName": "超级素数索引",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/116",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-116#author=translator:1281309:zh"
+  },
+  {
+    "id": "115",
+    "enName": "Calendar",
+    "zhName": "日历",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/115",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-115#author=translator:1281309:zh"
+  },
+  {
+    "id": "114",
+    "enName": "Telecasting station",
+    "zhName": "电视转播站",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/114",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-114#author=translator:1281309:zh"
+  },
+  {
+    "id": "113",
+    "enName": "Nearly prime numbers",
+    "zhName": "近似素数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/113",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-113#author=translator:1281309:zh"
+  },
+  {
+    "id": "112",
+    "enName": "a^b - b^a",
+    "zhName": "a^b - b^a",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/112",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-112#author=translator:1281309:zh"
+  },
+  {
+    "id": "111",
+    "enName": "Very simple problem",
+    "zhName": "非常简单的问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/111",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-111#author=translator:1281309:zh"
+  },
+  {
+    "id": "110",
+    "enName": "Dungeon",
+    "zhName": "地牢",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/110",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-110#author=translator:1281309:zh"
+  },
+  {
+    "id": "109",
+    "enName": "Magic of David Copperfield II",
+    "zhName": "大卫·科波菲尔的魔法II",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/109",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-109#author=translator:1281309:zh"
+  },
+  {
+    "id": "108",
+    "enName": "Self-numbers II",
+    "zhName": "自我数II",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/108",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-108#author=translator:1281309:zh"
+  },
+  {
+    "id": "107",
+    "enName": "987654321 problem",
+    "zhName": "987654321问题",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/107",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-107#author=translator:1281309:zh"
+  },
+  {
+    "id": "106",
+    "enName": "The Equation",
+    "zhName": "方程",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/106",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-106#author=translator:1281309:zh"
+  },
+  {
+    "id": "105",
+    "enName": "Div 3",
+    "zhName": "整除3",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/105",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-105#author=translator:1281309:zh"
+  },
+  {
+    "id": "104",
+    "enName": "Little Shop of Flowers",
+    "zhName": "小花店",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/104",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-104#author=translator:1281309:zh"
+  },
+  {
+    "id": "103",
+    "enName": "Traffic Lights",
+    "zhName": "交通信号灯",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/103",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-103#author=translator:1281309:zh"
+  },
+  {
+    "id": "102",
+    "enName": "Coprimes",
+    "zhName": "互素数",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/102",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-102#author=translator:1281309:zh"
+  },
+  {
+    "id": "101",
+    "enName": "Domino",
+    "zhName": "多米诺骨牌",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/101",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-101#author=translator:1281309:zh"
+  },
+  {
+    "id": "100",
+    "enName": "A+B",
+    "zhName": "A+B",
+    "cfUrl": "https://codeforces.com/problemsets/acmsguru/problem/99999/100",
+    "vjudgeUrl": "https://vjudge.net/problem/SGU-100#author=translator:1281309:zh"
+  }
+]

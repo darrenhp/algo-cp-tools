@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SGU 题目列表</title>
+<style>
+  :root {
+    --c-primary: #2563EB;
+    --c-primary-dark: #1E40AF;
+    --c-bg: #F4F6FB;
+    --c-surface: #FFFFFF;
+    --c-surface-2: #F8FAFC;
+    --c-text: #0F172A;
+    --c-text-soft: #64748B;
+    --c-border: #E6EAF2;
+    --c-row-hover: #EFF6FF;
+    --c-th-bg: #F1F5F9;
+    --c-shadow: rgba(15,23,42,.08);
+    --c-green: #16A34A;
+    --c-amber: #F59E0B;
+    --c-star: #EAB308;
+    --c-hl-bg: #FEF08A;
+    --c-hl-text: #854D0E;
+  }
+  [data-theme="dark"] {
+    --c-primary: #3B82F6;
+    --c-primary-dark: #60A5FA;
+    --c-bg: #0B1020;
+    --c-surface: #131A2C;
+    --c-surface-2: #0F1626;
+    --c-text: #E5E9F2;
+    --c-text-soft: #93A1B8;
+    --c-border: #243049;
+    --c-row-hover: #1B2740;
+    --c-th-bg: #18223A;
+    --c-shadow: rgba(0,0,0,.4);
+    --c-green: #4ADE80;
+    --c-amber: #FBBF24;
+    --c-star: #FACC15;
+    --c-hl-bg: #FACC15;
+    --c-hl-text: #1C1917;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--c-bg); }
+  body {
+    margin: 0;
+    font-family: "PingFang SC", "Noto Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--c-text);
+    transition: background-color .3s ease, color .3s ease;
+  }
+  a { color: inherit; }
+  .hero-gradient {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 55%, #3B82F6 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero-gradient::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(600px 200px at 80% -10%, rgba(255,255,255,.18), transparent 70%);
+  }
+  .max-w-6xl { max-width: 72rem; margin: 0 auto; }
+  .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px var(--c-shadow);
+    transition: background-color .3s ease, border-color .3s ease;
+  }
+  .fade-in { animation: fadeIn .4s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* toolbar */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 16px 18px; }
+  .search-box { position: relative; flex: 1 1 260px; }
+  .search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--c-text-soft); pointer-events: none; }
+  .search-input {
+    width: 100%; padding: 10px 38px 10px 38px; border-radius: 12px;
+    border: 1px solid var(--c-border); background: var(--c-surface-2);
+    color: var(--c-text); font-size: 15px; transition: all .2s ease;
+  }
+  .search-input:focus { outline: none; border-color: var(--c-primary); box-shadow: 0 0 0 4px rgba(37,99,235,.14); background: var(--c-surface); }
+  .search-clear {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    width: 24px; height: 24px; border: none; border-radius: 50%; background: transparent;
+    color: var(--c-text-soft); cursor: pointer; font-size: 16px; line-height: 1; display: none;
+  }
+  .search-clear:hover { background: var(--c-border); }
+  .kb-hint {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 12px; color: var(--c-text-soft); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 1px 6px; background: var(--c-surface); pointer-events: none;
+  }
+  .ctrl-group { display: flex; align-items: center; gap: 8px; }
+
+  /* segmented filter */
+  .seg { display: inline-flex; background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: 11px; padding: 3px; gap: 2px; }
+  .seg button {
+    border: none; background: transparent; color: var(--c-text-soft); padding: 7px 13px;
+    border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all .15s;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .seg button:hover { color: var(--c-primary); }
+  .seg button.active { background: var(--c-primary); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,.3); }
+  .seg button .cnt { font-size: 12px; font-weight: 600; opacity: .8; background: rgba(255,255,255,.22); border-radius: 999px; padding: 0 7px; }
+
+  .icon-btn {
+    height: 40px; min-width: 40px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--c-border);
+    background: var(--c-surface-2); color: var(--c-text); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all .15s ease; font-size: 13px; font-weight: 600;
+  }
+  .icon-btn:hover { border-color: var(--c-primary); color: var(--c-primary); transform: translateY(-1px); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn.armed { border-color: var(--c-green); color: var(--c-green); }
+
+  /* cloud panel */
+  .cloud-panel { padding: 14px 18px; border-top: 1px solid var(--c-border); display: none; }
+  .cloud-panel.open { display: block; }
+  .cloud-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .cloud-input {
+    flex: 1 1 240px; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--c-border);
+    background: var(--c-surface-2); color: var(--c-text); font-size: 14px;
+  }
+  .cloud-input:focus { outline: none; border-color: var(--c-primary); }
+  .cloud-status { font-size: 13px; color: var(--c-text-soft); margin-left: 2px; }
+  .cloud-status.ok { color: var(--c-green); }
+  .cloud-status.err { color: #EF4444; }
+  .cloud-note { font-size: 12px; color: var(--c-text-soft); margin-top: 8px; line-height: 1.5; }
+  .cloud-note code { background: var(--c-surface-2); padding: 1px 6px; border-radius: 5px; }
+
+  /* top pager */
+  .pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px; }
+  .pager-info { font-size: 13px; color: var(--c-text-soft); }
+  .pager-info b { color: var(--c-text); }
+  .pager-right { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .psize { display: inline-flex; align-items: center; gap: 6px; }
+  .psize .lbl { font-size: 12px; color: var(--c-text-soft); margin-right: 2px; }
+  .psize button {
+    min-width: 38px; height: 32px; padding: 0 9px; border-radius: 9px; border: 1px solid var(--c-border);
+    background: var(--c-surface-2); color: var(--c-text); cursor: pointer; font-size: 13px; font-weight: 600; transition: all .15s;
+  }
+  .psize button:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .psize button.active { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+  .pager-ctrl { display: flex; align-items: center; gap: 6px; }
+  .page-btn {
+    min-width: 34px; height: 34px; padding: 0 8px; border-radius: 9px; border: 1px solid var(--c-border);
+    background: var(--c-surface-2); color: var(--c-text); cursor: pointer; font-size: 13px; transition: all .15s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: var(--c-primary); color: var(--c-primary); }
+  .page-btn.active { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+  .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .page-ellipsis { color: var(--c-text-soft); padding: 0 2px; }
+
+  /* table */
+  .table-scroll { overflow: visible; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  thead th {
+    position: sticky; top: 0; z-index: 5; background: var(--c-th-bg);
+    text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600;
+    color: var(--c-text-soft); letter-spacing: .03em; border-bottom: 1px solid var(--c-border); user-select: none;
+  }
+  th.sortable { cursor: pointer; }
+  th.sortable:hover { color: var(--c-primary); }
+  th .arrow { display: inline-block; margin-left: 5px; opacity: .35; font-size: 11px; transition: all .15s; }
+  th.active .arrow { opacity: 1; color: var(--c-primary); }
+  tbody tr { transition: background-color .12s ease; border-bottom: 1px solid var(--c-border); }
+  tbody tr:hover { background: var(--c-row-hover); }
+  tbody td { padding: 11px 16px; vertical-align: middle; }
+  td.id-cell { width: 70px; }
+  td.mark-cell { width: 116px; white-space: nowrap; }
+  td.name-cell { font-weight: 600; color: var(--c-text); }
+  td.en-cell { color: var(--c-text-soft); font-size: 14px; }
+  td.link-cell { text-align: center; width: 210px; }
+
+  .pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; padding: 3px 10px; border-radius: 999px;
+    font-weight: 700; font-size: 13px; background: rgba(37,99,235,.12); color: var(--c-primary-dark);
+  }
+  [data-theme="dark"] .pill { color: var(--c-primary); }
+
+  /* status toggles */
+  .toggle-btn {
+    width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--c-border);
+    background: var(--c-surface-2); color: var(--c-text-soft); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 14px;
+    transition: all .15s ease; margin-right: 4px; line-height: 1;
+  }
+  .toggle-btn:last-child { margin-right: 0; }
+  .toggle-btn:hover { transform: translateY(-1px); }
+  .toggle-btn.done.active { background: var(--c-green); color: #fff; border-color: var(--c-green); }
+  .toggle-btn.todo.active { background: var(--c-amber); color: #fff; border-color: var(--c-amber); }
+  .toggle-btn.fav.active { background: var(--c-star); color: #1C1917; border-color: var(--c-star); }
+
+  .btn-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 11px; border-radius: 9px; font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: all .15s ease; white-space: nowrap; border: 1px solid transparent;
+  }
+  .btn-cf { background: rgba(37,99,235,.10); color: var(--c-primary); }
+  .btn-cf:hover { background: var(--c-primary); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.3); }
+  .btn-vj { background: rgba(22,163,74,.10); color: var(--c-green); }
+  .btn-vj:hover { background: var(--c-green); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22,163,74,.3); }
+  .btn-copy { background: var(--c-surface-2); color: var(--c-text-soft); border: 1px solid var(--c-border); padding: 6px 9px; }
+  .btn-copy:hover { color: var(--c-primary); border-color: var(--c-primary); }
+  .btn-copy.done { color: var(--c-green); border-color: var(--c-green); }
+  mark.hl { background: var(--c-hl-bg); color: var(--c-hl-text); border-radius: 3px; padding: 0 1px; }
+
+  .empty { padding: 60px 20px; text-align: center; color: var(--c-text-soft); font-size: 15px; }
+  .skeleton-row td { padding: 14px 16px; }
+  .sk { height: 16px; border-radius: 6px; background: linear-gradient(90deg,#e9edf5,#f4f6fb,#e9edf5); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
+  [data-theme="dark"] .sk { background: linear-gradient(90deg,#1c2740,#243049,#1c2740); background-size: 200% 100%; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--c-text); color: var(--c-bg); padding: 10px 18px; border-radius: 10px;
+    font-size: 14px; opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .footer { text-align: center; color: var(--c-text-soft); font-size: 13px; padding: 26px 20px; line-height: 1.6; }
+  .footer code { background: var(--c-surface-2); padding: 1px 6px; border-radius: 5px; }
+  @media (max-width: 680px) {
+    .link-cell { width: auto; }
+    .btn-link span.label { display: none; }
+    th.en-col, td.en-cell { display: none; }
+    td.mark-cell { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="max-w-6xl px-6">
+
+    <!-- toolbar -->
+    <div class="card fade-in">
+      <div class="toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="search" class="search-input" type="text" placeholder="按题号或中/英文名搜索…" autocomplete="off" />
+          <button id="searchClear" class="search-clear" title="清除" aria-label="清除">&times;</button>
+          <span class="kb-hint" id="kbHint">/</span>
+        </div>
+        <div class="ctrl-group">
+          <div class="seg" id="filterSeg">
+            <button data-filter="all" class="active">全部</button>
+            <button data-filter="done">已做<span class="cnt" id="cnt-done">0</span></button>
+            <button data-filter="todo">待做<span class="cnt" id="cnt-todo">0</span></button>
+            <button data-filter="fav">收藏<span class="cnt" id="cnt-fav">0</span></button>
+          </div>
+          <button id="cloudBtn" class="icon-btn" title="云端同步" aria-label="云端同步">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 001.1-8.86A6 6 0 006 9.5 4 4 0 007 19h10.5z"/><path d="M12 12v6M9.5 14.5L12 12l2.5 2.5" transform="translate(0 -1)"/></svg>
+            <span>云同步</span>
+          </button>
+          <button id="themeBtn" class="icon-btn" title="切换主题" aria-label="切换主题">
+            <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg>
+            <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- cloud panel -->
+    <div class="card fade-in" id="cloudCard" style="margin-top:16px;">
+      <div class="toolbar">
+        <div class="search-box" style="flex:1 1 220px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 001.1-8.86A6 6 0 006 9.5 4 4 0 007 19h10.5z"/></svg>
+          <input id="cloudKey" class="search-input" type="password" placeholder="API Key（jsonstorage.net，用于读写该 private item）" autocomplete="off" />
+        </div>
+        <div class="ctrl-group">
+          <button id="cloudConnect" class="icon-btn" style="background:var(--c-primary);color:#fff;border-color:var(--c-primary);">连接并同步</button>
+          <button id="cloudSync" class="icon-btn">立即上传</button>
+          <button id="cloudDisconnect" class="icon-btn">断开</button>
+        </div>
+      </div>
+      <div class="cloud-panel open">
+        <div class="cloud-row">
+          <input id="cloudUri" class="cloud-input" type="text" placeholder="固定存储地址（写死在代码中，无需修改）" readonly />
+          <button id="cloudCopyUri" class="icon-btn">复制地址</button>
+          <span class="cloud-status" id="cloudStatus"></span>
+        </div>
+        <div class="cloud-note">
+          存储条目地址（<code>STORAGE_URI</code>）已写死在代码中，为一个 private item。请在上方输入你在 <code>jsonstorage.net</code> 的 <b>API Key</b>（对该 item 有读写权限），点「连接并同步」。Key 会记在本机 <code>localStorage</code>，下次刷新自动连接；标记题目后自动上传云端。
+        </div>
+      </div>
+    </div>
+
+    <!-- top pager -->
+    <div class="card fade-in" style="margin-top:16px;">
+      <div class="pager">
+        <div class="pager-info" id="topPagerInfo"></div>
+        <div class="pager-right">
+          <div class="psize" id="pageSizeCtrl"><span class="lbl">每页</span></div>
+          <div class="pager-ctrl" id="topPagerCtrl"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="card fade-in" style="margin-top:16px;overflow:hidden;">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable id-cell" data-sort="id">题号<span class="arrow"></span></th>
+              <th class="mark-cell">标记</th>
+              <th class="sortable" data-sort="zhName">中文名<span class="arrow"></span></th>
+              <th class="sortable en-col" data-sort="enName">英文名<span class="arrow"></span></th>
+              <th class="link-cell">链接</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="empty" class="empty" style="display:none;">没有匹配的题目 🔍</div>
+    </div>
+
+    <footer class="footer">
+      数据来源：Codeforces acmsguru · 中文译名由混元大模型生成 · 最后更新 <span id="updated">—</span><br/>
+      做题状态标记存于浏览器 <code>localStorage</code>。
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const tbody = $('tbody');
+let PROBLEMS = [];
+const state = { query: '', filter: 'all', sortKey: 'id', sortDir: 'desc', page: 1, pageSize: 50 };
+
+/* ---------- storage: status ---------- */
+const STATUS_KEY = 'sgu-status';
+const PSIZE_KEY = 'sgu-pagesize';
+const PAGE_KEY = 'sgu-page';
+const FILTER_KEY = 'sgu-filter';
+const CLOUDPANEL_KEY = 'sgu-cloudpanel';
+const APIKEY_KEY = 'sgu-apikey';
+let store = loadStatus();
+function loadStatus() {
+  try { return JSON.parse(localStorage.getItem(STATUS_KEY)) || {}; } catch (_) { return {}; }
+}
+function saveStatus() {
+  try { localStorage.setItem(STATUS_KEY, JSON.stringify(store)); } catch (_) {}
+  schedulePush();
+}
+function getStatus(id) { return store[id] || { done: false, todo: false, fav: false }; }
+function loadFilter() {
+  try { return JSON.parse(localStorage.getItem(FILTER_KEY)) || {}; } catch (_) { return {}; }
+}
+function saveFilter() {
+  try {
+    const f = { query: state.query, filter: state.filter, sortKey: state.sortKey, sortDir: state.sortDir };
+    localStorage.setItem(FILTER_KEY, JSON.stringify(f));
+  } catch (_) {}
+}
+function toggleStatus(id, key) {
+  const cur = store[id] || { done: false, todo: false, fav: false };
+  cur[key] = !cur[key];
+  if (!cur.done && !cur.todo && !cur.fav) delete store[id];
+  else store[id] = cur;
+  saveStatus();
+  render();
+}
+
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const escapeReg = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function highlight(text, q) {
+  text = String(text);
+  if (!q) return esc(text);
+  const re = new RegExp('(' + escapeReg(q) + ')', 'gi');
+  let out = '', last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    out += esc(text.slice(last, m.index)) + '<mark class="hl">' + esc(m[0]) + '</mark>';
+    last = m.index + m[0].length;
+    if (m.index === re.lastIndex) re.lastIndex++;
+  }
+  return out + esc(text.slice(last));
+}
+
+/* ---------- cloud sync (jsonstorage.net) ---------- */
+const API_BASE = 'https://api.jsonstorage.net/v1/json';
+// 写死的固定存储条目（private item），所有 GET/PUT 都必须带 apiKey
+const STORAGE_URI = 'https://api.jsonstorage.net/v1/json/e5cb4178-396a-446d-965b-f2292d0e2760/3db000af-ea3e-4583-8e7f-c75b6bfb6eb3';
+function loadApiKey() { try { return localStorage.getItem(APIKEY_KEY) || ''; } catch (_) { return ''; } }
+function saveApiKey(k) { try { if (k) localStorage.setItem(APIKEY_KEY, k); else localStorage.removeItem(APIKEY_KEY); } catch (_) {} }
+// API Key 由网页输入并记在本机；存储地址固定写死
+let remote = { key: loadApiKey(), uri: STORAGE_URI };
+let pushTimer = null;
+let cloudConnected = false;
+
+function setCloudStatus(msg, cls) {
+  const el = $('cloudStatus'); if (!el) return;
+  el.textContent = msg || '';
+  el.className = 'cloud-status' + (cls ? ' ' + cls : '');
+}
+function withKey(url) { return remote.key ? url + '?apiKey=' + encodeURIComponent(remote.key) : url; }
+
+async function pushRemote() {
+  if (!cloudConnected || !remote.key || !remote.uri) return;
+  try {
+    const res = await fetch(withKey(remote.uri), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(store)
+    });
+    if (res.status === 404) { cloudConnected = false; setCloudStatus('云端条目不存在，请重新连接', 'err'); return; }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    setCloudStatus('已同步到云端 ✓', 'ok');
+  } catch (e) {
+    setCloudStatus('上传失败：' + e.message, 'err');
+  }
+}
+function schedulePush() {
+  if (!cloudConnected || !remote.key || !remote.uri) return;
+  setCloudStatus('待同步…');
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(pushRemote, 600);
+}
+
+function applyRemote(data) {
+  if (!data || typeof data !== 'object') return;
+  for (const id in data) {
+    const r = data[id] || {};
+    const cur = store[id] || { done: false, todo: false, fav: false };
+    const merged = { done: !!(cur.done || r.done), todo: !!(cur.todo || r.todo), fav: !!(cur.fav || r.fav) };
+    if (merged.done || merged.todo || merged.fav) store[id] = merged; else delete store[id];
+  }
+  saveStatusSilently();
+  render();
+}
+async function pullRemote() {
+  if (!remote.uri) return;
+  const res = await fetch(withKey(remote.uri), { cache: 'no-store' });
+  if (res.status === 404) return;
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  applyRemote(await res.json());
+}
+function saveStatusSilently() { try { localStorage.setItem(STATUS_KEY, JSON.stringify(store)); } catch (_) {} }
+
+async function connectCloud() {
+  const key = $('cloudKey').value.trim();
+  if (!key) { setCloudStatus('请输入 API Key', 'err'); return; }
+  const uri = STORAGE_URI;
+  remote = { key, uri };
+  saveApiKey(key);
+  $('cloudUri').value = uri;
+  setCloudStatus('连接中…');
+  try {
+    const res = await fetch(withKey(uri), { cache: 'no-store' });
+    if (res.status === 404) {
+      // private item 不存在：用 PUT 在该固定地址创建（需有效 apiKey）
+      const c = await fetch(withKey(uri), {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(store)
+      });
+      if (!c.ok) throw new Error('创建失败 HTTP ' + c.status + '（请确认 API Key 有效且具备权限）');
+      setCloudStatus('已用固定地址创建存储条目 ✓', 'ok');
+    } else if (res.status === 403) {
+      throw new Error('无权限（API Key 无效或不匹配该 private item）');
+    } else if (!res.ok) {
+      throw new Error('HTTP ' + res.status);
+    } else {
+      applyRemote(await res.json());
+    }
+    cloudConnected = true;
+    await pushRemote();
+    if (res.status !== 404) setCloudStatus('已连接并同步 ✓', 'ok');
+  } catch (e) {
+    cloudConnected = false;
+    setCloudStatus('连接失败：' + e.message, 'err');
+  }
+}
+function disconnectCloud() {
+  cloudConnected = false;
+  remote = { key: '', uri: STORAGE_URI };
+  saveApiKey('');
+  $('cloudKey').value = '';
+  setCloudStatus('已断开（已清除本机 API Key，本地状态保留）', '');
+}
+
+/* ---------- filtering / sorting / paging ---------- */
+function getFiltered() {
+  const q = state.query.toLowerCase();
+  let list = PROBLEMS;
+  if (state.filter !== 'all') list = list.filter(p => getStatus(p.id)[state.filter]);
+  if (q) list = list.filter(p =>
+    String(p.id).toLowerCase().includes(q) ||
+    (p.zhName || '').toLowerCase().includes(q) ||
+    (p.enName || '').toLowerCase().includes(q));
+  const dir = state.sortDir === 'asc' ? 1 : -1;
+  list = list.slice().sort((a, b) => {
+    let va = a[state.sortKey], vb = b[state.sortKey];
+    if (state.sortKey === 'id') { va = Number(va); vb = Number(vb); }
+    else { va = (va || '').toString().toLowerCase(); vb = (vb || '').toString().toLowerCase(); }
+    if (va < vb) return -1 * dir;
+    if (va > vb) return 1 * dir;
+    return Number(a.id) - Number(b.id);
+  });
+  return list;
+}
+
+function render() {
+  // counts
+  let cDone = 0, cTodo = 0, cFav = 0;
+  for (const p of PROBLEMS) { const s = getStatus(p.id); if (s.done) cDone++; if (s.todo) cTodo++; if (s.fav) cFav++; }
+  $('cnt-done').textContent = cDone; $('cnt-todo').textContent = cTodo; $('cnt-fav').textContent = cFav;
+
+  const list = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(list.length / state.pageSize));
+  if (state.page > totalPages) state.page = totalPages;
+  const start = (state.page - 1) * state.pageSize;
+  const pageItems = list.slice(start, start + state.pageSize);
+  const q = state.query;
+
+  tbody.innerHTML = pageItems.map(p => {
+    const s = getStatus(p.id);
+    return `<tr>
+      <td class="id-cell"><span class="pill">${highlight(p.id, q)}</span></td>
+      <td class="mark-cell">
+        <button class="toggle-btn done ${s.done?'active':''}" data-id="${esc(p.id)}" data-key="done" title="已做">✓</button>
+        <button class="toggle-btn todo ${s.todo?'active':''}" data-id="${esc(p.id)}" data-key="todo" title="待做">◷</button>
+        <button class="toggle-btn fav ${s.fav?'active':''}" data-id="${esc(p.id)}" data-key="fav" title="收藏">★</button>
+      </td>
+      <td class="name-cell">${highlight(p.zhName || p.enName, q)}</td>
+      <td class="en-cell en-col">${highlight(p.enName, q)}</td>
+      <td class="link-cell">
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
+          <a class="btn-link btn-cf" href="${esc(p.cfUrl)}" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg><span class="label">Codeforces</span></a>
+          <a class="btn-link btn-vj" href="${esc(p.vjudgeUrl)}" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span class="label">vjudge</span></a>
+          <button class="btn-link btn-copy" data-url="${esc(p.vjudgeUrl)}" title="复制 vjudge 链接"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  $('empty').style.display = list.length ? 'none' : 'block';
+  document.querySelector('.table-scroll').style.display = list.length ? 'block' : 'none';
+  const seg = document.getElementById('filterSeg');
+  if (seg) seg.querySelectorAll('button').forEach(x => x.classList.toggle('active', x.dataset.filter === state.filter));
+  renderSortIndicators();
+  renderTopPager(list.length, totalPages);
+}
+
+function renderSortIndicators() {
+  document.querySelectorAll('th.sortable').forEach(th => {
+    const active = th.dataset.sort === state.sortKey;
+    th.classList.toggle('active', active);
+    th.querySelector('.arrow').textContent = active ? (state.sortDir === 'asc' ? '▲' : '▼') : '';
+  });
+}
+
+function renderTopPager(total, totalPages) {
+  $('topPagerInfo').innerHTML = total
+    ? `第 <b>${state.page}</b> / <b>${totalPages}</b> 页 · 共 <b>${total}</b> 条`
+    : '';
+  // page size buttons
+  const pc = $('pageSizeCtrl');
+  pc.innerHTML = '<span class="lbl">每页</span>';
+  [10, 20, 50, 100, 200].forEach(sz => {
+    const b = document.createElement('button');
+    b.textContent = sz;
+    b.className = state.pageSize === sz ? 'active' : '';
+    b.addEventListener('click', () => { state.pageSize = sz; state.page = 1; try { localStorage.setItem(PSIZE_KEY, String(sz)); } catch(_){} render(); });
+    pc.appendChild(b);
+  });
+  // nav
+  const ctrl = $('topPagerCtrl');
+  if (totalPages <= 1) { ctrl.innerHTML = ''; return; }
+  let pages = [];
+  const cur = state.page;
+  pages.push(1);
+  for (let i = Math.max(2, cur - 1); i <= Math.min(totalPages - 1, cur + 1); i++) pages.push(i);
+  if (cur - 2 > 2) pages.push('…');
+  if (cur + 2 < totalPages - 1) pages.push('…');
+  if (totalPages > 1) pages.push(totalPages);
+  const seen = new Set(), out = [];
+  pages.forEach(v => { if (v === '…') { if (out[out.length - 1] !== '…') out.push('…'); } else if (!seen.has(v)) { seen.add(v); out.push(v); } });
+
+  let html = `<button class="page-btn" data-page="${cur - 1}" ${cur <= 1 ? 'disabled' : ''}>‹</button>`;
+  out.forEach(v => {
+    if (v === '…') html += `<span class="page-ellipsis">…</span>`;
+    else html += `<button class="page-btn ${v === cur ? 'active' : ''}" data-page="${v}">${v}</button>`;
+  });
+  html += `<button class="page-btn" data-page="${cur + 1}" ${cur >= totalPages ? 'disabled' : ''}>›</button>`;
+  ctrl.innerHTML = html;
+  ctrl.querySelectorAll('.page-btn[data-page]').forEach(b => {
+    b.addEventListener('click', () => {
+      const p = Number(b.dataset.page);
+      if (p >= 1 && p <= totalPages) { state.page = p; try { localStorage.setItem(PAGE_KEY, String(p)); } catch (_) {} render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    });
+  });
+}
+
+function showToast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+/* ---------- events ---------- */
+$('search').addEventListener('input', e => {
+  state.query = e.target.value.trim(); state.page = 1;
+  $('searchClear').style.display = state.query ? 'block' : 'none';
+  saveFilter(); render();
+});
+$('searchClear').addEventListener('click', () => {
+  $('search').value = ''; state.query = ''; state.page = 1;
+  $('searchClear').style.display = 'none'; saveFilter(); render(); $('search').focus();
+});
+document.querySelectorAll('#filterSeg button').forEach(b => {
+  b.addEventListener('click', () => {
+    state.filter = b.dataset.filter; state.page = 1;
+    document.querySelectorAll('#filterSeg button').forEach(x => x.classList.toggle('active', x === b));
+    saveFilter(); render();
+  });
+});
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (state.sortKey === key) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+    else { state.sortKey = key; state.sortDir = 'asc'; }
+    state.page = 1; saveFilter(); render();
+  });
+});
+tbody.addEventListener('click', e => {
+  const t = e.target.closest('.toggle-btn');
+  if (t) { toggleStatus(t.dataset.id, t.dataset.key); return; }
+  const c = e.target.closest('.btn-copy');
+  if (!c) return;
+  navigator.clipboard.writeText(c.dataset.url).then(() => {
+    c.classList.add('done'); showToast('已复制链接');
+    setTimeout(() => c.classList.remove('done'), 1200);
+  }).catch(() => showToast('复制失败'));
+});
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== $('search')) { e.preventDefault(); $('search').focus(); }
+  if (e.key === 'Escape' && document.activeElement === $('search')) { $('search').value = ''; state.query = ''; state.page = 1; $('searchClear').style.display = 'none'; render(); }
+});
+
+// cloud sync
+$('cloudBtn').addEventListener('click', () => {
+  const card = $('cloudCard');
+  const visible = card.style.display !== 'none';
+  card.style.display = visible ? 'none' : 'block';
+  try { localStorage.setItem(CLOUDPANEL_KEY, visible ? 'hidden' : 'shown'); } catch (_) {}
+});
+$('cloudConnect').addEventListener('click', connectCloud);
+$('cloudKey').addEventListener('keydown', e => { if (e.key === 'Enter') connectCloud(); });
+$('cloudSync').addEventListener('click', () => { if (!cloudConnected) { setCloudStatus('请先连接', 'err'); return; } pushRemote(); });
+$('cloudDisconnect').addEventListener('click', disconnectCloud);
+$('cloudCopyUri').addEventListener('click', () => {
+  const uri = $('cloudUri').value.trim();
+  if (!uri) { setCloudStatus('尚无存储地址', 'err'); return; }
+  navigator.clipboard.writeText(uri).then(() => { showToast('已复制存储地址'); }).catch(() => setCloudStatus('复制失败', 'err'));
+});
+
+// theme
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  $('iconMoon').style.display = theme === 'dark' ? 'none' : 'block';
+  $('iconSun').style.display = theme === 'dark' ? 'block' : 'none';
+  try { localStorage.setItem('sgu-theme', theme); } catch (_) {}
+}
+$('themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+});
+(function initTheme() {
+  let t = null; try { t = localStorage.getItem('sgu-theme'); } catch (_) {}
+  if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  applyTheme(t);
+})();
+
+// skeleton
+function showSkeleton() {
+  let rows = '';
+  for (let i = 0; i < 12; i++) rows += `<tr class="skeleton-row"><td class="id-cell"><div class="sk" style="width:44px"></div></td><td class="mark-cell"><div class="sk" style="width:90px"></div></td><td><div class="sk" style="width:60%"></div></td><td class="en-col"><div class="sk" style="width:70%"></div></td><td class="link-cell"><div class="sk" style="width:120px;margin:0 auto"></div></td></tr>`;
+  tbody.innerHTML = rows;
+  $('topPagerInfo').textContent = '';
+}
+
+/* ---------- init ---------- */
+(async function load() {
+  try { state.pageSize = parseInt(localStorage.getItem(PSIZE_KEY), 10) || 50; } catch (_) {}
+  try { const sp = parseInt(localStorage.getItem(PAGE_KEY), 10); if (sp >= 1) state.page = sp; } catch (_) {}
+  try { if (localStorage.getItem(CLOUDPANEL_KEY) === 'hidden') $('cloudCard').style.display = 'none'; } catch (_) {}
+  $('cloudUri').value = STORAGE_URI;
+  if (remote.key) $('cloudKey').value = remote.key;
+  const saved = loadFilter();
+  if (saved.query) { state.query = saved.query; $('search').value = saved.query; $('searchClear').style.display = 'block'; }
+  if (saved.filter) state.filter = saved.filter;
+  if (saved.sortKey) state.sortKey = saved.sortKey;
+  if (saved.sortDir) state.sortDir = saved.sortDir;
+  showSkeleton();
+  try {
+    const res = await fetch('problems.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    PROBLEMS = Array.isArray(data) ? data : (data.problems || []);
+    $('topPagerInfo'); // noop
+    const lm = res.headers.get('last-modified');
+    if (lm) { try { $('updated').textContent = new Date(lm).toLocaleString('zh-CN'); } catch (_) {} }
+    render();
+    if (remote.key) connectCloud();
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:40px;text-align:center;color:var(--c-text-soft);">
+      无法加载 <code>problems.json</code>：${esc(e.message)}<br/>
+      <span style="font-size:13px">请通过本地服务器访问（例如 <code>python -m http.server</code>），而非直接双击打开。</span>
+    </td></tr>`;
+  }
+})();
+</script>
+</body>
+</html>
