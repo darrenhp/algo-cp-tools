@@ -263,7 +263,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   outline: none;
 }
 .form-control:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,0.25); }
-.rt-textarea { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; resize: vertical; }
+.rt-textarea { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; resize: vertical; padding: 8px 10px; line-height: 1.5; box-sizing: border-box; }
 
 /* ===== 按钮 ===== */
 .btn {
@@ -852,4 +852,502 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .nt-table-vertical td {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* ============================================================
+   表达式计算器模块
+   ============================================================ */
+.calc-main {
+  display: block;
+}
+
+/* 内部子标签 */
+.calc-subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.calc-subtab-btn {
+  appearance: none;
+  background: #0b1120;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.calc-subtab-btn:hover {
+  color: #e2e8f0;
+  background: #1e293b;
+  border-color: #6366f1;
+}
+.calc-subtab-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+  border-color: #6366f1;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(14,165,233,0.4);
+}
+
+/* 依赖状态（内联在子标签栏右侧） */
+.calc-subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.calc-dep-inline {
+  margin-left: auto;
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+  padding: 4px 6px;
+}
+.calc-dep-ok { color: #34d399; font-weight: 600; }
+.calc-dep-off { color: #f87171; font-weight: 600; }
+.calc-dep-tip { color: #94a3b8; font-size: 11px; }
+
+/* 面板显隐 */
+.calc-panel { display: none; }
+.calc-panel.active { display: block; }
+
+/* 两栏布局（输入 + 输出） */
+.calc-grid2 {
+  display: grid;
+  grid-template-columns: minmax(360px, 1fr) minmax(420px, 1.1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .calc-grid2 { grid-template-columns: 1fr; }
+}
+
+.calc-card {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  max-height: calc(100vh - 150px);
+  overflow: auto;
+}
+.calc-card h2 { font-size: 15px; margin-bottom: 12px; }
+.calc-card h3 { font-size: 13px; margin: 14px 0 8px; color: #94a3b8; }
+
+.calc-input {
+  background: linear-gradient(135deg, #082f49 0%, #1e293b 100%);
+  border-top: 3px solid #0ea5e9;
+}
+.calc-input h2 { color: #7dd3fc; }
+
+.calc-viz {
+  background: linear-gradient(135deg, #4a044e 0%, #1e1b4b 100%);
+  border-top: 3px solid #a855f7;
+}
+.calc-viz h2 { color: #d8b4fe; }
+
+.calc-var-input { width: 70px; flex: 0 0 auto; }
+.calc-sep { color: #94a3b8; font-size: 13px; }
+.calc-btn-row { flex-wrap: wrap; }
+
+/* 结果展示 */
+.calc-result {
+  margin-top: 8px;
+  background: #0b1120;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.calc-out-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.calc-out-line code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #93c5fd;
+  background: rgba(30,41,59,0.6);
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 13px;
+}
+.calc-out-label {
+  font-size: 11px;
+  color: #818cf8;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  flex: 0 0 auto;
+}
+.calc-out-note { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+
+/* 绘图 */
+.calc-plot-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+.calc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+.calc-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #cbd5e1;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+.calc-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+/* 离散型图例用方形点，与连续型圆形点区分 */
+.calc-legend-dot.calc-legend-dot-disc {
+  border-radius: 1px;
+}
+.calc-legend-type {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+.calc-tip-inline {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+/* 自定义函数定义块（与绘图函数区分） */
+.calc-plot-custom {
+  background: #0b1120;
+  color: #e2e8f0;
+  border-color: #6366f1;
+  box-shadow: inset 0 1px 4px rgba(99,102,241,0.15);
+}
+
+/* 方程求解：解美化 / LaTeX / 验算 */
+.calc-out-latex {
+  margin: 2px 0 2px 18px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+}
+.calc-latex-tag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: #1e293b;
+  color: #cbd5e1;
+  font-size: 10px;
+  font-family: ui-monospace, monospace;
+}
+.calc-out-latex code {
+  font-family: ui-monospace, monospace;
+}
+.calc-out-verify {
+  margin: 2px 0 8px 18px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+.calc-verify-ok { color: #34d399; font-weight: 600; }
+.calc-verify-bad { color: #f87171; font-weight: 600; }
+.calc-verify-note { color: #94a3b8; }
+
+/* 预设按钮 */
+.calc-preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.calc-preset-btn {
+  appearance: none;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.calc-preset-btn:hover {
+  color: #e2e8f0;
+  background: #334155;
+  border-color: #0ea5e9;
+}
+.calc-cx-nrow { flex-wrap: wrap; align-items: center; }
+
+/* 复杂度结果 */
+.calc-cx-head { font-size: 13px; color: #cbd5e1; margin-bottom: 8px; }
+.calc-cx-head code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #93c5fd;
+  background: rgba(30,41,59,0.6);
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+.calc-cx-sci {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fcd34d;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  word-break: break-all;
+}
+.calc-cx-sci-label {
+  font-size: 11px;
+  color: #818cf8;
+  font-weight: 600;
+  margin-right: 8px;
+  letter-spacing: 0.3px;
+}
+.calc-cx-mag {
+  font-size: 16px;
+  color: #c7d2fe;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  margin-top: 4px;
+}
+.calc-cx-feas {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.calc-feas-great { color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); }
+.calc-feas-good { color: #4ade80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); }
+.calc-feas-ok { color: #fbbf24; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); }
+.calc-feas-slow { color: #fb923c; background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.3); }
+.calc-feas-veryslow { color: #f87171; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); }
+.calc-feas-bad { color: #f87171; background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.5); }
+
+.calc-table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 200px);
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #fff;
+}
+.calc-table { font-size: 12px; }
+.calc-table th, .calc-table td {
+  border: 1px solid #e2e8f0;
+  padding: 5px 10px;
+  white-space: nowrap;
+  text-align: center;
+}
+.calc-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.calc-table td { color: #1e293b; }
+.calc-table code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.calc-tip {
+  margin-top: 14px;
+  border-top: 1px dashed #334155;
+  padding-top: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+.calc-tip p { margin: 4px 0; }
+
+.calc-plot-warn {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* 求值结果值表 */
+.calc-valtable-wrap {
+  margin-top: 14px;
+}
+.calc-valtable-title {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+.calc-valtable {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 11px;
+  color: #334155;
+  background: #fff;
+}
+.calc-valtable th,
+.calc-valtable td {
+  border: 1px solid #e2e8f0;
+  padding: 3px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+.calc-valtable thead th {
+  background: #f1f5f9;
+  color: #475569;
+  position: sticky;
+  top: 0;
+}
+.calc-valtable tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+.calc-valtable tbody tr:hover {
+  background: #e0f2fe;
+}
+
+/* 支持函数清单（可折叠） */
+.calc-func-help {
+  margin: 8px 0 4px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #0f172a;
+}
+.calc-func-help > summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #a5b4fc;
+  user-select: none;
+}
+.calc-func-help > summary::-webkit-details-marker { color: #6366f1; }
+.calc-func-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 10px;
+}
+.calc-func-col { flex: 1 1 220px; min-width: 200px; }
+.calc-func-col h4 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #818cf8;
+  margin: 10px 0 4px;
+}
+.calc-func-col h4:first-child { margin-top: 0; }
+.calc-func-col ul { margin: 0; padding-left: 16px; }
+.calc-func-col li {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+.calc-func-col code,
+.calc-func-help code,
+.calc-tip code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 11px;
+  background: #1e293b;
+  color: #fcd34d;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.calc-func-note {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 10px 0 0;
+  border-top: 1px dashed #334155;
+  padding-top: 8px;
+}
+
+/* 数论函数（单值）面板 */
+.calc-nt-input { max-width: 260px; font-size: 15px; }
+.calc-nt-list { margin: 6px 0 0; padding-left: 18px; }
+.calc-nt-list li {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+.calc-nt-list code,
+.calc-nt-list code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 11px;
+  background: #1e293b;
+  color: #fcd34d;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+/* 数论 / CP 工具网格 */
+.calc-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.calc-tool-card {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
+  border-top: 3px solid #6366f1;
+}
+.calc-tool-card h3 { font-size: 13px; margin: 0 0 10px; color: #a5b4fc; }
+.calc-tool-card-wide { grid-column: 1 / -1; }
+.calc-tool-input { width: 80px; flex: 1 1 auto; min-width: 0; }
+.calc-tool-input-wide { width: 100%; }
+.calc-tool-out {
+  margin-top: 8px;
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #cbd5e1;
+  word-break: break-all;
+  min-height: 18px;
+  background: #0b1120;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+.calc-tool-out-ok { color: #6ee7b7; }
+.calc-tool-out-err { color: #f87171; }
+
+/* 线性代数：矩阵表格与结果区 */
+.la-result {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #cbd5e1;
+  min-height: 24px;
+}
+.la-result-err { color: #f87171; }
+.calc-mat {
+  border-collapse: collapse;
+  margin: 6px 0 10px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 13px;
+  background: #0b1120;
+}
+.calc-mat td {
+  border: 1px solid #334155;
+  padding: 4px 12px;
+  text-align: right;
+  color: #e2e8f0;
+  min-width: 56px;
+}
+.calc-eig {
+  margin-bottom: 10px;
+}
+.calc-eig .calc-out-label {
+  display: block;
+  margin-bottom: 4px;
 }

@@ -7,7 +7,9 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>Algo CP Tools</title>
-  <link rel="stylesheet" href="css/main.css?v=30" />
+  <!-- KaTeX：数学公式渲染（方程解析解 LaTeX 显示） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <link rel="stylesheet" href="css/main.css?v=43" />
 </head>
 <body>
   <header class="app-header">
@@ -31,6 +33,7 @@
     <button class="tab-btn" data-tab="geometry2d">二维几何</button>
     <button class="tab-btn" data-tab="geometry3d">三维几何</button>
     <button class="tab-btn" data-tab="number-theory">数论</button>
+    <button class="tab-btn" data-tab="calculator">计算器</button>
   </nav>
 
   <main class="tab-container">
@@ -427,9 +430,411 @@
 
       </div>
     </section>
+
+    <!-- ===================== 表达式计算器 Tab ===================== -->
+    <section class="tab-content" id="tab-calculator">
+      <div class="calc-main">
+
+        <div class="calc-subtabs">
+          <button class="calc-subtab-btn active" data-sub="general">通用计算器</button>
+          <button class="calc-subtab-btn" data-sub="plot">函数曲线</button>
+          <button class="calc-subtab-btn" data-sub="complexity">算法复杂度估算</button>
+          <button class="calc-subtab-btn" data-sub="solve">方程求解</button>
+          <button class="calc-subtab-btn" data-sub="linalg">线性代数</button>
+          <span id="calc-dep-status" class="calc-dep-inline"></span>
+        </div>
+
+        <!-- ========== 通用计算器 ========== -->
+        <div class="calc-panel active" data-panel="general">
+          <div class="calc-grid2">
+            <section class="calc-card calc-input">
+              <h2>表达式与符号运算</h2>
+              <div class="form-row">
+                <label class="form-label">表达式（变量 x；支持函数与常数见下方清单；例：<code>gcd(12,18)</code>、<code>comb(10,3)</code>、<code>modpow(2,10,1000)</code>、<code>2*x^2+3*x+1</code>）</label>
+                <textarea id="calc-expr" class="form-control rt-textarea" rows="3" spellcheck="false"></textarea>
+              </div>
+              <details class="calc-func-help">
+                <summary>支持的函数与常数（全部）</summary>
+                <div class="calc-func-grid">
+                  <div class="calc-func-col">
+                    <h4>常量</h4>
+                    <ul>
+                      <li><code>pi</code> / <code>e</code> / <code>tau</code>(2π)</li>
+                      <li><code>phi</code>(黄金比) / <code>eps</code>(1e-12)</li>
+                      <li><code>inf</code>(∞)</li>
+                    </ul>
+                    <h4>三角 / 双曲</h4>
+                    <ul>
+                      <li><code>sin cos tan</code></li>
+                      <li><code>asin acos atan</code></li>
+                      <li><code>sinh cosh tanh</code></li>
+                      <li><code>asinh acosh atanh</code></li>
+                      <li><code>atan2(y,x)</code></li>
+                    </ul>
+                    <h4>指数 / 对数</h4>
+                    <ul>
+                      <li><code>exp</code> / <code>log</code>(自然) / <code>ln</code></li>
+                      <li><code>log10</code> / <code>log2</code> / <code>logb(x,base)</code></li>
+                      <li><code>pow(a,b)</code> / <code>sqrt</code> / <code>cbrt</code></li>
+                    </ul>
+                  </div>
+                  <div class="calc-func-col">
+                    <h4>数论 / CP 工具</h4>
+                    <ul>
+                      <li><code>gcd(a,b)</code> / <code>lcm(a,b)</code></li>
+                      <li><code>modpow(b,e,m)</code>（快速模幂）</li>
+                      <li><code>comb(n,k)</code> / <code>choose</code> / <code>C</code></li>
+                      <li><code>perm(n,k)</code> / <code>P</code></li>
+                      <li><code>factorial(n)</code> / <code>fact</code></li>
+                      <li><code>isPrime(n)</code> / <code>nextPrime(n)</code></li>
+                      <li><code>eulerPhi(n)</code>（欧拉函数 φ）</li>
+                      <li><code>primeCount(n)</code>（π(N) 素数个数）</li>
+                      <li><code>divisorCount(n)</code>（d(N) 因子个数）</li>
+                      <li><code>omega(n)</code>（ω 不同质因子数）/ <code>bigomega(n)</code>（Ω 总质因子数）</li>
+                      <li><code>mobius(n)</code>（μ 莫比乌斯函数）</li>
+                      <li><code>partitionNumber(n)</code>（p(N) 分拆数）</li>
+                      <li><code>factorize(n)</code>（质因数分解，如 <code>factorize(12)</code> → 2²×3）</li>
+                    </ul>
+                    <h4>取整 / 最值</h4>
+                    <ul>
+                      <li><code>abs floor ceil round sign</code></li>
+                      <li><code>min(…)</code> / <code>max(…)</code></li>
+                    </ul>
+                    <h4>特殊函数</h4>
+                    <ul>
+                      <li><code>erf(x)</code>（误差函数）</li>
+                      <li><code>gamma(z)</code>（伽马函数）</li>
+                      <li>隐式乘：<code>2x</code> → <code>2*x</code>，<code>3!</code> 阶乘</li>
+                    </ul>
+                  </div>
+                </div>
+                <p class="calc-func-note">符号化简 / 因式分解 / 求导 / 积分由 Algebrite 提供；代入求值的精确结果（分数 / 大数 / 复数）优先由 math.js 给出。函数绘图、数值积分 / 求导 / 求根由自研求值器 + numeric.js 提供。</p>
+              </details>
+              <div class="form-row form-row-inline calc-btn-row">
+                <button id="calc-simplify" class="btn btn-primary btn-sm">化简</button>
+                <button id="calc-factor" class="btn btn-ghost btn-sm">因式分解</button>
+                <label class="form-label">对</label>
+                <input id="calc-diff-var" class="form-control calc-var-input" value="x" />
+                <button id="calc-diff" class="btn btn-ghost btn-sm">求导 d/dx</button>
+                <button id="calc-int" class="btn btn-ghost btn-sm">积分 ∫</button>
+              </div>
+              <div id="calc-gen-result" class="rt-status"></div>
+
+              <div class="form-row">
+                <label class="form-label">代入具体数值求解（如 x=2, a=3，逗号或换行分隔）</label>
+                <textarea id="calc-subs-vars" class="form-control rt-textarea" spellcheck="false" placeholder="x=2" rows="2"></textarea>
+              </div>
+              <div class="form-row form-row-inline">
+                <button id="calc-subs-btn" class="btn btn-primary btn-sm">代入求值</button>
+              </div>
+              <div id="calc-subs-result" class="rt-status"></div>
+
+              <h3>数值计算（numeric.js）</h3>
+              <div class="form-row form-row-inline">
+                <label class="form-label">∫<sub>a</sub><sup>b</sup> f(x)dx</label>
+                <input id="calc-num-int-a" class="form-control calc-var-input" />
+                <span class="calc-sep">~</span>
+                <input id="calc-num-int-b" class="form-control calc-var-input" />
+                <button id="calc-num-int-btn" class="btn btn-ghost btn-sm">数值积分</button>
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">d/dx | x=</label>
+                <input id="calc-num-diff-x0" class="form-control calc-var-input" />
+                <button id="calc-num-diff-btn" class="btn btn-ghost btn-sm">数值求导</button>
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">求根 f(x)=0, x∈</label>
+                <input id="calc-root-x0" class="form-control calc-var-input" />
+                <span class="calc-sep">~</span>
+                <input id="calc-root-x1" class="form-control calc-var-input" />
+                <button id="calc-root-btn" class="btn btn-ghost btn-sm">方程求根</button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ========== 函数曲线（独立模块） ========== -->
+        <div class="calc-panel" data-panel="plot">
+          <div class="calc-grid2">
+            <section class="calc-card calc-input">
+              <h2>函数曲线绘制</h2>
+              <div class="form-row">
+                <label class="form-label">自定义函数（可选，每行一个，如 <code>f(x) = 2*x + 1</code>、<code>P(n) = comb(n, 3)</code>，可为多参数 <code>g(x, k) = x^k</code>，可引用其他自定义函数与额外参数）</label>
+                <textarea id="calc-plot-custom" class="form-control rt-textarea calc-plot-custom" rows="3" spellcheck="false" placeholder="f(x) = 2*x + 1&#10;P(n) = comb(n, 3)"></textarea>
+              </div>
+              <div class="form-row">
+                <label class="form-label">绘图函数（一行一个，横轴为 x，如 f(x)、x^2、a*x+b；可引用上方自定义函数）</label>
+                <textarea id="calc-plot-fns" class="form-control rt-textarea" rows="2" spellcheck="false"></textarea>
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">x 范围</label>
+                <input id="calc-plot-xmin" class="form-control calc-var-input" />
+                <span class="calc-sep">~</span>
+                <input id="calc-plot-xmax" class="form-control calc-var-input" />
+                <label class="form-label">采样点</label>
+                <input id="calc-plot-samples" class="form-control calc-var-input" />
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">绘制类型</label>
+                <div class="graph-type-tabs calc-plot-type-tabs" id="calc-plot-type">
+                  <button type="button" class="graph-type-btn active" data-plot-type="continuous">连续型（连线）</button>
+                  <button type="button" class="graph-type-btn" data-plot-type="discrete">离散型（散点，x 轴仅整数）</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <span class="calc-tip-inline">离散型仅对整数 x 采样（floor(xmin)..ceil(xmax)），适合数论类整函数 eulerPhi / primeCount / mobius 等。</span>
+              </div>
+              <div class="form-row">
+                <label class="form-label">额外参数（如 a=2, b=1，绘图时作为常数；缺省按 1 处理）</label>
+                <input id="calc-plot-params" class="form-control" spellcheck="false" placeholder="a=2, b=1" />
+              </div>
+              <div class="form-row form-row-inline">
+                <button id="calc-plot-btn" class="btn btn-primary btn-sm">绘制曲线</button>
+              </div>
+              <div class="calc-tip">
+                <p>右侧实时显示函数图像（多函数叠加、自动缩放，忽略极端离群值以避免渐近线撑爆画面）。多函数每行一个（因 <code>comb(n,k)</code> 等内建函数含逗号，分隔符改用换行而非逗号）。</p>
+                <p>可先在「自定义函数」中定义函数，再在「绘图函数」中引用。自定义函数支持多参数（如 <code>g(x,k)=x^k</code>），可调用其他自定义函数、内建函数、绘图额外参数与自变量 <code>x</code>。例如定义 <code>P(n)=comb(n,3)</code> 后，绘制 <code>P(x)</code> 即可画出组合数曲线。</p>
+                <p>支持全部内建函数（含 <code>gcd/lcm/comb/factorial/eulerPhi/primeCount/divisorCount/omega/bigomega/mobius/partitionNumber/isPrime/nextPrime/factorize</code> 等）。其中数论类函数仅对正整数自变量有效：跨实数区间时会自动隐藏非整数点，仅显示整数点；若 x 范围不含整数则给出提示。</p>
+                <p>提示：勘察数论函数可用整数型范围，例如 x ∈ [1, 30]、采样点 30，绘制 <code>eulerPhi(x)</code>、<code>primeCount(x)</code>、<code>mobius(x)</code> 等。</p>
+              </div>
+            </section>
+
+            <section class="calc-card calc-viz">
+              <h2>图像</h2>
+              <div id="calc-plot-output" class="graph-output"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ========== 算法复杂度估算 ========== -->
+        <div class="calc-panel" data-panel="complexity">
+          <div class="calc-grid2">
+            <section class="calc-card calc-input">
+              <h2>算法复杂度估算</h2>
+              <div class="form-row">
+                <label class="form-label">运算量表达式（自变量为 n，支持函数与常数见下方清单；如 n^2、n*log(n)、n*log2(n)、2^n、n!、comb(n,2)）</label>
+                <textarea id="calc-cx-expr" class="form-control rt-textarea" rows="2" spellcheck="false"></textarea>
+              </div>
+              <details class="calc-func-help">
+                <summary>支持的函数与常数（全部）</summary>
+                <div class="calc-func-grid">
+                  <div class="calc-func-col">
+                    <h4>常量</h4>
+                    <ul>
+                      <li><code>pi</code> / <code>e</code> / <code>tau</code>(2π)</li>
+                      <li><code>phi</code>(黄金比) / <code>eps</code>(1e-12)</li>
+                      <li><code>inf</code>(∞)</li>
+                    </ul>
+                    <h4>三角 / 双曲</h4>
+                    <ul>
+                      <li><code>sin cos tan</code></li>
+                      <li><code>asin acos atan</code></li>
+                      <li><code>sinh cosh tanh</code></li>
+                      <li><code>asinh acosh atanh</code></li>
+                      <li><code>atan2(y,x)</code></li>
+                    </ul>
+                    <h4>指数 / 对数</h4>
+                    <ul>
+                      <li><code>exp</code> / <code>log</code>(自然) / <code>ln</code></li>
+                      <li><code>log10</code> / <code>log2</code> / <code>logb(x,base)</code></li>
+                      <li><code>pow(a,b)</code> / <code>sqrt</code> / <code>cbrt</code></li>
+                    </ul>
+                  </div>
+                  <div class="calc-func-col">
+                    <h4>数论 / CP 工具</h4>
+                    <ul>
+                      <li><code>gcd(a,b)</code> / <code>lcm(a,b)</code></li>
+                      <li><code>modpow(b,e,m)</code>（快速模幂）</li>
+                      <li><code>comb(n,k)</code> / <code>choose</code> / <code>C</code></li>
+                      <li><code>perm(n,k)</code> / <code>P</code></li>
+                      <li><code>factorial(n)</code> / <code>fact</code></li>
+                      <li><code>isPrime(n)</code> / <code>nextPrime(n)</code></li>
+                      <li><code>eulerPhi(n)</code>（欧拉函数 φ）</li>
+                      <li><code>primeCount(n)</code>（π(N) 素数个数）</li>
+                      <li><code>divisorCount(n)</code>（d(N) 因子个数）</li>
+                      <li><code>omega(n)</code>（ω 不同质因子数）/ <code>bigomega(n)</code>（Ω 总质因子数）</li>
+                      <li><code>mobius(n)</code>（μ 莫比乌斯函数）</li>
+                      <li><code>partitionNumber(n)</code>（p(N) 分拆数）</li>
+                      <li><code>factorize(n)</code>（质因数分解，如 <code>factorize(12)</code> → 2²×3）</li>
+                    </ul>
+                    <h4>取整 / 最值</h4>
+                    <ul>
+                      <li><code>abs floor ceil round sign</code></li>
+                      <li><code>min(…)</code> / <code>max(…)</code></li>
+                    </ul>
+                    <h4>特殊函数</h4>
+                    <ul>
+                      <li><code>erf(x)</code>（误差函数）</li>
+                      <li><code>gamma(z)</code>（伽马函数）</li>
+                      <li>隐式乘：<code>2n</code> → <code>2*n</code>，<code>3!</code> 阶乘</li>
+                    </ul>
+                  </div>
+                </div>
+                <p class="calc-func-note">规模估算对指数 / 阶乘类（2ⁿ、n!、comb、perm）采用对数尺度，避免大数溢出。</p>
+              </details>
+              <div class="form-row">
+                <label class="form-label">常用模板</label>
+                <div id="calc-cx-presets" class="calc-preset-row">
+                  <button type="button" class="calc-preset-btn" data-expr="n">O(n)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n*log(n)">O(n·log n)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n*log2(n)">O(n·log₂n)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n^2">O(n²)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n^3">O(n³)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="2^n">O(2ⁿ)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n!">O(n!)</button>
+                  <button type="button" class="calc-preset-btn" data-expr="n^2*log(n)">O(n²·log n)</button>
+                </div>
+              </div>
+              <div class="form-row form-row-inline calc-cx-nrow">
+                <label class="form-label">最大数据范围 N</label>
+                <input id="calc-cx-N" class="form-control calc-var-input" />
+                <div id="calc-cx-npresets" class="calc-preset-row">
+                  <button type="button" class="calc-preset-btn" data-n="1000">1e3</button>
+                  <button type="button" class="calc-preset-btn" data-n="10000">1e4</button>
+                  <button type="button" class="calc-preset-btn" data-n="100000">1e5</button>
+                  <button type="button" class="calc-preset-btn" data-n="1000000">1e6</button>
+                  <button type="button" class="calc-preset-btn" data-n="10000000">1e7</button>
+                </div>
+                <button id="calc-cx-btn" class="btn btn-primary btn-sm">估算规模</button>
+              </div>
+              <div id="calc-cx-result" class="rt-status"></div>
+              <div class="calc-tip">
+                <p>仅评估最大数据范围内的<strong>计算量规模</strong>（不计算精确值），以科学计数法（如 1e10）输出，并提示竞赛时限内的可行性。</p>
+                <p>对指数 / 阶乘类（2ⁿ、n!）采用对数尺度估算数量级，避免大数溢出。</p>
+                <p>表达式中自变量为 <code>n</code>，支持全部通用计算函数（见「表达式与符号运算」清单），例如：<code>n^2</code>、<code>n*log(n)</code>、<code>n*log2(n)</code>、<code>2^n</code>、<code>n!</code>、<code>comb(n,2)</code>、<code>perm(n,3)</code>、<code>factorial(n)</code>、<code>gcd(n,7)</code> 等均可参与规模估算。</p>
+              </div>
+            </section>
+            <section class="calc-card calc-viz">
+              <h2>多规模对比</h2>
+              <div id="calc-cx-table" class="calc-table-wrap"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ========== 方程求解 ========== -->
+        <div class="calc-panel" data-panel="solve">
+          <div class="calc-grid2">
+            <section class="calc-card calc-input">
+              <h2>方程输入</h2>
+              <div class="form-row">
+                <label class="form-label">方程（等号两边为表达式，如 <code>c0 = p1*c1 + p0*c0 + 1</code>；也支持无等号的整体表达式，视为 = 0）</label>
+                <textarea id="calc-solve-eq" class="form-control rt-textarea" rows="2" spellcheck="false" placeholder="c0 = p1*c1 + p0*c0 + 1"></textarea>
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">求解变量</label>
+                <input id="calc-solve-var" class="form-control calc-var-input" />
+                <button id="calc-solve-btn" class="btn btn-primary btn-sm">求解</button>
+              </div>
+              <div class="form-row">
+                <label class="form-label">代入数值验证（如 c1=1, p0=2, p1=3，逗号或换行分隔；留空则自动对数值型解做展示）</label>
+                <textarea id="calc-solve-subs" class="form-control rt-textarea" spellcheck="false" placeholder="c1=1, p0=2, p1=3" rows="2"></textarea>
+              </div>
+              <div class="calc-tip">
+                <p>符号代数求解（基于 nerdamer，缺载时回退 Algebrite）：对含参数的方程做移项整理，输出指定变量的解析表达式。</p>
+                <p>支持一次 / 二次 / 高次多项式方程，参数（其他字母均视为常数）混合兼容；多解会以列表形式给出。求解后会自动代入你给出的数值验算（计算方程左右两边并比较残差），同时给出易读形式与可复制的 LaTeX。</p>
+              </div>
+            </section>
+
+            <section class="calc-card calc-viz">
+              <h2>解析解</h2>
+              <div id="calc-solve-result" class="calc-result calc-solve-result"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ========== 线性代数 ========== -->
+        <div class="calc-panel" data-panel="linalg">
+          <div class="calc-grid2">
+            <section class="calc-card calc-input">
+              <h2>矩阵输入</h2>
+              <div class="form-row">
+                <label class="form-label">矩阵 A（每行一行，元素支持数值 / 变量 / 函数表达式）</label>
+                <textarea id="la-A" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="a  b&#10;c  d"></textarea>
+              </div>
+              <div class="form-row">
+                <label class="form-label">矩阵 B（二元运算时使用，可选）</label>
+                <textarea id="la-B" class="form-control rt-textarea" rows="4" spellcheck="false" placeholder="5 6&#10;7 8"></textarea>
+              </div>
+              <div class="form-row">
+                <label class="form-label">变量取值（name=value，逗号或换行分隔）</label>
+                <input id="la-vars" class="form-control calc-tool-input-wide" spellcheck="false" placeholder="a=1, b=2, c=3, d=4, t=0.5" />
+              </div>
+              <div class="form-row">
+                <label class="form-label">自定义函数（每行一个 name(params)=expr，可选）</label>
+                <textarea id="la-funcs" class="form-control rt-textarea" rows="2" spellcheck="false" placeholder="f(x)=x^2+1&#10;g(x,y)=x*y"></textarea>
+              </div>
+              <div class="form-row form-row-inline">
+                <label class="form-label">标量 / 幂次 k</label>
+                <input id="la-k" class="form-control calc-var-input" value="2" />
+              </div>
+              <p class="calc-func-note">元素可写变量（a、t）或表达式（sin(t)、a+b、gcd(6,4)、f(2)）。当同一行含表达式时，列之间请用「两个及以上空格」「竖线 |」「分号 ;」或换行分隔；函数参数内的逗号/空格不会被误拆。纯数字行仍可用单空格或逗号。表达式先按「变量取值 / 自定义函数」求值为数值，再进行矩阵运算。</p>
+              <div class="form-row">
+                <label class="form-label">常用演示样例</label>
+                <div class="calc-preset-row" id="la-sample-row">
+                  <button type="button" class="calc-preset-btn" data-s="2x2">2×2 可逆</button>
+                  <button type="button" class="calc-preset-btn" data-s="sym">对称阵</button>
+                  <button type="button" class="calc-preset-btn" data-s="rot">旋转阵</button>
+                  <button type="button" class="calc-preset-btn" data-s="identity">3×3 单位阵</button>
+                  <button type="button" class="calc-preset-btn" data-s="nonsquare">2×3 非方阵</button>
+                  <button type="button" class="calc-preset-btn" data-s="symbolic">变量矩阵</button>
+                  <button type="button" class="calc-preset-btn" data-s="funcmat">函数矩阵</button>
+                </div>
+              </div>
+              <div id="la-dep" class="calc-dep-row"></div>
+            </section>
+
+            <section class="calc-card calc-viz">
+              <h2>运算与结果（基于 numeric.js）</h2>
+              <div class="form-row">
+                <label class="form-label">一元运算（作用于 A）</label>
+                <div class="calc-preset-row" id="la-unary-row">
+                  <button type="button" class="calc-preset-btn" data-op="det">行列式 det(A)</button>
+                  <button type="button" class="calc-preset-btn" data-op="inv">逆 inv(A)</button>
+                  <button type="button" class="calc-preset-btn" data-op="transpose">转置 Aᵀ</button>
+                  <button type="button" class="calc-preset-btn" data-op="trace">迹 tr(A)</button>
+                  <button type="button" class="calc-preset-btn" data-op="rank">秩 rank(A)</button>
+                  <button type="button" class="calc-preset-btn" data-op="eig">特征值 / 向量</button>
+                  <button type="button" class="calc-preset-btn" data-op="neg">负矩阵 −A</button>
+                  <button type="button" class="calc-preset-btn" data-op="pow">矩阵幂 A^k</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-label">二元运算（A 与 B，或 A 与标量 k）</label>
+                <div class="calc-preset-row" id="la-binary-row">
+                  <button type="button" class="calc-preset-btn" data-op="add">加法 A + B</button>
+                  <button type="button" class="calc-preset-btn" data-op="sub">减法 A − B</button>
+                  <button type="button" class="calc-preset-btn" data-op="mul">乘法 A × B</button>
+                  <button type="button" class="calc-preset-btn" data-op="scalarmul">标量乘 k·A</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-label">线性方程组 Ax = b（numeric.solve）</label>
+              </div>
+              <div class="form-row form-row-inline">
+                <input id="la-b" class="form-control calc-tool-input-wide" placeholder="右端向量 b，支持表达式，如 5, 11 或 a+1, 2*b" spellcheck="false" />
+                <button id="la-solve-btn" class="btn btn-primary btn-sm">求解 x</button>
+              </div>
+              <div id="la-result" class="la-result"></div>
+            </section>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- ===== 第三方库（CDN） ===== -->
+  <!-- Algebrite：符号代数（使用浏览器独立打包版，内部已打包 big-integer，可直接 <script> 加载） -->
+  <script src="https://cdn.jsdelivr.net/npm/algebrite@1.4.0/dist/algebrite.bundle-for-browser.js"></script>
+  <!-- numeric.js：数值计算（采样 / 数值积分 / 求导 / 方程求根 / 线性方程组） -->
+  <script src="https://cdn.jsdelivr.net/npm/numeric@1.2.6/numeric-1.2.6.min.js"></script>
+  <!-- math.js：通用数学表达式解析与求值（分数 / 大数 BigNumber / 复数 / 单位，作为符号与数值之外的第三套引擎） -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@12.4.1/lib/browser/math.js"></script>
+  <!-- nerdamer：轻量符号代数（方程符号求解 / 含参公式推导，all.min.js 含 Algebra + Solve 等扩展） -->
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/all.min.js"></script>
+  <!-- KaTeX：数学公式渲染（把方程解析解的 LaTeX 渲染成公式） -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/viz.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/full.render.js"></script>
@@ -458,6 +863,9 @@
   <script src="js/tabs/geometry3d.js?v=26"></script>
   <script src="js/models/number-theory-model.js?v=30"></script>
   <script src="js/tabs/number-theory.js?v=30"></script>
+  <script src="js/models/calculator-model.js?v=41"></script>
+  <script src="js/models/solver-helpers.js?v=41"></script>
+  <script src="js/tabs/calculator.js?v=43"></script>
   <script src="js/app.js?v=30"></script>
 </body>
 </html>
