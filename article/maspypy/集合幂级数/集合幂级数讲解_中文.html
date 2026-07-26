@@ -125,6 +125,12 @@ html[data-theme="dark"] .callout-definition strong{color:#b39ae8}
 #topbar button:hover{background:var(--hover)}
 #menu-btn{display:none}
 
+
+/* 正文外链 -> 点击直接在新标签页打开 */
+.lp-link{color:var(--accent); text-decoration:underline; cursor:pointer; word-break:break-all}
+.lp-link::after{content:"↗"; font-size:.72em; margin-left:2px; vertical-align:super; opacity:.7}
+.lp-link:hover{opacity:.82}
+
 @media (max-width:900px){
   #sidebar{transform:translateX(-100%); transition:transform .25s ease;
     box-shadow:2px 0 12px rgba(0,0,0,.2)}
@@ -594,6 +600,49 @@ $g(x)$ 的计算即 $f(x+c)$，变成 Polynomial Taylor Shift 的计算；但只
     document.body.classList.toggle('nav-open');
   };
 })();
+
+(function(){
+  // 正文中的纯文本外链 -> 包裹为可点击链接，点击弹出预览（不立即跳转）
+  var ROOT = document.querySelector('#content .article');
+  if (ROOT) {
+    var URL_RE = new RegExp("https?://[^\\s<>\"']+", "gi");
+    var TRAIL = new RegExp("[.,;:。，、；：）)】」\\s]$");
+    function safeParent(p){
+      if(!p) return false;
+      var t=(p.tagName||'').toLowerCase();
+      if(t==='a'||t==='code'||t==='pre'||t==='script'||t==='style') return false;
+      if(p.closest && (p.closest('.math-block')||p.closest('mjx-container')||p.closest('pre')||p.closest('code'))) return false;
+      return true;
+    }
+    var walker=document.createTreeWalker(ROOT, NodeFilter.SHOW_TEXT, {
+      acceptNode:function(n){
+        if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if(!new RegExp("https?://","i").test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        return safeParent(n.parentNode) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var textNodes=[], node;
+    while((node=walker.nextNode())) textNodes.push(node);
+    textNodes.forEach(function(textNode){
+      var txt=textNode.nodeValue, frag=document.createDocumentFragment(), last=0, m;
+      URL_RE.lastIndex=0;
+      while((m=URL_RE.exec(txt))){
+        var url=m[0];
+        while(TRAIL.test(url)) url=url.slice(0,-1);
+        if(m.index>last) frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+        var a=document.createElement('a');
+        a.className='lp-link'; a.href=url;
+        a.target='_blank'; a.rel='noopener noreferrer';
+        a.textContent=url;
+        frag.appendChild(a);
+        last=m.index+m[0].length;
+      }
+      if(last<txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      textNode.parentNode.replaceChild(frag,textNode);
+    });
+  }
+})();
+
 </script>
 </body>
 </html>
