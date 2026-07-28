@@ -40,6 +40,7 @@ algo-cp-tools/
 │   │   ├── geometry2d.js            # 二维几何控制器
 │   │   ├── geometry3d.js            # 三维几何控制器
 │   │   ├── number-theory.js         # 数论控制器
+│   │   ├── string.js                # 字符串结构可视化控制器
 │   │   └── calculator.js            # 表达式计算器 / 矩阵 控制器（通用计算 + 复杂度 + 线性代数）
 │   ├── models/
 │   │   ├── tree-model.js            # 图数据模型
@@ -47,10 +48,12 @@ algo-cp-tools/
 │   │   ├── geometry2d-model.js      # 二维几何模型
 │   │   ├── geometry3d-model.js      # 三维几何模型
 │   │   ├── number-theory-model.js   # 数论模型（线性筛 + 积性函数）
+│   │   ├── string-model.js          # 字符串模型（11 种结构算法：KMP/Z/SA/SAM/AC/Eertree…）
 │   │   └── calculator-model.js       # 表达式计算器模型（Algebrite + numeric.js + math.js + 自研求值器 + 线性代数）
 │   ├── parsers/
 │   │   ├── tree-parsers.js          # 图输入解析
 │   │   ├── array-parsers.js         # 数组解析
+│   │   ├── string-parsers.js        # 字符串 / 模式串解析
 │   │   ├── geometry2d-parsers.js    # 二维几何解析
 │   │   └── geometry3d-parsers.js    # 三维几何解析
 │   ├── renderers/
@@ -58,6 +61,7 @@ algo-cp-tools/
 │   │   ├── graphviz-renderer.js
 │   │   ├── tikz-renderer.js
 │   │   ├── array-svg-renderer.js
+│   │   ├── string-svg-renderer.js
 │   │   ├── geometry2d-svg-renderer.js
 │   │   └── geometry3d-three-renderer.js
 │   └── utils/tree-layout.js         # TikZ 布局算法
@@ -110,6 +114,38 @@ algo-cp-tools/
   - **约数列表**：升序排列的全部约数
 - **列显隐控制**：n 列固定显示，其余 8 列各有 checkbox，勾选/取消即时切换列显隐
 - **性能**：线性筛使用 Int32Array，10^7 约 200-500ms；区间超过 5000 行时提示但仍允许计算
+- **状态持久化**：localStorage + sessionStorage 双写，刷新不丢数据
+
+### 字符串结构可视化
+
+面向算法竞赛的字符串数据结构可视化调试工具。输入主串（AC 自动机额外输入模式串列表），选择目标结构后自动计算并自绘 SVG 渲染，帮助理解 KMP、自动机、后缀结构等核心字符串算法的内部构造。纯前端实现，离线可用，无需任何第三方库。
+
+- **输入**：主串文本框（多行自动拼接去空白，支持 `#` / `//` 注释）；起始索引 0/1-based 切换；AC 自动机选中时显示模式串列表输入区（每行一个模式）
+- **11 种结构**（按 3 组分类，分组模型按钮切换）：
+  - **单串匹配与函数**
+    - **KMP 前缀函数** π：π[i] = s[0..i] 最长 border 长度（O(n)）；字符串行 + π 条形图
+    - **Z 算法**：z[i] = s 与 s[i..] 的最长公共前缀（z[0]=n）；字符串行 + Z-box 弧线 + Z 条形图
+    - **Border 树**：节点 = 前缀长度 0..n，边 i → π[i] 的最长 border；树形布局，节点标注前缀
+    - **Lyndon 分解**：Duval 算法 O(n)；字符串按因子着色分段 + 因子括号标注
+  - **后缀结构**
+    - **后缀数组** SA：倍增排序 O(n log n) + Kasai 求 height(LCP)；排序后缀列表 + rank/SA/height 表格 + LCP 条形
+    - **后缀树**：由 SA+LCP 栈式构建 O(n)；树形布局，边标注子串，叶子标后缀位置
+    - **后缀平衡树**：由 SA 构建平衡 BST（中序遍历 = 后缀字典序）；BST 布局，节点标后缀
+    - **SAM 后缀自动机**：在线增量构造 O(n)；按 len 分层 DAG，转移实线标字符，suffix link 紫色虚线，clone 态橙色虚边
+  - **自动机与回文**
+    - **AC 自动机**：trie 插入 + BFS fail 链；trie 树 + fail 紫色虚线箭头，模式串结尾红环
+    - **序列自动机**（子序列自动机）：next[i][c] 逆向填表；按状态分层 DAG，转移边标字符
+    - **回文树 / Eertree**：奇偶双根 + suffix link；两棵树（奇根 len=-1 / 偶根 len=0），fail 紫色虚线
+  - **变换与性质**
+    - **BWT 变换**（Burrows-Wheeler）：所有循环移位按字典序排序，取末字符列（L 列）即 BWT；旋转排序表 + F/L 列对照 + BWT 结果串
+    - **Runs 游程**（Run-Length Encoding）：连续相同字符的最大段；字符串按 run 着色 + RLE 编码表 + 每段起止长度
+  - **位并行匹配**（需额外「模式串 P」输入框）
+    - **Shift-And / Bitap**：D = ((D<<1)|1) & M[T[i]]，最高位=1 即匹配；逐位置位向量 D 表格（精确匹配，Bitap 的 k=0 形式）
+    - **Shift-Or**：D = (D<<1) | R[T[i]]（匹配位为 0），最高位=0 即匹配；逐位置位向量 D 表格
+    - **BNDM**：窗口内从右向左扫描 D = ((D<<1)|1) & Mrev[c]，最高位=1 即匹配；逐窗口位向量 D 表格（已与暴力匹配验证一致）
+    - **BOM**（Backward Oracle Matching）：基于 reverse(P) 后缀 oracle（SAM）匹配，并用 suffix link / border 计算位移；逐窗口展示最长匹配长、匹配标记与 shift
+- **可视化**：纯 SVG 自绘（离线可用），树形结构复用 `treeLayout` 布局，DAG 按深度/len 分层
+- **性能**：所有算法 O(n) 或 O(n log n)，主串建议 ≤ 300 字符；按需重算（切换模型时只算当前结构）
 - **状态持久化**：localStorage + sessionStorage 双写，刷新不丢数据
 
 ### 表达式计算器 / 矩阵

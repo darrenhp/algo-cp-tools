@@ -92,6 +92,13 @@
     }
   }
 
+  function initString() {
+    var el = document.getElementById('tab-string');
+    if (el && NS.tabs.StringTab) {
+      NS.state.string = new NS.tabs.StringTab(el);
+    }
+  }
+
   function initCalculator() {
     var el = document.getElementById('tab-calculator');
     if (el && NS.tabs.CalculatorTab) {
@@ -107,6 +114,7 @@
     initGeometry2D();
     initGeometry3D();
     initNumberTheory();
+    initString();
     initCalculator();
   }
 

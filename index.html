@@ -9,7 +9,7 @@
   <title>Algo CP Tools</title>
   <!-- KaTeX：数学公式渲染（方程解析解 LaTeX 显示） -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
-  <link rel="stylesheet" href="css/main.css?v=43" />
+  <link rel="stylesheet" href="css/main.css?v=49" />
 </head>
 <body>
   <header class="app-header">
@@ -33,6 +33,7 @@
     <button class="tab-btn" data-tab="geometry2d">二维几何</button>
     <button class="tab-btn" data-tab="geometry3d">三维几何</button>
     <button class="tab-btn" data-tab="number-theory">数论</button>
+    <button class="tab-btn" data-tab="string">字符串</button>
     <button class="tab-btn" data-tab="calculator">计算器</button>
   </nav>
 
@@ -427,6 +428,75 @@
           </div>
           <div id="nt-table-wrap" class="nt-table-wrap"></div>
         </section>
+
+      </div>
+    </section>
+
+    <!-- ===================== 字符串 Tab ===================== -->
+    <section class="tab-content" id="tab-string">
+      <div class="str-layout">
+
+        <!-- 左：算法选择（原样） -->
+        <section class="str-panel str-input">
+          <h2>输入</h2>
+          <div class="str-model-tabs" id="str-model-groups"></div>
+
+          <div class="str-tip">
+            <h3>说明</h3>
+            <ul>
+              <li>选择结构后自动计算并渲染（输入变更即刷新）</li>
+              <li>主串长度建议 ≤ 300，过大时 SVG 较拥挤</li>
+              <li>AC 自动机需在「模式串列表」中输入多个模式串</li>
+              <li>后缀树由 SA+LCP 构建，后缀平衡树/数组共享排序结果</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 右：主串输入(上) + 可视化(下) -->
+        <div class="str-main">
+          <section class="str-panel str-text-top">
+            <div class="form-row">
+              <label class="form-label">主串（多行自动拼接去空白，支持 # 与 // 注释）</label>
+            </div>
+            <textarea id="str-input-text" class="form-control str-textarea" rows="5" spellcheck="false" placeholder="输入字符串，例如：&#10;ababcabab&#10;banana"></textarea>
+
+            <!-- AC 自动机模式串输入（条件显示） -->
+            <div class="str-pattern-block" id="str-pattern-block">
+              <div class="form-row">
+                <label class="form-label">模式串列表（每行一个，用于 AC 自动机）</label>
+                <textarea id="str-pattern-text" class="form-control str-textarea" rows="4" spellcheck="false" placeholder="每行一个模式串&#10;例如：&#10;ab&#10;bab&#10;abab"></textarea>
+              </div>
+            </div>
+
+            <!-- 位并行匹配模式串 P 输入（条件显示） -->
+            <div class="str-pattern-block" id="str-pattern-p-block">
+              <div class="form-row">
+                <label class="form-label">模式串 P（位并行匹配：Shift-And / Shift-Or / BNDM / BOM）</label>
+                <textarea id="str-pattern-p-text" class="form-control str-textarea" rows="3" spellcheck="false" placeholder="单个模式串 P，例如：&#10;abcab"></textarea>
+              </div>
+            </div>
+
+            <div class="form-row form-row-inline str-input-actions">
+              <label class="form-label">起始索引</label>
+              <div class="arr-base-toggle">
+                <button class="arr-base-btn str-base-btn" data-base="0">0-based</button>
+                <button class="arr-base-btn str-base-btn active" data-base="1">1-based</button>
+              </div>
+              <button id="str-parse-btn" class="btn btn-primary">解析</button>
+              <button id="str-clear-btn" class="btn btn-ghost" title="清空并重置为示例">清理</button>
+            </div>
+            <div id="str-parse-status" class="rt-status"></div>
+          </section>
+
+          <section class="str-panel str-viz">
+            <h2>可视化</h2>
+            <div id="str-graph-output" class="graph-output"></div>
+            <details class="code-details">
+              <summary>SVG 源代码</summary>
+              <pre id="str-code-output" class="code-block"></pre>
+            </details>
+          </section>
+        </div>
 
       </div>
     </section>
@@ -848,24 +918,28 @@
   <script src="js/utils/tree-layout.js?v=23"></script>
   <script src="js/renderers/mermaid-renderer.js?v=23"></script>
   <script src="js/renderers/graphviz-renderer.js?v=23"></script>
-  <script src="js/tabs/rooted-tree.js?v=24"></script>
+  <script src="js/tabs/rooted-tree.js?v=44"></script>
   <script src="js/models/array-model.js?v=23"></script>
   <script src="js/parsers/array-parsers.js?v=23"></script>
   <script src="js/renderers/array-svg-renderer.js?v=23"></script>
   <script src="js/tabs/array.js?v=23"></script>
-  <script src="js/models/geometry2d-model.js?v=27"></script>
-  <script src="js/parsers/geometry2d-parsers.js?v=27"></script>
-  <script src="js/renderers/geometry2d-svg-renderer.js?v=29"></script>
-  <script src="js/tabs/geometry2d.js?v=28"></script>
-  <script src="js/models/geometry3d-model.js?v=26"></script>
-  <script src="js/parsers/geometry3d-parsers.js?v=26"></script>
-  <script src="js/renderers/geometry3d-three-renderer.js?v=26"></script>
-  <script src="js/tabs/geometry3d.js?v=26"></script>
-  <script src="js/models/number-theory-model.js?v=30"></script>
-  <script src="js/tabs/number-theory.js?v=30"></script>
-  <script src="js/models/calculator-model.js?v=41"></script>
-  <script src="js/models/solver-helpers.js?v=41"></script>
-  <script src="js/tabs/calculator.js?v=43"></script>
-  <script src="js/app.js?v=30"></script>
+  <script src="js/models/geometry2d-model.js?v=44"></script>
+  <script src="js/parsers/geometry2d-parsers.js?v=44"></script>
+  <script src="js/renderers/geometry2d-svg-renderer.js?v=44"></script>
+  <script src="js/tabs/geometry2d.js?v=44"></script>
+  <script src="js/models/geometry3d-model.js?v=44"></script>
+  <script src="js/parsers/geometry3d-parsers.js?v=44"></script>
+  <script src="js/renderers/geometry3d-three-renderer.js?v=44"></script>
+  <script src="js/tabs/geometry3d.js?v=44"></script>
+  <script src="js/models/number-theory-model.js?v=44"></script>
+  <script src="js/tabs/number-theory.js?v=44"></script>
+  <script src="js/parsers/string-parsers.js?v=44"></script>
+  <script src="js/models/string-model.js?v=44"></script>
+  <script src="js/renderers/string-svg-renderer.js?v=44"></script>
+  <script src="js/tabs/string.js?v=44"></script>
+  <script src="js/models/calculator-model.js?v=44"></script>
+  <script src="js/models/solver-helpers.js?v=44"></script>
+  <script src="js/tabs/calculator.js?v=44"></script>
+  <script src="js/app.js?v=44"></script>
 </body>
 </html>
