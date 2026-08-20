@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slope Trick 讲解（maspy 博客中文翻译）</title>
+<style>
+:root{
+  --bg:#fbfbfa; --fg:#23272e; --muted:#6b7280; --accent:#b45309;
+  --accent-soft:#f3e7d3; --border:#e6e3dd; --code-bg:#f1eee9;
+  --quote-bg:#f6f3ee; --sidebar-bg:#f7f5f1; --sidebar-fg:#3a3f47;
+  --hover:#efe9df; --shadow:0 1px 3px rgba(0,0,0,.06);
+}
+html[data-theme="dark"]{
+  --bg:#16181d; --fg:#d7dae0; --muted:#9aa3af; --accent:#e0a458;
+  --accent-soft:#2a2418; --border:#2c3038; --code-bg:#1f232b;
+  --quote-bg:#1c2027; --sidebar-bg:#121419; --sidebar-fg:#c2c8d2;
+  --hover:#21262f; --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans CJK SC",
+    "Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:17px; line-height:1.85; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+
+#progress{position:fixed; top:0; left:0; height:3px; width:0%;
+  background:var(--accent); z-index:60; transition:width .1s linear}
+
+#sidebar{
+  position:fixed; top:0; left:0; width:300px; height:100vh;
+  background:var(--sidebar-bg); color:var(--sidebar-fg);
+  border-right:1px solid var(--border); overflow-y:auto;
+  padding:22px 0 60px; z-index:50;
+}
+#sidebar .brand{
+  font-size:18px; font-weight:700; padding:0 22px 14px;
+  border-bottom:1px solid var(--border); margin-bottom:10px; line-height:1.4;
+}
+#sidebar .brand small{display:block; font-weight:400; font-size:12px;
+  color:var(--muted); margin-top:4px}
+#toc{font-size:14px}
+#toc ul{list-style:none; margin:0; padding:0}
+#toc li{margin:0}
+#toc a{
+  display:block; padding:5px 22px; color:var(--sidebar-fg);
+  border-left:3px solid transparent; line-height:1.5;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+#toc a:hover{background:var(--hover); text-decoration:none}
+#toc a.active{
+  color:var(--accent); border-left-color:var(--accent);
+  background:var(--accent-soft); font-weight:600;
+}
+#toc ul ul a{padding-left:36px; font-size:13.5px}
+#toc ul ul ul a{padding-left:50px; font-size:13px; color:var(--muted)}
+
+#content{margin-left:300px; padding:46px 32px 120px}
+.article{max-width:840px; margin:0 auto}
+.article h1{font-size:30px; line-height:1.35; margin:0 0 6px;
+  border-bottom:3px solid var(--accent); padding-bottom:14px}
+.article h2{font-size:24px; margin:52px 0 16px; padding-top:10px;
+  border-top:1px solid var(--border); padding-top:24px}
+.article h3{font-size:20px; margin:34px 0 12px; color:var(--fg)}
+.article h4{font-size:17px; margin:24px 0 10px; color:var(--muted);
+  font-weight:600}
+.article h1,h2,h3,h4{scroll-margin-top:20px; line-height:1.4}
+.article p{margin:14px 0}
+.article ul,.article ol{padding-left:26px; margin:14px 0}
+.article li{margin:6px 0}
+.article blockquote{
+  margin:18px 0; padding:12px 18px; border-left:4px solid var(--accent);
+  background:var(--quote-bg); border-radius:0 6px 6px 0; color:var(--muted);
+}
+.article blockquote p{margin:8px 0}
+.article code{
+  background:var(--code-bg); padding:.15em .4em; border-radius:4px;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.88em}
+.article pre{background:var(--code-bg); padding:14px 16px; border-radius:8px;
+  overflow-x:auto}
+.article pre code{background:none; padding:0}
+.article hr{border:none; border-top:1px solid var(--border); margin:34px 0}
+.article table{border-collapse:collapse; margin:16px 0}
+.article th,.article td{border:1px solid var(--border); padding:6px 10px}
+.math-block{overflow-x:auto; overflow-y:hidden; margin:18px 0;
+  text-align:center; font-size:1.02em}
+.article img{max-width:100%; height:auto; display:block; margin:18px auto;
+  border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow)}
+mjx-container{outline:none}
+
+/* 色块 / callout */
+.callout{margin:18px 0; padding:13px 17px; border-radius:8px;
+  border-left:5px solid; line-height:1.8}
+.callout p{margin:6px 0}
+.callout p:first-child{margin-top:0}
+.callout p:last-child{margin-bottom:0}
+.callout strong{font-weight:700}
+.callout-problem{background:#fdf3d7; border-color:#e0a458}
+.callout-problem strong{color:#a9690f}
+.callout-solution{background:#e9f7ec; border-color:#3fa45b}
+.callout-solution strong{color:#1f7a3c}
+.callout-theorem{background:#e7f0fb; border-color:#3b7dd8}
+.callout-theorem strong{color:#1f5bb5}
+.callout-definition{background:#efeafb; border-color:#7c5cd6}
+.callout-definition strong{color:#5a36b0}
+html[data-theme="dark"] .callout-problem{background:#2e2716; border-color:#c98f3a}
+html[data-theme="dark"] .callout-problem strong{color:#e8b566}
+html[data-theme="dark"] .callout-solution{background:#16271b; border-color:#3fa45b}
+html[data-theme="dark"] .callout-solution strong{color:#74c98c}
+html[data-theme="dark"] .callout-theorem{background:#16202e; border-color:#3b7dd8}
+html[data-theme="dark"] .callout-theorem strong{color:#7aa6e6}
+html[data-theme="dark"] .callout-definition{background:#211c2e; border-color:#7c5cd6}
+html[data-theme="dark"] .callout-definition strong{color:#b39ae8}
+
+#topbar{position:fixed; top:10px; right:14px; z-index:55; display:flex; gap:8px}
+#topbar button{
+  background:var(--sidebar-bg); color:var(--fg); border:1px solid var(--border);
+  border-radius:8px; width:38px; height:38px; cursor:pointer; font-size:16px;
+  box-shadow:var(--shadow)}
+#topbar button:hover{background:var(--hover)}
+#menu-btn{display:none}
+
+
+/* 正文外链 -> 点击直接在新标签页打开 */
+.lp-link{color:var(--accent); text-decoration:underline; cursor:pointer; word-break:break-all}
+.lp-link::after{content:"↗"; font-size:.72em; margin-left:2px; vertical-align:super; opacity:.7}
+.lp-link:hover{opacity:.82}
+
+@media (max-width:900px){
+  #sidebar{transform:translateX(-100%); transition:transform .25s ease;
+    box-shadow:2px 0 12px rgba(0,0,0,.2)}
+  body.nav-open #sidebar{transform:translateX(0)}
+  #content{margin-left:0; padding:60px 18px 100px}
+  #menu-btn{display:block}
+  #toc a{white-space:normal}
+}
+</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$','$'],['\\(','\\)']],
+    displayMath: [['$$','$$'],['\\[','\\]']],
+    macros: {
+      pmat: ['\\begin{pmatrix}#1\\end{pmatrix}', 1],
+      dp:   ['\\mathrm{dp}#1', 1],
+      C: '\\mathbb{C}', Q: '\\mathbb{Q}',
+      R: '\\mathbb{R}', Z: '\\mathbb{Z}', N: '\\mathbb{N}'
+    }
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div id="progress"></div>
+<div id="topbar">
+  <button id="menu-btn" title="目录">&#9776;</button>
+  <button id="theme-btn" title="切换主题">&#9728;</button>
+</div>
+<aside id="sidebar">
+  <div class="brand">Slope Trick 讲解（maspy 博客中文翻译）<small>maspy 博客中文翻译</small></div>
+  <nav id="toc"></nav>
+</aside>
+<main id="content">
+  <article class="article">
+<h1 id="sec-1">Slope Trick 讲解（maspy 博客中文翻译）</h1>
+<blockquote>
+<p><strong>作者（原文）</strong>：maspy（<a href="https://maspypy.com/">maspypy.com</a>）
+<strong>来源分类页</strong>：<a href="https://maspypy.com/category/algorithm_math">https://maspypy.com/category/algorithm_math</a>
+<strong>说明</strong>：本文件由分类页中列出的博客文章链接下载后翻译整理而成。数学公式（$...$ 与 <div class="math-block">$$...$$</div>）保持原样，未作改动。</p>
+</blockquote>
+<hr />
+<h2 id="sec-2">目录</h2>
+<ul>
+<li><a href="#st1-slope1">slope trick (1) 解说编（slope trick (1) 解説編）</a></li>
+<li><a href="#st2-slope2">slope trick (2) 问题编（slope trick (2) 問題編）</a></li>
+<li><a href="#st3-slope-conj">slope trick (3) 凸共役（slope trick 的凸共轭）</a></li>
+</ul>
+<hr />
+<h2 id="st1-slope1">slope trick (1) 解说编（slope trick (1) 解説編）</h2>
+<p>续 → <a href="#st2-slope2">slope trick (2) 问题编</a></p>
+<p>为顾及剧透，把能用此题的题整理到了别文 <a href="#st2-slope2">slope trick (2) 问题编</a>。</p>
+<p>关于具体实现代码，必要时请参考 <a href="#st2-slope2">slope trick (2) 问题编</a>中的解答例。</p>
+<p>日本竞技编程界没见过这个叫法，所以依 codeforces blog 文章称为 slope trick。</p>
+<p>看过去题时发现，能用它的题常被当作 boss 题放置，或 AC 人数少，或解说用了别的思路而显得难懂。感觉几乎没见过作为典型技巧介绍的中文文章，所以我这边简单整理一下。</p>
+<h3 id="sec-4">目录</h3>
+<ul>
+<li>参考文献</li>
+<li>ei1333 さん的实现例</li>
+<li>分段线性凸函数</li>
+<li>数据的持有方式</li>
+<li>可实现的操作</li>
+</ul>
+<h3 id="sec-5">参考文献</h3>
+<ul>
+<li>https://codeforces.com/blog/entry/47821</li>
+<li>https://codeforces.com/blog/entry/77298</li>
+</ul>
+<p>（感觉叫 slope trick 的东西与竞技编程界所称的相近）
+Rote, G. (2018). Isotonic regression by dynamic programming. In 2nd Symposium on Simplicity in Algorithms (SOSA 2019). Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik.
+（相当新的论文，但也相近）
+— 熨斗袋 (@noshi91) March 13, 2021</p>
+<h3 id="sec-6">ei1333 さん的实现例</h3>
+<ul>
+<li>https://ei1333.github.io/library/structure/others/slope-trick.hpp</li>
+<li>https://ei1333.github.io/library/structure/others/generalized-slope-trick.hpp</li>
+</ul>
+<h3 id="sec-7">分段线性凸函数</h3>
+<p>slope trick 是一种良好地管理如下连续函数 $f\colon \R\longrightarrow \R$ 的技巧：</p>
+<p><img src="images/01/slope1-1.png" alt="slope1-1" />
+<strong>【条件】</strong> $f$ 的图像，是从左起依次连接斜率为 $l, l+1, \ldots, r-1, r$ 的线段而成的折线。（※ 表述略粗略。）</p>
+<p>就是这样的东西。连接了斜率为 $-2, -1, 0, 1, 2, 3$ 的线段。虽说线段，两端是半直线，但麻烦，也含这些统称为“线段”。</p>
+<p><img src="images/01/slope2-1.png" alt="slope2-1" />
+另外，为方便也考虑长度为 $0$ 的线段。</p>
+<p>上图中，视为按此顺序连接了：</p>
+<ul>
+<li>$(-\infty, a]$ 上斜率为 $-2$</li>
+<li>$[a,b]$ 上斜率为 $-1$</li>
+<li>$[b,b]$ 上斜率为 $0$</li>
+<li>$[b,c]$ 上斜率为 $1$</li>
+<li>$[c,c]$ 上斜率为 $2$</li>
+<li>$[c,\infty)$ 上斜率为 $3$</li>
+</ul>
+<p>的线段。结果，斜率跳变的情形也包含在考察对象中。</p>
+<p>以下把这样的函数称为分段线性凸函数。虽要求斜率的整数性，严格说仅“分段线性凸”还不够，但本文中应不会混乱。敬请注意。</p>
+<h4 id="sec-8">具体例</h4>
+<p>以下函数是分段线性凸函数：</p>
+<ul>
+<li>$|x|$ 的平移 $f(x) = |x-a|$</li>
+<li>形如 $f(x) = \max(0, x-a)$ 的函数。以下记为 $(x-a)_{+}$。</li>
+<li>形如 $f(x) = \max(0, a-x)$ 的函数。以下记为 $(a-x)_{+}$。</li>
+</ul>
+<p><img src="images/01/slope_3-2.png" alt="slope_3-2" />
+特别把重要的后两个可视化一下。它们是 $|x-a|$ 的左半、右半那样的函数，且成立 $|x-a| = (x-a)_{+} + (a-x)_{+}$。</p>
+<p>另外，分段线性凸函数的和也是分段线性凸函数，因此例如 $f(x) = \sum_{i} |x-a_i|$ 这样的函数也是分段线性凸函数。</p>
+<h3 id="sec-9">数据的持有方式</h3>
+<p>slope trick 是把分段线性凸函数替换为斜率变化点的多重集来管理，从而使特定函数操作能简洁进行。</p>
+<p>数据的细节似乎有几种模式，例如 https://codeforces.com/blog/entry/77298 中也有用变化点与 $x\to\infty$ 处样子来描述函数的尝试。这次介绍我自己想来觉得处理简单的。</p>
+<p><img src="images/01/a.png" alt="a" />
+对分段线性凸函数 $f$，持有如下 $3$ 个信息：</p>
+<ul>
+<li>$\text{min}_f$：$f$ 的最小值</li>
+<li>$L$：斜率 $\leq 0$ 的部分中，斜率变化点全体的多重集</li>
+<li>$R$：斜率 $\geq 0$ 的部分中，斜率变化点全体的多重集</li>
+</ul>
+<p>以下总以 $l_0$ 表示 $L$ 的最大值、$r_0$ 表示 $R$ 的最小值。另外 $L$ 或 $R$ 为空时，定 $l_0 = -\infty$, $r_0 = \infty$（也可显式放入哨兵）。作为“多重集”的持有方式，设想用优先队列，使总能取到 $l_0, r_0$。</p>
+<p><img src="images/01/b.png" alt="b" />
+斜率变化 $2$ 以上的地方的例子。</p>
+<h4 id="sec-10">还原</h4>
+<p>这样持有数据后，$f(x)$ 可如下表示：</p>
+<div class="math-block">$$f(x) = \text{min}_{f} + \sum_{l\in L} (l-x)_{+} + \sum_{r \in R} (x-r)_{+}$$</div>
+<p>实际上，只需验证左右两边：</p>
+<ul>
+<li>处处斜率相等</li>
+<li>在 $x\in [l_0,r_0]$ 处的值相等</li>
+</ul>
+<p>两者都容易。</p>
+<h3 id="sec-11">可实现的操作</h3>
+<p>记 $N = |L|+|R|$。此时可实现如下操作与复杂度。</p>
+<h4 id="sec-12">最小值的获取：$O(1)$ 时间</h4>
+<p>答 $\min_{x\in \R} f(x)$ 及其实现的 $x$，可在 $O(1)$ 时间。本来就是管理 $\text{min}_f$，最小值直接返回即可。取最小值的 $x$ 范围是斜率为 $0$ 的区间 $[l_0, r_0]$，这只读优先队列头部即可，故也 $O(1)$ 取得。</p>
+<h4 id="sec-13">加常数函数 $a$：$O(1)$ 时间</h4>
+<p>只需给 $\text{min}_f$ 加 $a$。当然。</p>
+<h4 id="sec-14">加 $(x-a)_+$：$O(\log N)$ 时间</h4>
+<p>加它时，斜率变化点处增加 $a$。另外斜率最小值不变、最大值 $+1$，故 $L$ 大小不变，$R$ 大小增 $1$。因此把多重集 $L\cup R\cup \{a\}$ 从小到大切成 $|L|$ 个、$|R|+1$ 个，重新作为 $L$, $R$ 即可。例如如下步骤更新：</p>
+<ul>
+<li>把 $a$ push 进 $L$。</li>
+<li>从 $L$ pop 一个值，push 进 $R$。</li>
+</ul>
+<p>$a > l_0$ 时最初的 push 是浪费，也可按 $a$ 与 $l_0$ 大小关系分支。或者用优先队列的 push/pop 合并方法，在 $a > l_0$ 时也几乎无浪费。例如 python 标准库 heapq 可用 heappushpop / heappush 各调一次实现。</p>
+<p>$L$, $R$ 的更新方法已知，接下来考虑 $\text{min}_f$ 的更新。虽因 $a$ 的位置出现分支而显得麻烦，其实简单。关注更新前 $f$ 中 $L$ 的最大值 $l_0$。</p>
+<p>其实更新后 $l_0$ 仍是给最小值的点。确实，$a$ 的插入使 $l_0$ 前后的斜率变为 $+0, +1$ 中某一种变化。更新前 $l_0$ 是斜率为 $-1, 0$ 的边界点，故更新后是斜率为 $-1, 0$ 或 $0, 1$ 的边界点。于是 $\text{min}_f$ 的变化等于 $f(l_0)$ 的变化，故</p>
+<div class="math-block">$$\text{min}_f \leftarrow \text{min}_f + (l_0-a)_+$$</div>
+<p>最小值的更新也完成。</p>
+<h4 id="sec-15">加 $(a-x)_+$：$O(\log N)$ 时间</h4>
+<p>相同。</p>
+<ul>
+<li>$\text{min}_f\leftarrow \text{min}_f + (a-r_0)_+$</li>
+<li>把 $a$ push 进 $R$</li>
+<li>从 $R$ pop 一个值，push 进 $L$</li>
+</ul>
+<p>即可。</p>
+<h4 id="sec-16">加 $|x-a|$：$O(\log N)$ 时间</h4>
+<p>由 $|x-a| = (x-a)_+ + (a-x)_+$ 成立，把上面 $2$ 个操作任意顺序都做即可。</p>
+<h4 id="sec-17">累积 min：$O(1)$ 时间</h4>
+<p><img src="images/01/left_min.png" alt="left_min" />
+即把 $f$ 替换为 $g(x) := \min_{y\leq x} f(y)$ 的操作。</p>
+<p>只需把 $R$ 换成空集。</p>
+<h4 id="sec-18">右侧累积 min：$O(1)$ 时间</h4>
+<p><img src="images/01/slope_trick-1.png" alt="slope_trick-1" />
+把 $f$ 替换为 $g(x) := \min_{y\geq x} f(y)$ 的操作。</p>
+<p>只需把 $L$ 换成空集。</p>
+<h3 id="sec-19">扩展</h3>
+<p>给数据结构再持有附加信息，可做更多操作。具体地，除了 $\text{min}_f$, $L$, $R$ 外，再持有给左侧统一加的值 $\text{add}_L$、给右侧统一加的值 $\text{add}_R$。</p>
+<p>插入或取出时，注意实际值与放入 $L$, $R$ 的值的差分来进行操作。这样，对左集合、右集合全体的加算可在 $O(1)$ 时间做。</p>
+<p>来确认可做哪些操作。</p>
+<h4 id="sec-20">平移：$O(1)$ 时间</h4>
+<p>有分段线性凸函数 $f(x)$ 时，考虑求 $g(x) = f(x-a)$ 的函数 $g$。</p>
+<p><img src="images/01/translation-1.png" alt="translation-1" />
+只需给集合 $L$, $R$ 统一加 $a$。</p>
+<h4 id="sec-21">滑动最小值函数：$O(1)$ 时间</h4>
+<p>名字这样行吗。是取 sliding window minimum 的操作。</p>
+<p>$a \leq b$ 时，计算由 <div class="math-block">$$g(x) = \min_{y\in [x-b,x-a]} f(y)$$</div> 确定的 $g$。其实这对应于分别对左集合、右集合平移。</p>
+<p><img src="images/01/range_translation-2.png" alt="range_translation-2" />
+$a$ 以上 $b$ 以下所有平移取 min，几何上想也合理吧。为保险用数式理解。</p>
+<ul>
+<li>若 $x\leq l_0 + a$，则 $x-a\leq l_0$，故在 $[x-b,x-a]$ 上 $f$ 单调递减。于是 $g(x) = \min_{y\in [x-b,x-a]}f(y) = f(x-a)$</li>
+<li>若 $x\geq r_0 + b$，则 $x-b\geq r_0$，故在 $[x-b,x-a]$ 上 $f$ 单调递增。于是 $g(x) = f(x-b)$</li>
+<li>若 $l_0+a\leq x\leq r_0+b$，则 $[x-b,x-a]\cap [l_0,r_0]\neq \emptyset$，故 $g(x) = \text{min}_f$</li>
+</ul>
+<p>得以验证。</p>
+<p>另外，平移可视为此处的 $a = b$ 情形。</p>
+<p>累积 min 操作可视为 $b = \infty$ 情形。不过，$\infty$ 多次加加减减运算可疑，且把 $\infty$ 替换为足够大常数实现时也有溢出与误差之忧，所以还是直接把 $R$ 置空的实现更好。</p>
+<p>续 → <a href="#st2-slope2">slope trick (2) 问题编</a></p>
+<h2 id="st2-slope2">slope trick (2) 问题编（slope trick (2) 問題編）</h2>
+<p>以下假定已读过解说编。所用记号等是共通的，不再重新说明。</p>
+<p>前 → <a href="#st1-slope1">slope trick (1) 解说编</a></p>
+<h3 id="sec-23">目录</h3>
+<p><img src="images/02/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
+<ul>
+<li>ABC 127 [F] Absolute minima</li>
+<li>第2回 ドワンゴからの挑戦状 予选 [E] 花火</li>
+<li>UTPC 2012 [L] じょうしょうツリー</li>
+<li>KUPC 2015 [H] 壁壁壁壁壁壁壁</li>
+<li>ARC 070 [E] NarrowRectangles</li>
+<li>其他问题</li>
+</ul>
+<h3 id="sec-24">ABC 127 [F] Absolute minima</h3>
+<p>F - Absolute Minima（AtCoder）</p>
+<p>直接实现解说编所述内容即可。</p>
+<p>解答例：https://atcoder.jp/contests/abc127/submissions/20969428</p>
+<p>此问题情形下，也可视为“向集合添加元素并取得中位数”。为添加一个元素，使 $L\cup R$ 增加 $2$ 个元素。也存在把优先队列操作次数减半的解法，但无需区分元素个数奇偶，实现或许更简洁。</p>
+<p>（每次插入 $2$ 个，使得中位数无论元素个数奇偶都总以 $l_0, r_0$ 呈现，很漂亮，我很喜欢）</p>
+<p><img src="images/02/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
+<h3 id="sec-25">第2回 ドワンゴからの挑戦状 予选 [E] 花火</h3>
+<p>E - 花火（AtCoder）</p>
+<p>虽是 AC 人数仅 3 人的 boss 题，却相当简单。这里就所有 $t_i$ 互异的情形说明（同时刻烟花的处理很简单，请想一想）。结果归约为如下问题。</p>
+<p>给定数列 $p_1, p_2, \ldots, p_N$。巧妙构造单调递增数列 $a_1, a_2, \ldots, a_N$ 使 $\sum_{i}|p_i – a_i|$ 最小。</p>
+<p>例如取 $a_i$ 从 $-A, -(A-1), \ldots, A-1, A$ 中选，则立刻想到 $O(NA)$ 时间的 DP 解法。记选到 $a_i = x$ 时的成本最小值为 $\dp_i(x)$，则例如如下要领可算所有 $\dp_i(x)$：</p>
+<div class="math-block">$$\dp_{i}(x) = |x-p_i| + \min_{y\leq x} \dp_{i-1}(y)$$</div>
+<p>仔细看此式，其实它只是 slope trick 做就完事的问题。不是把 DP 计算结果看作“计算各点值的表”，而是看作“在计算一个函数”。这个函数始终是分段线性凸函数，用 slope trick 管理后其余就简单了。</p>
+<p>结果如下即可求得答案：</p>
+<ul>
+<li>从常数函数 $f(x) = 0$ 开始。</li>
+<li>对 $i=1,2,\ldots$ 顺序，重复以下：<ul>
+<li>把 $f(x)$ 换成累积 $\min$。</li>
+<li>给 $f(x)$ 加上 $|x-p_i|$。</li>
+</ul>
+</li>
+<li>最后输出 $f$ 的最小值。</li>
+</ul>
+<p>解答例：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969672</p>
+<p>另外此问题中，一加上 $|x-p|$ 就取累积 min 并初始化 $R$，故无需持有 $R$。</p>
+<p>解答例 2：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969720</p>
+<p><img src="images/02/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
+<h3 id="sec-26">UTPC 2012 [L] じょうしょうツリー</h3>
+<p>L - じょうしょうツリー（AtCoder）</p>
+<p>首先，预先按深度加上值，把问题读成：从父向子作成广义单调递减列。考虑树 dp。</p>
+<p>记把子树 $v$ 变成“じょうしょうツリー”，且顶点 $v$ 的值变为 $x$ 的操作中最小成本为 $f_v(x)$。记 $v$ 的全体子节点为 $C(v)$，则易知</p>
+<div class="math-block">$$f_v(x) = |x-a_v| + \sum_{w\in C(v)}\min_{y\leq x}f_w(y)$$</div>
+<p>用 slope trick 管理所有这些函数 $f_v$。另外记 $g_v(x) = \min_{y\leq x} f_v(y)$。</p>
+<ul>
+<li>$g_v$ 可由 $f_v$ 在 $O(1)$ 时间算出（丢弃右侧集合）。</li>
+<li>$f_v$ 是 $\sum_{w\in C(v)}g_w$ 加上 $|x-a_v|$。</li>
+</ul>
+<p>$\sum_{w\in C(v)} g_w$ 的处理是问题。</p>
+<p>一般地，考虑给分段线性凸函数 $f$ 加上分段线性凸函数 $g$。记 $f, g$ 的数据大小为 $N_f$, $N_g$（请各自定义为持有的 $L$, $R$ 元素数之和等）。</p>
+<p>分段线性凸函数 $g$ 具有 $g(x) = \text{min}_{g} + \sum_{l\in L_g} (l-x)_{+} + \sum_{r \in R_g} (x-r)_{+}$ 这样的表示。因此，给 $g$ 加算等价于：</p>
+<ul>
+<li>加算 $(x-a)_+$</li>
+<li>加算 $(a-x)_+$</li>
+<li>加算 $\min_g$</li>
+</ul>
+<p>各约做 $N_g$ 次。于是可知，给 $f$ 加 $g$ 在时间复杂度 $O(N_g\log(N_f+N_g))$ 内可做。</p>
+<p>用 weighted union heuristic 计算 $\sum_{w\in C(v)} g_w$，可知本问题的树 dp 整体可在 $O(N\log^2N)$ 时间算。另外此问题也无需持有右侧集合 $R$。</p>
+<p>解答例：https://atcoder.jp/contests/utpc2012/submissions/20970281</p>
+<p>看解答例的 merge 部分可知，因 $R$ 为空，分段线性凸函数的加算与合并优先队列的操作完全一致。因此用 meldable 优先队列，也可在 $O(N\log N)$ 时间解。官方解说大概就是做这种事？</p>
+<p><img src="images/02/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
+<h3 id="sec-27">KUPC 2015 [H] 壁壁壁壁壁壁壁</h3>
+<p>H - WAAAAAAAAAAAAALL（AtCoder）</p>
+<p>还是先试着把立刻想到的 DP 写成式。把加固材料移动这一操作，理解为对每 $i$ 决定从位置 $i$ 向 $i-1$ 移动的货物个数 $n_i$（正则为向左移，负则为向右移 $|n_i|$ 个）。</p>
+<p>记 $n_i = x$ 已定，使位置 $i-1$ 之前加固材料足够时的最小成本为 $f_i(x)$。</p>
+<p>则可知成立 <div class="math-block">$$f_{i+1}(x) = |x| + \min_{A_i – y + x \geq B_i}f_i(y)$$</div>。令 $C_i = A_i – B_i$ 改写为 <div class="math-block">$$f_{i+1}(x) = |x| + \min_{y\leq x + C_i} f_i(y)$$</div>。</p>
+<p>初始状态为 $f_0(x) = \begin{cases}0 & (x=0)\\\infty & (x\neq 0)\end{cases}$，所求为 $f_{N}(0)$。</p>
+<p>$f_0$ 看似不是分段线性凸函数，但可视为 $L = R = [0,0,0,\ldots]$（在 $x=0$ 处斜率变化无限次）而作为分段线性凸函数处理。</p>
+<p>$g_i(x) = \min_{y\leq x+C_i} f_i(y)$ 如何计算？令 $z = y – C_i$，则 $g_i(x) = \min_{z\leq x} f_i(z + C_i)$，故 $g_i$ 是 $f_i$ 平移后取累积 min。</p>
+<p>结果，从 $f_i$ 算 $f_{i+1}$ 的步骤可分解为：</p>
+<ul>
+<li>平移 $-C_i$</li>
+<li>取累积 $\min$</li>
+<li>加算 $|x|$</li>
+</ul>
+<p>这些全部可由 slope trick 简洁处理。因含平移操作，实现时也持有 $\text{add}_L$, $\text{add}_R$。</p>
+<p>最后想算的是 $f_N(0)$。这通过把 $f_N$ 分解为 $(a-x)_{+}$, $(x-a)_+$ 可在 $O(N)$ 时间算。</p>
+<p>首先，别忘了从 $L = [0,0,0,\ldots]$（足够多）开始。放入约 $2N$ 个就够。</p>
+<p>解答例：https://atcoder.jp/contests/kupc2016/submissions/20983323</p>
+<p>另外此问题也无需持有 $R$。</p>
+<p>解答例：https://atcoder.jp/contests/kupc2016/submissions/20983382</p>
+<h3 id="sec-28">ARC 070 [E] NarrowRectangles</h3>
+<p><img src="images/02/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" />
+E - NarrowRectangles（AtCoder）</p>
+<p>我个人觉得，在 4 题 ARC 的第 3 题中最难。把 dp 表视为函数的想法，当时对我非常新颖，是留下强烈印象的喜欢的题。</p>
+<p>不过，基于到此的解说，我想已经相当好解了。还是考虑自然的 dp。记把前 $i$ 个矩形连起来、且第 $i$ 个矩形左端 $x$ 坐标为 $x$ 时到那里为止的最小成本为 $f_i(x)$。记矩形宽为 $w_i = r_i – l_i$。</p>
+<p>立刻可知可写为 <div class="math-block">$$f_{i}(x) = |x-l_i| + \min_{[x, x+w_i]\cap[y,y+w_{i-1}]\neq \emptyset}f_{i-1}(y)$$</div>。几乎是题面原话。区间相交条件可改写为 $x-w_{i-1}\leq y\leq x + w_i$，于是 <div class="math-block">$$f_i(x) = |x-l_i| + \min_{y\in [x-w_{i-1}, x+w_i]} f_{i-1}(y)$$</div>。</p>
+<p>这个操作，可通过给左集合、右集合加常数来完成。持有 $\text{add}_L$, $\text{add}_R$ 即可实现。</p>
+<p>解答例：https://atcoder.jp/contests/arc070/submissions/20983784</p>
+<h3 id="sec-29">其他问题</h3>
+<ul>
+<li>ARC 123 [D] Inc, Dec – Decomposition</li>
+<li>ABC 217 [H] Snuketoon</li>
+</ul>
+<h2 id="st3-slope-conj">slope trick (3) 凸共役（slope trick 的凸共轭）</h2>
+<h3 id="sec-31">概要</h3>
+<p>本文对凸函数的凸共轭（Legendre-Fenchel 变换）及其性质做一个简要整理。进一步，把它与 slope trick 对凸函数的处理结合起来，导出一个新的凸函数处理方式，称为 slope trick 的凸共轭。这个叫法是本文首次提出，至于今后会流行什么名字目前还不清楚。</p>
+<h3 id="sec-32">凸函数的凸共轭</h3>
+<p>wikipedia：https://ja.wikipedia.org/wiki/%E5%87%B8%E5%85%B1%E5%BD%B9%E6%80%A7</p>
+<h4 id="sec-33">定义</h4>
+<p>设 $f\colon \R\longrightarrow \R\cup\{\infty\}$（但恒不为恒等无穷大）。用下式定义 $f$ 的凸共轭 $f^{\star}$：</p>
+<div class="math-block">$$f^{\star}(p) := \sup_{x} (px-f(x))$$</div>
+<p>从 $f$ 得到 $f^{\star}$ 的操作也称为 Legendre-Fenchel 变换。几何上看，$f^{\star}(p)$ 相当于：在 $f$ 的图像下方、考虑斜率为 $p$ 的直线中 $y$ 截距尽可能大的那条。</p>
+<h4 id="sec-34">Fenchel 的双共轭定理</h4>
+<p>下面的事实成立：</p>
+<ul>
+<li>$f^{\star}$ 是凸函数</li>
+<li>当 $f$ 为凸函数且满足适当条件时，有 $f = (f^{\star})^{\star}$</li>
+</ul>
+<p>关于“条件”这里省略，但下文要讲的闭区间上的分段线性凸函数满足该条件。</p>
+<p>$f^{\star}$ 的凸性，由 $f^{\star}$ 是线性函数（从而是凸函数）的 $\sup$ 这一点可知。$f = (f^{\star})^{\star}$ 方面，$f \geq (f^{\star})^{\star}$ 是从定义直接可得的平凡不等式（请自行验证）。反方向的不等式，几何上意味着凸函数的图像可以由它的整个包络线还原出来。</p>
+<p><img src="images/03/conjugate.png" alt="conjugate" /></p>
+<h4 id="sec-35">极小卷积（infimal convolution / min-plus convolution）</h4>
+<p>以下，$f,g$ 等都表示“满足适当条件”的凸函数。</p>
+<p>用下式定义 $f,g$ 的极小卷积 $f \mathop{\Box} g$：</p>
+<div class="math-block">$$\bigl(f\mathop{\Box} g\bigr)(x) = \inf_{y}\bigl(f(x-y)+g(y)\bigr)$$</div>
+<p>与凸共轭的关系如下：</p>
+<div class="math-block">$$\bigl(f\mathop{\Box} g\bigr)^{\star}(p) = f^{\star}(p) + g^{\star}(p)$$</div>
+<div class="math-block">$$\bigl(f + g\bigr)^{\star}(p) = (f^{\star} \mathop{\Box} g^{\star})(p)$$</div>
+<p>也就是说，取凸共轭后，加法与卷积会互换。</p>
+<p>简单证明一下。由凸共轭的性质 $(f^{\star})^{\star} = f$，只需证上式。</p>
+<div class="math-block">$$\begin{align*}\bigl(f\mathop{\Box} g\bigr)^{\star}(p) &= \sup_x\bigl(px {}-{} f\mathop{\Box}g(x)\bigr) = \sup_{x,y}\bigl(px-f(x-y)-g(y)\bigr) \\&= \sup_{x,y}\bigl(\bigl(p(x-y)-f(x-y)\bigr) + \bigl(py-g(y)\bigr)\bigr) \\&= \sup_{x,y}\bigl(\bigl(px-f(x)\bigr)+\bigl(py-g(y)\bigr)\bigr) = f^{\star}(p)+g^{\star}(p)\end{align*}$$</div>
+<h4 id="sec-36">分段线性凸函数的凸共轭</h4>
+<p>对于 slope trick (1) 解説編 中讲过的那种形式的分段线性凸函数 $f$，$f^{\star}$ 也依然是分段线性凸的，并且其图像有如下关系：</p>
+<ul>
+<li>当 $f$ 在 $x = a$ 前后斜率由 $b$ 变为 $c$ 时，$f^{\star}$ 在 $[b,c]$ 上斜率为 $a$</li>
+</ul>
+<p>对 $p\in [b,c]$，考虑 $f$ 图像下方的斜率为 $p$ 的直线，使得 $y$ 截距最大的直线会在 $x=a$ 处与 $f$ 一致。仅由上述性质还残留 $y$ 轴方向平移的自由度，但把它与平凡性质 $f^{\star}(0) = -\min_f$ 等结合，就能确定 $f^{\star}$。</p>
+<p><img src="images/03/convex_linear_conjugate.png" alt="convex_linear_conjugate" /></p>
+<h3 id="sec-37">slope trick 的凸共轭</h3>
+<p>在 slope trick (1) 解説編 中，我们对满足如下性质的、形如分段线性凸函数，加速了一些操作：</p>
+<ul>
+<li>斜率的绝对值都是小的整数</li>
+</ul>
+<p>本文考虑凸共轭也是一个能用 slope trick 处理的函数（即满足如下性质的分段线性凸函数）：</p>
+<ul>
+<li>斜率变化点的坐标的绝对值都是小的整数</li>
+</ul>
+<p>以下设 $f$ 满足该性质。通过把对 $f$ 的操作，经凸共轭转换成对 $f^{\star}$ 的操作，再用 $f^{\star}$ 上的 slope trick 来加速对 $f$ 的操作，这一方法就称为 slope trick 的凸共轭。</p>
+<p>在 slope trick 中，我们用如下数据来管理分段线性凸函数 $F$：</p>
+<ul>
+<li>$F$ 的最小值</li>
+<li>最小值左侧斜率变化点全体 $L$（用优先队列维护）</li>
+<li>最小值右侧斜率变化点全体 $R$（用优先队列维护）</li>
+</ul>
+<p>因此，在 slope trick 的凸共轭中，我们用如下数据来管理分段线性凸函数 $f$：</p>
+<ul>
+<li>$f(0)$</li>
+<li>各非负整数 $n$ 对应的 $[n,n+1]$ 上的斜率所排成的序列 $(R_0, R_1, \ldots)$（用优先队列维护）</li>
+<li>各非负整数 $n$ 对应的 $[-(n+1),-n]$ 上的斜率所排成的序列 $(L_0, L_1, \ldots)$（用优先队列维护）</li>
+</ul>
+<h3 id="sec-38">可实现的操作</h3>
+<p>来确认可以加速的操作。以下用 $N$ 表示当前维护的优先队列的元素个数。</p>
+<h4 id="sec-39">取得 $f(0)$：$O(1)$ 时间</h4>
+<p>因为直接维护了 $f(0)$，这是显然的。</p>
+<h4 id="sec-40">加常数函数：$O(1)$ 时间</h4>
+<p>只需加到 $f(0)$ 上。</p>
+<h4 id="sec-41">取得 $\min_{x}\bigl(f(x){}-{}px\bigr)$，特别是取得 $\min_xf(x)$：$O(N\log N)$ 时间</h4>
+<p>这等价于计算 $-f^{\star}(p)$。由 slope trick (1) 解説編，</p>
+<div class="math-block">$$f^{\star}(p) = {\min}_{f^{\star}} + \sum_{l\in L}(l-p)_+ + \sum_{r\in R}(p-r)_+$$</div>
+<p>成立，且 $\min_{f^{\star}} = -f(0)$，于是即可。slope trick 中取得最小值很容易但计算 $f(0)$ 很难；而在 slope trick 凸共轭中，取得 $f(0)$ 容易但取得最小值难。</p>
+<h4 id="sec-42">平移 $f(x) \gets f(x\pm 1)$：$O(\log N)$ 时间</h4>
+<p>直接考虑 $f$ 的图像也可以，但这里也兼作练习，利用极小卷积与凸共轭。</p>
+<p>取 $g$ 满足</p>
+<div class="math-block">$$g(x) = \begin{cases}0 & (x=1) \\ \infty & (x\neq 1)\end{cases}$$</div>
+<p>则有 $f(x+1) = \bigl(f\mathop{\Box}g\bigr)(x)$。因此，只要能在凸共轭侧完成“加上 $g^{\star}$”的操作即可。</p>
+<p>由 $g^{\star}(p) = p$ 成立，于是只需考虑 $f^{\star}(p) \gets f^{\star}(p) + p$ 这样的操作。</p>
+<ul>
+<li>设 $L$ 的最大值为 $L_0$。这在操作前后都是 $f^{\star}$ 取最小的点。</li>
+<li>给 $f^{\star}$ 的最小值加上 $L_0$。也就是给 $f(0)$ 加上 $L_0$。</li>
+<li>把 $L_0$ 从 $L$ 弹出，移入 $R$。</li>
+</ul>
+<p>这样就好了。$f(x)\gets f(x-1)$ 的情况，考虑在凸共轭侧加上 $-p$，同理可做。</p>
+<p>对于坐标变化很小的平移，重复上述操作即可。坐标很大的平移（在 slope trick 中很简单）在 slope trick 的凸共轭中却不好处理。</p>
+<h4 id="sec-43">加 $cx$, $c(x-0)_+$, $c(0-x)_+$：$O(1)$ 时间</h4>
+<p>这不用取凸共轭、直接按 $f$ 考虑就显然。给 $R$ 全体加上 $c$，或给 $L$ 全体加上 $-c$ 即可。</p>
+<p>与平移结合，对绝对值小的整数 $a$ 就能加上 $c(x-a)_+$ 等。另外，把两者都做，就能加上 $c|x|$ 形的函数。</p>
+<p>slope trick 中没法处理对较大的 $c$ 加 $c|x|$ 之类，但在 slope trick 的凸共轭中，即使 $c$ 很大也很简单。</p>
+<h4 id="sec-44">滑动最小值函数 $f(x) \gets \min_{y\in [x-b,x-a]}f(y)$：$O((|a|+|b|)\log N)$ 时间</h4>
+<p>用极小卷积来导出计算方法。</p>
+<p>取</p>
+<div class="math-block">$$g(x) = \begin{cases}0 & (x\in [a,b])\\ \infty & (x\notin [a,b])\end{cases}$$</div>
+<p>则有把 $f$ 变成 $f\mathop{\Box} g$ 的操作正是所求。因此，考虑给 $f^{\star}$ 加上 $g^{\star}$ 的操作。</p>
+<p>$g^{\star}$ 是在 $x=0$ 前后斜率由 $a$ 变为 $b$ 的折线。它可以写成 $ax + (b-a)(x-0)_+$ 等，所以可用 slope trick 对 $f^{\star}$ 的基本操作 $O(|a|+|b|)$ 次来完成。</p>
+<h3 id="sec-45">问题例</h3>
+<ul>
+<li>JAG 2017 autumn：J – Farm Village （解説記事）</li>
+<li>yukicoder：No. 2114 01 Matching （解説記事）</li>
+<li>SEERC 2020：A. Archeologists （提出）</li>
+</ul>
+
+  </article>
+</main>
+<script>
+(function(){
+  var html=document.documentElement;
+  var saved=localStorage.getItem('theme');
+  if(saved) html.setAttribute('data-theme',saved);
+  else if(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)
+    html.setAttribute('data-theme','dark');
+  document.getElementById('theme-btn').onclick=function(){
+    var cur=html.getAttribute('data-theme')==='dark'?'light':'dark';
+    html.setAttribute('data-theme',cur); localStorage.setItem('theme',cur);
+  };
+  var heads=document.querySelectorAll('#content h2, #content h3, #content h4');
+  var toc=document.getElementById('toc');
+  var root=document.createElement('ul'); toc.appendChild(root);
+  var cur2=null, cur3=null;
+  heads.forEach(function(h){
+    var txt=h.textContent.trim();
+    if(txt==='目录') return;
+    var li=document.createElement('li');
+    var a=document.createElement('a');
+    a.href='#'+h.id; a.textContent=txt;
+    li.appendChild(a);
+    if(h.tagName==='H2'){ root.appendChild(li); cur2=li; cur3=null; }
+    else if(h.tagName==='H3'){
+      if(!cur2){ root.appendChild(li); cur2=li; }
+      var ul=cur2.querySelector('ul'); if(!ul){ ul=document.createElement('ul'); cur2.appendChild(ul); }
+      ul.appendChild(li); cur3=li;
+    } else {
+      var parent=cur3||cur2; if(!parent) parent=root;
+      var ul2=parent.querySelector('ul'); if(!ul2){ ul2=document.createElement('ul'); parent.appendChild(ul2); }
+      ul2.appendChild(li);
+    }
+  });
+  var links=toc.querySelectorAll('a');
+  links.forEach(function(a){
+    a.addEventListener('click',function(e){
+      var id=a.getAttribute('href').slice(1);
+      var el=document.getElementById(id);
+      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'});
+        history.replaceState(null,'','#'+id);
+        document.body.classList.remove('nav-open'); }
+    });
+  });
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  function setActive(id){
+    links.forEach(function(a){ a.classList.remove('active'); });
+    if(map[id]) map[id].classList.add('active');
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting) setActive(en.target.id);
+    });
+  },{rootMargin:'-10% 0px -75% 0px',threshold:0});
+  heads.forEach(function(h){ io.observe(h); });
+  if(heads[0]) setActive(heads[0].id);
+  var bar=document.getElementById('progress');
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  document.getElementById('menu-btn').onclick=function(){
+    document.body.classList.toggle('nav-open');
+  };
+})();
+
+(function(){
+  // 正文中的纯文本外链 -> 包裹为可点击链接，点击弹出预览（不立即跳转）
+  var ROOT = document.querySelector('#content .article');
+  if (ROOT) {
+    var URL_RE = new RegExp("https?://[^\\s<>\"']+", "gi");
+    var TRAIL = new RegExp("[.,;:。，、；：）)】」\\s]$");
+    function safeParent(p){
+      if(!p) return false;
+      var t=(p.tagName||'').toLowerCase();
+      if(t==='a'||t==='code'||t==='pre'||t==='script'||t==='style') return false;
+      if(p.closest && (p.closest('.math-block')||p.closest('mjx-container')||p.closest('pre')||p.closest('code'))) return false;
+      return true;
+    }
+    var walker=document.createTreeWalker(ROOT, NodeFilter.SHOW_TEXT, {
+      acceptNode:function(n){
+        if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if(!new RegExp("https?://","i").test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        return safeParent(n.parentNode) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var textNodes=[], node;
+    while((node=walker.nextNode())) textNodes.push(node);
+    textNodes.forEach(function(textNode){
+      var txt=textNode.nodeValue, frag=document.createDocumentFragment(), last=0, m;
+      URL_RE.lastIndex=0;
+      while((m=URL_RE.exec(txt))){
+        var url=m[0];
+        while(TRAIL.test(url)) url=url.slice(0,-1);
+        if(m.index>last) frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+        var a=document.createElement('a');
+        a.className='lp-link'; a.href=url;
+        a.target='_blank'; a.rel='noopener noreferrer';
+        a.textContent=url;
+        frag.appendChild(a);
+        last=m.index+m[0].length;
+      }
+      if(last<txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      textNode.parentNode.replaceChild(frag,textNode);
+    });
+  }
+})();
+
+</script>
+</body>
+</html>

@@ -188,12 +188,9 @@ window.MathJax = {
 <li><a href="#am07-rand-k">选择 K 个的最优化的随机算法（$K$ 個を選ぶ最適化における乱択アルゴリズム）</a></li>
 <li><a href="#am08-monoid-dlog">关于幺半群作用的离散对数问题（モノイド作用に関する離散対数問題）</a></li>
 <li><a href="#am09-dc-query">基于分割统制的静态数列区间积查询（分割統治による静的列の区間積クエリ）</a></li>
-<li><a href="#am10-slope-conj">slope trick (3) 凸共役（slope trick 的凸共轭）</a></li>
 <li><a href="#am11-stirling-mod-p">Stirling 数除以 $p$ 的余数的计算（Stirling 数を $p$ で割った余りの計算）</a></li>
 <li><a href="#am12-prime-bound">关于素数的上界估计（初等证明）（素数に関する上からの評価（初等的な証明））</a></li>
 <li><a href="#am13-dirichlet">Dirichlet 级数与 Dirichlet 积（Dirichlet 級数と Dirichlet 積）</a></li>
-<li><a href="#am14-slope2">slope trick (2) 问题编（slope trick (2) 問題編）</a></li>
-<li><a href="#am15-slope1">slope trick (1) 解说编（slope trick (1) 解説編）</a></li>
 <li><a href="#am16-fft">FFT 与卷积（フーリエ変換と畳み込み / FFT による畳み込み）</a></li>
 <li><a href="#am17-segtree2">Segment Tree 的学习 (2) 延迟传播（遅延伝搬 Segment 木のお勉強）</a></li>
 <li><a href="#am18-segtree1">Segment Tree 的学习 (1)（Segment Tree のお勉強 (1)）</a></li>
@@ -943,104 +940,8 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <li>无剪枝（$O((N\log N+Q)K)$ 时间、1050ms）：https://yukicoder.me/submissions/839527</li>
 <li>有剪枝（$O((N+Q)K)$ 时间、273ms）：https://yukicoder.me/submissions/839592</li>
 </ul>
-<h2 id="am10-slope-conj">slope trick (3) 凸共役（slope trick 的凸共轭）</h2>
-<h3 id="sec-77">概要</h3>
-<p>本文对凸函数的凸共轭（Legendre-Fenchel 变换）及其性质做一个简要整理。进一步，把它与 slope trick 对凸函数的处理结合起来，导出一个新的凸函数处理方式，称为 slope trick 的凸共轭。这个叫法是本文首次提出，至于今后会流行什么名字目前还不清楚。</p>
-<h3 id="sec-78">凸函数的凸共轭</h3>
-<p>wikipedia：https://ja.wikipedia.org/wiki/%E5%87%B8%E5%85%B1%E5%BD%B9%E6%80%A7</p>
-<h4 id="sec-79">定义</h4>
-<p>设 $f\colon \R\longrightarrow \R\cup\{\infty\}$（但恒不为恒等无穷大）。用下式定义 $f$ 的凸共轭 $f^{\star}$：</p>
-<div class="math-block">$$f^{\star}(p) := \sup_{x} (px-f(x))$$</div>
-<p>从 $f$ 得到 $f^{\star}$ 的操作也称为 Legendre-Fenchel 变换。几何上看，$f^{\star}(p)$ 相当于：在 $f$ 的图像下方、考虑斜率为 $p$ 的直线中 $y$ 截距尽可能大的那条。</p>
-<h4 id="sec-80">Fenchel 的双共轭定理</h4>
-<p>下面的事实成立：</p>
-<ul>
-<li>$f^{\star}$ 是凸函数</li>
-<li>当 $f$ 为凸函数且满足适当条件时，有 $f = (f^{\star})^{\star}$</li>
-</ul>
-<p>关于“条件”这里省略，但下文要讲的闭区间上的分段线性凸函数满足该条件。</p>
-<p>$f^{\star}$ 的凸性，由 $f^{\star}$ 是线性函数（从而是凸函数）的 $\sup$ 这一点可知。$f = (f^{\star})^{\star}$ 方面，$f \geq (f^{\star})^{\star}$ 是从定义直接可得的平凡不等式（请自行验证）。反方向的不等式，几何上意味着凸函数的图像可以由它的整个包络线还原出来。</p>
-<p><img src="images/10/conjugate.png" alt="conjugate" /></p>
-<h4 id="sec-81">极小卷积（infimal convolution / min-plus convolution）</h4>
-<p>以下，$f,g$ 等都表示“满足适当条件”的凸函数。</p>
-<p>用下式定义 $f,g$ 的极小卷积 $f \mathop{\Box} g$：</p>
-<div class="math-block">$$\bigl(f\mathop{\Box} g\bigr)(x) = \inf_{y}\bigl(f(x-y)+g(y)\bigr)$$</div>
-<p>与凸共轭的关系如下：</p>
-<div class="math-block">$$\bigl(f\mathop{\Box} g\bigr)^{\star}(p) = f^{\star}(p) + g^{\star}(p)$$</div>
-<div class="math-block">$$\bigl(f + g\bigr)^{\star}(p) = (f^{\star} \mathop{\Box} g^{\star})(p)$$</div>
-<p>也就是说，取凸共轭后，加法与卷积会互换。</p>
-<p>简单证明一下。由凸共轭的性质 $(f^{\star})^{\star} = f$，只需证上式。</p>
-<div class="math-block">$$\begin{align*}\bigl(f\mathop{\Box} g\bigr)^{\star}(p) &= \sup_x\bigl(px {}-{} f\mathop{\Box}g(x)\bigr) = \sup_{x,y}\bigl(px-f(x-y)-g(y)\bigr) \\&= \sup_{x,y}\bigl(\bigl(p(x-y)-f(x-y)\bigr) + \bigl(py-g(y)\bigr)\bigr) \\&= \sup_{x,y}\bigl(\bigl(px-f(x)\bigr)+\bigl(py-g(y)\bigr)\bigr) = f^{\star}(p)+g^{\star}(p)\end{align*}$$</div>
-<h4 id="sec-82">分段线性凸函数的凸共轭</h4>
-<p>对于 slope trick (1) 解説編 中讲过的那种形式的分段线性凸函数 $f$，$f^{\star}$ 也依然是分段线性凸的，并且其图像有如下关系：</p>
-<ul>
-<li>当 $f$ 在 $x = a$ 前后斜率由 $b$ 变为 $c$ 时，$f^{\star}$ 在 $[b,c]$ 上斜率为 $a$</li>
-</ul>
-<p>对 $p\in [b,c]$，考虑 $f$ 图像下方的斜率为 $p$ 的直线，使得 $y$ 截距最大的直线会在 $x=a$ 处与 $f$ 一致。仅由上述性质还残留 $y$ 轴方向平移的自由度，但把它与平凡性质 $f^{\star}(0) = -\min_f$ 等结合，就能确定 $f^{\star}$。</p>
-<p><img src="images/10/convex_linear_conjugate.png" alt="convex_linear_conjugate" /></p>
-<h3 id="sec-83">slope trick 的凸共轭</h3>
-<p>在 slope trick (1) 解説編 中，我们对满足如下性质的、形如分段线性凸函数，加速了一些操作：</p>
-<ul>
-<li>斜率的绝对值都是小的整数</li>
-</ul>
-<p>本文考虑凸共轭也是一个能用 slope trick 处理的函数（即满足如下性质的分段线性凸函数）：</p>
-<ul>
-<li>斜率变化点的坐标的绝对值都是小的整数</li>
-</ul>
-<p>以下设 $f$ 满足该性质。通过把对 $f$ 的操作，经凸共轭转换成对 $f^{\star}$ 的操作，再用 $f^{\star}$ 上的 slope trick 来加速对 $f$ 的操作，这一方法就称为 slope trick 的凸共轭。</p>
-<p>在 slope trick 中，我们用如下数据来管理分段线性凸函数 $F$：</p>
-<ul>
-<li>$F$ 的最小值</li>
-<li>最小值左侧斜率变化点全体 $L$（用优先队列维护）</li>
-<li>最小值右侧斜率变化点全体 $R$（用优先队列维护）</li>
-</ul>
-<p>因此，在 slope trick 的凸共轭中，我们用如下数据来管理分段线性凸函数 $f$：</p>
-<ul>
-<li>$f(0)$</li>
-<li>各非负整数 $n$ 对应的 $[n,n+1]$ 上的斜率所排成的序列 $(R_0, R_1, \ldots)$（用优先队列维护）</li>
-<li>各非负整数 $n$ 对应的 $[-(n+1),-n]$ 上的斜率所排成的序列 $(L_0, L_1, \ldots)$（用优先队列维护）</li>
-</ul>
-<h3 id="sec-84">可实现的操作</h3>
-<p>来确认可以加速的操作。以下用 $N$ 表示当前维护的优先队列的元素个数。</p>
-<h4 id="sec-85">取得 $f(0)$：$O(1)$ 时间</h4>
-<p>因为直接维护了 $f(0)$，这是显然的。</p>
-<h4 id="sec-86">加常数函数：$O(1)$ 时间</h4>
-<p>只需加到 $f(0)$ 上。</p>
-<h4 id="sec-87">取得 $\min_{x}\bigl(f(x){}-{}px\bigr)$，特别是取得 $\min_xf(x)$：$O(N\log N)$ 时间</h4>
-<p>这等价于计算 $-f^{\star}(p)$。由 slope trick (1) 解説編，</p>
-<div class="math-block">$$f^{\star}(p) = {\min}_{f^{\star}} + \sum_{l\in L}(l-p)_+ + \sum_{r\in R}(p-r)_+$$</div>
-<p>成立，且 $\min_{f^{\star}} = -f(0)$，于是即可。slope trick 中取得最小值很容易但计算 $f(0)$ 很难；而在 slope trick 凸共轭中，取得 $f(0)$ 容易但取得最小值难。</p>
-<h4 id="sec-88">平移 $f(x) \gets f(x\pm 1)$：$O(\log N)$ 时间</h4>
-<p>直接考虑 $f$ 的图像也可以，但这里也兼作练习，利用极小卷积与凸共轭。</p>
-<p>取 $g$ 满足</p>
-<div class="math-block">$$g(x) = \begin{cases}0 & (x=1) \\ \infty & (x\neq 1)\end{cases}$$</div>
-<p>则有 $f(x+1) = \bigl(f\mathop{\Box}g\bigr)(x)$。因此，只要能在凸共轭侧完成“加上 $g^{\star}$”的操作即可。</p>
-<p>由 $g^{\star}(p) = p$ 成立，于是只需考虑 $f^{\star}(p) \gets f^{\star}(p) + p$ 这样的操作。</p>
-<ul>
-<li>设 $L$ 的最大值为 $L_0$。这在操作前后都是 $f^{\star}$ 取最小的点。</li>
-<li>给 $f^{\star}$ 的最小值加上 $L_0$。也就是给 $f(0)$ 加上 $L_0$。</li>
-<li>把 $L_0$ 从 $L$ 弹出，移入 $R$。</li>
-</ul>
-<p>这样就好了。$f(x)\gets f(x-1)$ 的情况，考虑在凸共轭侧加上 $-p$，同理可做。</p>
-<p>对于坐标变化很小的平移，重复上述操作即可。坐标很大的平移（在 slope trick 中很简单）在 slope trick 的凸共轭中却不好处理。</p>
-<h4 id="sec-89">加 $cx$, $c(x-0)_+$, $c(0-x)_+$：$O(1)$ 时间</h4>
-<p>这不用取凸共轭、直接按 $f$ 考虑就显然。给 $R$ 全体加上 $c$，或给 $L$ 全体加上 $-c$ 即可。</p>
-<p>与平移结合，对绝对值小的整数 $a$ 就能加上 $c(x-a)_+$ 等。另外，把两者都做，就能加上 $c|x|$ 形的函数。</p>
-<p>slope trick 中没法处理对较大的 $c$ 加 $c|x|$ 之类，但在 slope trick 的凸共轭中，即使 $c$ 很大也很简单。</p>
-<h4 id="sec-90">滑动最小值函数 $f(x) \gets \min_{y\in [x-b,x-a]}f(y)$：$O((|a|+|b|)\log N)$ 时间</h4>
-<p>用极小卷积来导出计算方法。</p>
-<p>取</p>
-<div class="math-block">$$g(x) = \begin{cases}0 & (x\in [a,b])\\ \infty & (x\notin [a,b])\end{cases}$$</div>
-<p>则有把 $f$ 变成 $f\mathop{\Box} g$ 的操作正是所求。因此，考虑给 $f^{\star}$ 加上 $g^{\star}$ 的操作。</p>
-<p>$g^{\star}$ 是在 $x=0$ 前后斜率由 $a$ 变为 $b$ 的折线。它可以写成 $ax + (b-a)(x-0)_+$ 等，所以可用 slope trick 对 $f^{\star}$ 的基本操作 $O(|a|+|b|)$ 次来完成。</p>
-<h3 id="sec-91">问题例</h3>
-<ul>
-<li>JAG 2017 autumn：J – Farm Village （解説記事）</li>
-<li>yukicoder：No. 2114 01 Matching （解説記事）</li>
-<li>SEERC 2020：A. Archeologists （提出）</li>
-</ul>
 <h2 id="am11-stirling-mod-p">Stirling 数除以 $p$ 的余数的计算（Stirling 数を $p$ で割った余りの計算）</h2>
-<h3 id="sec-93">概要</h3>
+<h3 id="sec-77">概要</h3>
 <p>用下降幂 $(x)_n$、带符号第 1 类 Stirling 数 $s(n,k)$、第 2 类 Stirling 数 $S(n,k)$ 如下定义：</p>
 <div class="math-block">$$(x)_n = \prod_{0\leq i &lt; n} (x-i) = \sum_{k=0}^{n} s(n,k)x^k$$</div>
 <div class="math-block">$$x^n = \sum_{k=0}^n S(n,k)(x)_k$$</div>
@@ -1059,18 +960,18 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 </ul>
 <p>竞技编程中也似乎出过几次题。</p>
 <p>以下固定素数 $p$，整数与多项式的等式都视为 $\mathbb{F}_p$ 上（$\mod{p}$ 下）的等式。</p>
-<h3 id="sec-94">下降幂的性质</h3>
+<h3 id="sec-78">下降幂的性质</h3>
 <p>对非负整数 $i, j$，如下成立：</p>
 <div class="math-block">$$(x)_p = x^p-x, \qquad (x)_{ip+j} = (x^p-x)^i(x)_j$$</div>
 <p>$(x)_p = x^p-x$ 可由 Fermat 小定理与因式定理（在域 $\mathbb{F}_p$ 中）证明。$(x)_{ip+j}$ 把每 $p$ 项分组后使用 $(x)_p = x^p-x$ 即可。</p>
-<h3 id="sec-95">第 1 类 Stirling 数的计算</h3>
+<h3 id="sec-79">第 1 类 Stirling 数的计算</h3>
 <p>第 1 类 Stirling 数 $s(n,k)$ 就是下降幂的系数 $[x^k] (x)_n$。令 $n = ip+j$ ($0\leq j\leq p-1$)，由上面讲过的下降幂性质，</p>
 <div class="math-block">$$s(n,k) = [x^k] (x^p-x)^i(x)_j = [x^{k-i}] (x^{p-1}-1)^{i}(x)_j=[x^{k-i}]\sum_{a=0}^{i}\sum_{b=0}^{j}\binom{i}{a}x^{(p-1)a}(-1)^{i-a}\cdot s(j,b)x^b$$</div>
 <p>于是</p>
 <div class="math-block">$$X = \{(a,b)\mid k-i=(p-1)a+b, 0\leq a\leq i, 0\leq b\leq j\}$$</div>
 <p>则 $s(n,k) = \sum_{(a,b)\in X} (-1)^{i-a}\binom{i}{a}s(j,b)$ 成立。</p>
 <p>固定 $n,k$ 时，$X$ 至多是 $2$ 元集合。虽可能有对应于 $b=0, p-1$ 的 $2$ 元模式，但这种情形由 $s(0,p-1)=0$ 或 $s(j,0)=0$ ($j>0$) 可知，使 $s(j,b)\neq 0$ 的 $(a,b)$ 是唯一的。因此该情形下，使 $s(n,k) = (-1)^{i-a}\binom{i}{a}s(j,b)$ 成立的 $(a,b)$ 恰好存在一个。</p>
-<h3 id="sec-96">第 2 类 Stirling 数的计算</h3>
+<h3 id="sec-80">第 2 类 Stirling 数的计算</h3>
 <p>由 $x^n = \sum_{k=0}^n S(n,k)(x)_k$ 求 $S(n,k)$。由下降幂性质可变形为</p>
 <div class="math-block">$$x^n = \sum_{i=0}^{\infty}\sum_{j=0}^{p-1} S(n,ip+j) (x^p-x)^i(x)_j$$</div>
 <p>因此，$S(n,ip+j)$ 可用如下步骤计算：</p>
@@ -1099,7 +1000,7 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <li>若 $b=p-1$，则 $S(n,ip+j) = \binom{a}{i}S(p-1,j) + \binom{a}{i-1}S(0,j)$</li>
 </ul>
 <p>后者乍看是 $2$ 项之和，但依 $j=0$ 与否，恰有 $S(p-1,j)$ 与 $S(0,j)$ 中仅一方非零。无论如何，找到了使 $S(n,k) = \binom{a}{i}S(b,j)$ 恰好成立的一对 $(a,b)$。</p>
-<h3 id="sec-97">总结</h3>
+<h3 id="sec-81">总结</h3>
 <p>证明了以下事实：</p>
 <ul>
 <li>给定 $n,k$ 时，使 $s(n,k) = (-1)^{i-a}\binom{i}{a}s(j,b)$ 成立的 $i,j,a,b$ ($0\leq b \leq j\leq p – 1$) 可在 $O(1)$ 时间内算出。</li>
@@ -1111,7 +1012,7 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <li>二项式系数的计算</li>
 </ul>
 <p>来求得。所有 $n\leq p-1$ 情形的 $s(n,k), S(n,k)$ 整体可在 $O(p^2)$ 时间预处理。不预处理时也能在 $O(p\log p)$ 时间计算。</p>
-<h3 id="sec-98">二项式系数除以 $p$ 的余数的计算</h3>
+<h3 id="sec-82">二项式系数除以 $p$ 的余数的计算</h3>
 <p>虽然有名，顺便也讲一下。计算 $\binom{n}{k} = [x^k](1+x)^n$。</p>
 <p>利用在域 $\mathbb{F}_p$ 中（或 $\mod p$ 下）$(1+x)^p = 1+x^p$ 成立。</p>
 <p>把 $n,k$ 写成 $p$ 除的商与余数：$n = n_0 + pn_1, k = k_0 + pk_1$ ($0\leq k_0,n_0\leq p-1$)，则</p>
@@ -1119,7 +1020,7 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <p>得到。这个性质作为 Lucas 定理而知名。</p>
 <p>由此，在 $n &lt; p$ 情形的二项式系数预处理基础上，$\binom{n}{k}$ 可在 $O(\log_pn)$ 时间计算。</p>
 <h2 id="am12-prime-bound">关于素数的上界估计（初等证明）（素数に関する上からの評価（初等的な証明））</h2>
-<h3 id="sec-100">概要</h3>
+<h3 id="sec-84">概要</h3>
 <p>本文中总是用 $p$ 表示素数，$i, k, n$ 表示整数，$x$ 表示实数。特别地，直接写 $\sum_{p\leq x}$ 或 $\prod_{p\leq x}$ 等，表示对素数求和或求积。</p>
 <p>记 $\pi(x) := \sum_{p\leq x}1$。也就是说，$\pi(x)$ 是不超过 $x$ 的素数个数。另外文中 big-O 记号是关于 $x\to \infty$, $N\to\infty$, $n\to\infty$ 等的。</p>
 <p>本文证明以下事实：</p>
@@ -1131,24 +1032,24 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <p>另外，进一步精细估计误差的命题也是已知的。</p>
 <p>竞技编程的资料中也常介绍这些“强估计”，但因为结果强，证明常被省略，容易让人产生“素数个数的阶估计很难”的误解。然而（对于竞技编程语境中多数目的应该够用的）“弱估计”，用高中数学水平就能简单证明。</p>
 <p>那开始吧。</p>
-<h3 id="sec-101">二项式系数与素数</h3>
+<h3 id="sec-85">二项式系数与素数</h3>
 <p><strong>【補題】</strong> 对正整数 $N$ 如下成立：<div class="math-block">$$\prod_{N &lt; p\leq 2N} p \leq \binom{2N}{N} \leq 2^{2N}$$</div></p>
 <div class="callout-solution"><p><strong>【証明】</strong></p></div>
 <p>$\binom{2N}{N} = \frac{(2N)!}{N!N!}$。当 $N &lt; p\leq 2N$ 时，$p$ 整除分子 $(2N)!$，但不整除分母 $N!$。故知 $\binom{2N}{N}$ 是 $p$ 的倍数。又因满足 $N &lt; p\leq 2N$ 的 $p$ 两两互素，于是 $\binom{2N}{N}$ 是 $\prod_{N &lt; p \leq 2N} p$ 的倍数，左边不等式得证。</p>
 <p>右边不等式由 $2^{n} = (1+1)^n = \sum_{k=0}^n \binom{n}{k}$ 知任意 $0\leq k\leq n$ 有 $\binom{n}{k}\leq 2^n$ 而得。</p>
-<h3 id="sec-102">不等式估计 (1)</h3>
+<h3 id="sec-86">不等式估计 (1)</h3>
 <p>由上述不等式得 $\sum_{N &lt; p \leq 2N} \log_2 p\leq 2N$。接下来基本就是照做。姑且认真做一遍。</p>
 <p>与代数变形不同，解析的不等式估计或近似计算，即使是同一内容，式变形也有相当大的自由度，请当作只是一例来看。</p>
 <p>取 $N = 2^k$，有 $\sum_{2^k &lt; p \leq 2^{k+1}} \log_2 p\leq 2^{k+1}$。范围内 $p$ 满足 $k &lt; \log_2 p$，故 $\sum_{2^k &lt; p\leq 2^{k+1}}1\leq \frac{2^{k+1}}{k}$。对 $k = 1, 2, \ldots, n$ 求和，得如下估计：</p>
 <div class="math-block">$$\pi(2^{n+1}) \leq 1 + \sum_{k=1}^n\frac{2^{k+1}}{k}$$</div>
 <p>也看一下素数倒数和。$2^k &lt; p\leq 2^{k+1}$ 时 $\frac{1}{p} \leq \frac{1}{2^{k}}$，故 $\sum_{2^k &lt; p\leq 2^{k+1}}\frac{1}{p}\leq \frac{1}{2^k}\sum_{2^k &lt; p\leq 2^{k+1}}1\leq \frac{2}{k}$。对 $k = 1, 2, \ldots, n$ 求和，得如下估计：</p>
 <div class="math-block">$$\sum_{p\leq 2^{n+1}} \frac{1}{p} \leq \frac12 + \sum_{k=1}^n\frac{2}{k}$$</div>
-<h3 id="sec-103">不等式估计 (2)</h3>
-<h3 id="sec-104">调和级数</h3>
+<h3 id="sec-87">不等式估计 (2)</h3>
+<h3 id="sec-88">调和级数</h3>
 <p>有著名结果 $\sum_{k=1}^N\frac{1}{k} = \log n + O(1)$。用积分的方法很简洁。但关于这个也偶尔有误会，以为不知道积分就无法估计阶，所以这里用更初等的方法说明 $\sum_{k=1}^N\frac{1}{k} = O(\log N)$。取满足 $2^n\leq N &lt; 2^{n+1}$ 的 $n$。</p>
 <p>$2^i\leq k &lt; 2^{i+1}$ 时 $\frac{1}{k}\leq 2^{-i}$。于是 $\sum_{k=2^i}^{2^{i+1}-1}\frac{1}{k}\leq \sum_{k=2^i}^{2^{i+1}-1}2^{-i} = 1$。对 $i=0, \ldots, n$ 累加，得 $\sum_{k=1}^{2^{n+1}-1}\frac{1}{k} \leq n+1$。</p>
 <p>由此得 $\sum_{k=1}^N\frac{1}{k}\leq \sum_{k=1}^{2^{n+1}-1}\frac{1}{k} \leq n + 1\leq \log_2N + 1$。特别地 $\sum_{k=1}^N\frac{1}{k} = O(\log N)$。</p>
-<h3 id="sec-105">素数倒数和</h3>
+<h3 id="sec-89">素数倒数和</h3>
 <p>结合调和级数的不等式估计，得</p>
 <div class="math-block">$$\sum_{p\leq 2^{n+1}} \frac{1}{p} \leq \frac12 + \sum_{k=1}^n\frac{2}{k}\leq \frac12 + 2(\log_2n+1)$$</div>
 <p>取 $x\in \R$，取满足 $2^n\leq x &lt; 2^{n+1}$ 的 $n$，则</p>
@@ -1156,7 +1057,7 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <p>得证 $\sum_{p\leq x}\frac{1}{p} = O(\log_2\log_2 x)$。又由</p>
 <div class="math-block">$$\log_2\log_2x = \log_2\frac{\log x}{\log 2} = \log_2\log x – \log_2\log 2 = \frac{\log\log x}{\log 2} – \log_2\log 2$$</div>
 <p>可知，本次证明的估计也可写成 $\sum_{p\leq x}\frac{1}{p} = \frac{2}{\log 2}\log\log x + O(1) \leq 2.886\cdot\log \log x + O(1)$。比最优估计弱了约 $3$ 倍。</p>
-<h3 id="sec-106">素数个数</h3>
+<h3 id="sec-90">素数个数</h3>
 <p>估计 $\pi(2^{n+1}) \leq 1 + \sum_{k=1}^n\frac{2^{k+1}}{k}$ 的右边。简单说，就是估计 $k = n$ 时的 $\frac{2^{n+1}}{n}$ 在总和里占了足够大的比例。令 $i = n – k$，例如如下处理：</p>
 <div class="math-block">$$\begin{align*}\sum_{k=1}^n\frac{2^{k+1}}{k} &= \sum_{i=0}^{n-1}\frac{2^{n-i+1}}{n-i} = \frac{2^{n+1}}{n}\sum_{i=0}^{n-1}\frac{n}{n-i}2^{-i}\\&=\frac{2^{n+1}}{n}\left(\sum_{i=0}^{n-1}2^{-i} + \sum_{i=1}^{n-1}\frac{i}{n-i}2^{-i}\right)\\&\leq \frac{2^{n+1}}{n}\left(\sum_{i=0}^{\infty}2^{-i}+\sum_{i=1}^{\infty}i 2^{-i}\right) = \frac{4\cdot 2^{n+1}}{n}\end{align*}$$</div>
 <p>于是得 $\pi(2^{n+1})\leq 1 + \frac{4\cdot 2^{n+1}}{n}$。</p>
@@ -1164,15 +1065,15 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <div class="math-block">$$\pi(x)\leq \pi(2^{n+1})\leq 1 + \frac{4\cdot 2^{n+1}}{n}\leq 1 + \frac{8x}{\log_2x-1} = \frac{8x}{\log_2 x} + O(1)$$</div>
 <p>从而 $\pi(x) \leq \frac{8x}{\log_2x} + O(1)$，特别地 $\pi(x) = O(\frac{x}{\log x})$ 得证。</p>
 <p>由 $\frac{8}{\log_2x} = \frac{8\log 2}{\log x} \leq 5.55\cdot \frac{x}{\log x}$，比最优估计弱了约 $6$ 倍。</p>
-<h3 id="sec-107">其他评论</h3>
+<h3 id="sec-91">其他评论</h3>
 <p>得到的估计虽弱，但属于“【補題】一发”那样的简单证明。在式变形的细节处应该还能改善估计。</p>
 <p>本文处理的是“素数很少”方向的估计，但“素数很多”即 $\pi(x)\geq c\cdot \frac{x}{\log x}$ 这样的估计也能用初等方法做到。例如关注 $\binom{2N}{N}$，由 $p\leq 2N$ 的指数足够小就能估计，从而可证 $\pi(x) = \Theta\left(\frac{x}{\log x}\right)$ 以及 $\sum_{p\leq x} \frac1p = \Theta(\log\log x)$。有兴趣的话可以想一想。另外关于下界估计，也有利用由 Euler 积可知的 $\sum_{1\leq n\leq x}\frac{1}{n}\leq \prod_{p\leq x}\left(1-\frac{1}{p}\right)^{-1}$ 等方法。</p>
-<h3 id="sec-108">参考文献</h3>
+<h3 id="sec-92">参考文献</h3>
 <p>Introduction to Analytic Number Theory (Tom M. Apostol)</p>
 <p>基本的想法（$\binom{2N}{N}$ 的考虑）是从这里学的。细微的式变形是写文章时自己想的，所以应该有些不同之处。</p>
 <p>关于素数定理等“强估计”，本书中也有证明（不是在“估计二项式系数”这一思路的延长线上）。这是一本以数论函数的不等式估计为中心的有趣的书。具备高中数学程度的微积分知识，大部分就能读懂。</p>
 <h2 id="am13-dirichlet">Dirichlet 级数与 Dirichlet 积（Dirichlet 級数と Dirichlet 積）</h2>
-<h3 id="sec-110">Dirichlet 级数与 Dirichlet 积</h3>
+<h3 id="sec-94">Dirichlet 级数与 Dirichlet 积</h3>
 <p>定义域为 $\N = \{1,2,3,\ldots\}$ 的函数 $a, b\colon \N\longrightarrow \C$ 称为数论函数（arithmetic function）。</p>
 <p>由 $c(n) = \sum_{ij=n}a(i)b(j)$ 确定的 $c\colon \N\longrightarrow \C$ 称为 $a, b$ 的 Dirichlet 积。本文记 $c = a * b$。这个积满足交换律、结合律、分配律等。</p>
 <p>也可以说是关于幺半群 $(\N, \times)$ 的卷积运算。$(\N\cup\{0\}, +)$ 的卷积运算，换成形式幂级数后往往能看清性质；而 $(\N, \times)$ 的情形，一般用 Dirichlet 级数表示。也就是把数列 $\{a_n\}$ 换成</p>
@@ -1181,17 +1082,17 @@ $x^ns = t$ 的 $n$ 存在、但用上面方法求不到解的，是如下图的�
 <p>由 $i^{-s}\cdot j^{-s} = (ij)^{-s}$ 并扩张使之满足分配律来定义积。有时会考虑代入 $\text{Re}(s)$ 充分大的复数 $s$，但这次忽略收敛性等细节。</p>
 <p>“$-s$”的符号是历史背景造成的，本文中并不重要。若嫌写式麻烦，全部换成“$+s$”也不会出问题。</p>
 <p>另外虽用无穷数列来形式化，但基本处理是只把 $1\leq n\leq N$ 部分作为数组持有。</p>
-<h3 id="sec-111">Dirichlet 积的计算量</h3>
+<h3 id="sec-95">Dirichlet 积的计算量</h3>
 <p>已知 $a$, $b$ 求 $c = a*b$ 时，计算 $c(1), \ldots, c(N)$ 可在 $O(N\log N)$ 时间内完成。要领如下：</p>
 <pre><code>c = [0] * (N+1)
 for i in range(1, N+1):
   for j in range(1, N//i+1):
     c[i*j] += a[i] * b[j]
 </code></pre>
-<h3 id="sec-112">积性 Dirichlet 级数的情形</h3>
+<h3 id="sec-96">积性 Dirichlet 级数的情形</h3>
 <p>满足 $a(1) = 1$，且对互素的 $n,m$ 有 $a(nm) = a(n)a(m)$ 的 $a$ 称为积性的。由素数幂处的值 $a(p^k)$ 能还原所有 $a(n)$ 这一性质，使得约数个数、约数和、Euler 函数等是著名例子。</p>
 <p>用 Dirichlet 级数的话说，对应于级数具有 Euler 乘积分解 <div class="math-block">$$D_a(s) = \prod_p \Bigl(\sum_{k}a(p^k)p^{-ks}\Bigr)$$</div>。</p>
-<h4 id="sec-113">$O(N\log\log N)$ 时间计算</h4>
+<h4 id="sec-97">$O(N\log\log N)$ 时间计算</h4>
 <p>$a$ 为积性时，$a*b$ 的计算可在 $O(N\log\log N)$ 时间内完成。利用 $a$ 被分解为稀疏函数的 Euler 乘积，反复做 in-place 的 $p$ 部分乘法。用 Dirichlet 积的话说，如下计算即可：</p>
 <pre><code>for p in primes:
   D_{a,p}(s) = sum a(p^k) p^{-ks}  (p-part of D_a)
@@ -1211,14 +1112,14 @@ for p in primes:
       q, m = q * p, m // p
 </code></pre>
 <p>由于是 in-place 更新，要注意更新顺序。从大编号开始更新，以避免后续计算需要的部分被先覆盖。复杂度可分析为 <div class="math-block">$$\sum_{q=p^k\leq N}\Bigl\lfloor\frac{N}{q}\Bigr\rfloor=\sum_{p\leq N} \Bigl\lfloor\frac{N}{p}\Bigr\rfloor + O(N) = O(N\log\log N)$$</div>（$q$ 为素数幂，$p$ 为素数）。</p>
-<h4 id="sec-114">$O(N)$ 时间计算</h4>
+<h4 id="sec-98">$O(N)$ 时间计算</h4>
 <p>当 $c$ 为积性时（特别地 $a, b$ 为积性时），若 $n$ 恰被素数 $p$ 整除 $k$ 次，即 $n = p^km$，则 $c(n) = c(p^k)c(m)$。利用此可对 $c(1), \ldots, c(N)$ 在 $O(N)$ 时间计算。</p>
 <ul>
 <li>对素数幂 $p^k\leq N$，愚直地（$O(k^2)$ 时间）计算 $c(p^k)$。</li>
 <li>对 $n = 2, 3, 4, \ldots$ 顺序，若不是素数幂，则令 $n = p^km$，由 $c(n) = c(p^k)c(m)$ 求得 $c(n)$。</li>
 </ul>
 <p>需要预处理：持有整除各 $n$ 的 $p^k$。该预处理也可用线性筛在 $O(N)$ 时间内完成。</p>
-<h3 id="sec-115">Dirichlet 积与累积和</h3>
+<h3 id="sec-99">Dirichlet 积与累积和</h3>
 <p>对数论函数 $a$，记 $A(n) = \sum_{i=1}^n a(i)$。本文以小写与大写对应，$a$ 的累积和记为 $A$，$b$ 的累积和记为 $B$，$c$ 的累积和记为 $C$。</p>
 <p>首先确认以下。</p>
 <div class="callout-theorem"><p><strong>【命題 1】</strong> 设 $c = a*b$，且对任意 $1\leq i\leq N$ 已算出 $a(i), b(i), A(i), B(i)$。则 $C(N)$ 可在 $O(\sqrt{N})$ 时间算出。</p></div>
@@ -1278,7 +1179,7 @@ for p in primes:
 </ul>
 <p>于是可知为 $O(K\log K + (NL)^{1/2})$ 时间。</p>
 <p>另外若 $a, b$ 都积性，则 Dirichlet 积计算更快，可知上面整体为 $O(K + (NL)^{1/2})$ 时间。此情形取 $K = \lceil N^{2/3}\rceil$, $L = \lceil N^{1/3}\rceil$ 即可实现 $O(N^{2/3})$ 时间。</p>
-<h3 id="sec-116">除法的计算</h3>
+<h3 id="sec-100">除法的计算</h3>
 <p>巧妙地回推同样的讨论，可知如下操作也可做。需要 $a_1\neq 0$。</p>
 <div class="callout-theorem"><p><strong>【命題 5】</strong> 取 $K, L$ 使 $N\leq KL$。设 $a*b = c$，且以下形式的值都已算出：</p></div>
 <ul>
@@ -1299,27 +1200,27 @@ for p in primes:
 <p>这是【命題 4】的类似。利用【命題 1】中出现的式变形等，从小的 $b(i)$, $B(i)$ 开始顺序算。例如由 Dirichlet 积定义式可写 <div class="math-block">$$c(n) = a(1)b(n) + \text{更小 $b(i)$ 的贡献}$$</div> 从而可算 $b(1), b(2), \ldots, b(K)$。取累积和可得 $B(1), \ldots, B(K)$。由 <div class="math-block">$$C(n) = a(1)B(n) + \text{更小 $B(i)$ 的贡献}$$</div> 也可从小的（$i$ 大的）开始算 $B(\lfloor N/i\rfloor)$。</p>
 <p>详细实现不介绍，请边解后述相关题边想细节。</p>
 <p>【命題 2】的类似不成立。即只想要单点的值 $C(N)$ 时，算大的 $N$ 处的 $C(N)$ 也需要小的 $C(i)$ 的值，故复杂度为 $O(N^{2/3 + \epsilon})$ 形。</p>
-<h3 id="sec-117">具体例子</h3>
+<h3 id="sec-101">具体例子</h3>
 <p>代表性的 Dirichlet 级数有 $\zeta(s) = \sum_{n=1}^{\infty}n^{-s}$。另外它的平移 $\zeta(s-k) = \sum_{n=1}^{\infty}n^kn^{-s}$ 也常出现。仅这些的组合就能覆盖相当多的著名数论函数。</p>
-<h4 id="sec-118">约数函数的累积和</h4>
+<h4 id="sec-102">约数函数的累积和</h4>
 <p>记 $\sigma_k(n) = \sum_{d|n} d^k$。特别地 $k=0$ 是约数个数，$k = 1$ 是约数和。Dirichlet 级数为</p>
 <div class="math-block">$$\sum_{n=1}^{\infty} \sigma_k(n)n^{-s} = \zeta(s)\zeta(s-k)$$</div>
 <p>对 $\zeta(s)$ 或 $\zeta(s-k)$，把 $n$ 项看作常数时取第 $n$ 项、取前 $n$ 项累积和都可在 $O(1)$ 时间计算。因此它的前 $N$ 项总和由【命題 1】可在 $O(\sqrt{N})$ 时间算。</p>
 <p>此例说到底只是计算 $\sum_{ij\leq N}i^k$，注意到至少一方在 $\sqrt{N}$ 以下去算而已，极为基本。对到目前为止的命题，想在简单情形复查逻辑时应该有用。</p>
 <p>要枚举所有 $i$ 的 $\lfloor N/i\rfloor$ 项之前的总和时，由【命題 4】可在 $O(N^{2/3})$ 时间算。</p>
-<h4 id="sec-119">Möbius 函数的累积和（Mertens 函数）</h4>
+<h4 id="sec-103">Möbius 函数的累积和（Mertens 函数）</h4>
 <p>Möbius 函数 $\mu(n)$ 的累积和 $M(n) = \sum_{i=1}^n\mu(i)$ 称为 Mertens 函数。Möbius 函数在 Dirichlet 积中非常基本，相当于 $\zeta(s)$ 的逆元：<div class="math-block">$$\frac{1}{\zeta(s)} = \sum_{n=1}^{\infty}\mu(n)n^{-s}.$$</div></p>
 <p>由【命題 5】可知 Mertens 函数 $M(N)$ 可在 $O(N^{2/3})$ 时间算出。</p>
-<h4 id="sec-120">Euler 函数的累积和</h4>
+<h4 id="sec-104">Euler 函数的累积和</h4>
 <p>对 Euler 函数 $\varphi(n)$，基本事实为：$n = \sum_{d|n}\varphi(d)$。即 $\zeta(s-1) = D_{\varphi}(s)\zeta(s)$ 成立。可知 $D_{\varphi}(s) = \frac{\zeta(s-1)}{\zeta(s)}$。</p>
 <p>另外，此事也可由表示 $\varphi(n)$ 按质因数分解的计算法的 Euler 乘积 <div class="math-block">$$D_{\varphi}(s) = \prod_{p} (1 + (p-1)p^{-s} + (p^2-p)p^{-2s} + \cdots) = \prod_{p}\frac{1-p^{-s}}{1-p\cdot p^{-s}}$$</div> 验证。</p>
 <p>对 $\zeta(s)$ 与 $\zeta(s-1)$ 应用【命題 5】，可知 $\sum_{i=1}^N \varphi(i)$ 可在 $O(N^{2/3})$ 时间算出。或者由 $D_{\varphi}(s) = \zeta(s-1)\cdot \frac{1}{\zeta(s)}$，用 Mertens 函数与【命題 4】也可。</p>
-<h4 id="sec-121">无平方数 (square-free number) 的计数</h4>
+<h4 id="sec-105">无平方数 (square-free number) 的计数</h4>
 <p>当不存在素数 $p$ 使 $p^2|n$ 时，称 $n$ 为无平方（square-free）。来计数不超过 $N$ 的无平方数。这就是求 Dirichlet 级数</p>
 <div class="math-block">$$f(s) = \prod_p (1 + p^{-s})$$</div>
 <p>中 $n^{-s}$ 系数的累积和。由 $1 + p^{-s} = \frac{1-p^{-2s}}{1-p^{-s}}$ 得 $f(s) = \frac{\zeta(s)}{\zeta(2s)}$。于是 $f(s)\zeta(2s) = \zeta(s)$，所以若能以【命題 5】的形式管理 $\zeta(s)$ 或 $\zeta(2s)$ 即可。</p>
 <p>$\zeta(2s)$ 只在平方数处有系数 $1$ 这一简单形式，故累积和作为平方数计数也容易做。因此，不超过 $N$ 的无平方数计数可在 $O(N^{2/3})$ 时间完成。</p>
-<h4 id="sec-122">稀疏的变形</h4>
+<h4 id="sec-106">稀疏的变形</h4>
 <p>也处理一个稍难的例。例如 $a(n) = \sigma_0(100n)$（$\sigma_0$ 为约数个数计数函数），求 $\sum_{n=1}^N a(n)$。</p>
 <p>$\sigma_0(n)$ 与 $a(n)$ 可由 $n$ 的质因数分解计算。这说明 Dirichlet 级数 $D_{\sigma_0}$, $D_a$ 具有“Euler 乘积分解”。例如</p>
 <ul>
@@ -1335,7 +1236,7 @@ for p in primes:
 <p>即 $D_{a}(s) = D_{\sigma_0}(s)\cdot \frac{g_2(s)g_5(s)}{f_2(s)f_5(s)}$。$F(s) = \frac{g_2(s)g_5(s)}{f_2(s)f_5(s)}$ 是非常稀疏的 Dirichlet 级数，只在 $n = 2^a5^b$ 处有非零值。</p>
 <p>因此所有项的计算、累积和的计算都容易，$\sum_{n=1}^N \sigma_0(100n)$ 可在 $O(N^{2/3})$ 时间算。另外利用 $F$ 非常稀疏，可知 $\sigma_0$ 的累积和只需对形如 $n = \lfloor N/(2^a5^b) \rfloor$ 的 $n$ 进行，整体也可在 $O(\sqrt{N})$ 时间算。</p>
 <p>作为“稀疏变形”，像这样少数素数部分的变形，或对所有 $p$ 在平方以上整除的数（powerful number）部分的变形，是典型例子。</p>
-<h3 id="sec-123">相关题目</h3>
+<h3 id="sec-107">相关题目</h3>
 <p>Project Euler 因内容性质所限，无法进一步给出提示与解答代码，敬请见谅。</p>
 <ul>
 <li>https://projecteuler.net/problem=193</li>
@@ -1351,13 +1252,13 @@ for p in primes:
 <li>https://projecteuler.net/problem=715</li>
 <li>https://atcoder.jp/contests/xmascon19/tasks/xmascon19_d</li>
 </ul>
-<h3 id="sec-124">问题例：Multiple Sequences (ARC 116 [C])</h3>
+<h3 id="sec-108">问题例：Multiple Sequences (ARC 116 [C])</h3>
 <p>本文写作的直接契机就是此题。</p>
 <p><img src="images/13/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" />
 C - Multiple Sequences（AtCoder）</p>
 <p>适当替换记号，把 $A_i$ 换成比，可知它是如下题目：</p>
 <p>记使自然数组 $(A_1, \ldots, A_M)$ 总积为 $n$ 的个数为 $f_M(n)$。求 $\sum_{n=1}^N f_M(n)$。</p>
-<h4 id="sec-125">解法 1：$O(N^{2/3}\log M)$ 时间解法</h4>
+<h4 id="sec-109">解法 1：$O(N^{2/3}\log M)$ 时间解法</h4>
 <p>成立 <div class="math-block">$$\zeta(s)^M = \sum_{n=1}^{\infty} f_{M}(n)n^{-s}$$</div>。即感兴趣的数列是 $\zeta$ 在 Dirichlet 积意义下 $M$ 次幂。</p>
 <p>对 Dirichlet 级数，以【命題 4】的形式管理所需信息。$\zeta^i$ 总是积性的，故 Dirichlet 积计算每次 $O(N^{2/3})$ 时间。</p>
 <p>若算 $M$ 次则复杂度糟糕，但 Dirichlet 积是结合的，故可用快速幂（重复平方），整体在 $O(N^{2/3}\log M)$ 时间算。</p>
@@ -1367,7 +1268,7 @@ C - Multiple Sequences（AtCoder）</p>
 <li>$O(N^{2/3}(\log\log N)^{1/3}\log M)$ 时间实现：https://atcoder.jp/contests/arc116/submissions/21380909</li>
 </ul>
 <p>在 AtCoder 代码测试环境，$N = M = 10^9$ 可在 3 秒算出。</p>
-<h4 id="sec-126">解法 2：$O(N^{2/3}\log N)$ 时间解法</h4>
+<h4 id="sec-110">解法 2：$O(N^{2/3}\log N)$ 时间解法</h4>
 <p><img src="images/13/image.png" alt="image" />
 记使 $2$ 以上的自然数组 $(A_1, \ldots, A_m)$ 总积为 $n$ 的个数为 $g_{m}(n)$。令 $G_m = \sum_{n=1}^Ng_{m}(n)$，则答案为 $\sum_{m}G_m\binom{M}{m}$。由 $2^m > N\implies G_m = 0$ 立即可知，只需对 $0\leq m\leq \log_2n$ 算 $G_m$。</p>
 <p>这里成立 $\sum_{n=1}^{\infty}g_{m}(n)n^{-s} = (\zeta(s)-1)^m$。因为规则是“$2$ 以上的自然数”，用了 $\sum_{n\geq 2}n^{-s} = \zeta(s)-1$。</p>
@@ -1381,7 +1282,7 @@ C - Multiple Sequences（AtCoder）</p>
 <li>重复平方的乘法次数 $O(\log N)$ 次，比此解法的乘法次数 $O(\log M)$ 次常数倍更小</li>
 <li>此解法的乘法对象始终是 $\zeta(s)$，故无需显式以数组持有它</li>
 </ul>
-<h3 id="sec-127">参考文献</h3>
+<h3 id="sec-111">参考文献</h3>
 <ul>
 <li>wikipedia：Dirichlet convolution</li>
 <li>Min_25 さん：Sum of Multiplicative Function</li>
@@ -1391,246 +1292,14 @@ C - Multiple Sequences（AtCoder）</p>
 <li>Nisiyama_Suzune さん（codeforces blog）：[Tutorial] Math note — Dirichlet convolution</li>
 <li>我的过去文章：[数学] 畳み込み入門：Dirichlet積とゼータ変換・メビウス変換</li>
 </ul>
-<h2 id="am14-slope2">slope trick (2) 问题编（slope trick (2) 問題編）</h2>
-<p>以下假定已读过解说编。所用记号等是共通的，不再重新说明。</p>
-<p>前 → (1) 解说编</p>
-<h3 id="sec-129">目录</h3>
-<ul>
-<li>ABC 127 [F] Absolute minima</li>
-<li>第2回 ドワンゴからの挑戦状 予选 [E] 花火</li>
-<li>UTPC 2012 [L] じょうしょうツリー</li>
-<li>KUPC 2015 [H] 壁壁壁壁壁壁壁</li>
-<li>ARC 070 [E] NarrowRectangles</li>
-<li>其他问题</li>
-</ul>
-<p><img src="images/14/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
-<h3 id="sec-130">ABC 127 [F] Absolute minima</h3>
-<p>F - Absolute Minima（AtCoder）</p>
-<p>直接实现解说编所述内容即可。</p>
-<p>解答例：https://atcoder.jp/contests/abc127/submissions/20969428</p>
-<p>此问题情形下，也可视为“向集合添加元素并取得中位数”。为添加一个元素，使 $L\cup R$ 增加 $2$ 个元素。也存在把优先队列操作次数减半的解法，但无需区分元素个数奇偶，实现或许更简洁。</p>
-<p>（每次插入 $2$ 个，使得中位数无论元素个数奇偶都总以 $l_0, r_0$ 呈现，很漂亮，我很喜欢）</p>
-<p><img src="images/14/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
-<h3 id="sec-131">第2回 ドワンゴからの挑戦状 予选 [E] 花火</h3>
-<p>E - 花火（AtCoder）</p>
-<p>虽是 AC 人数仅 3 人的 boss 题，却相当简单。这里就所有 $t_i$ 互异的情形说明（同时刻烟花的处理很简单，请想一想）。结果归约为如下问题。</p>
-<p>给定数列 $p_1, p_2, \ldots, p_N$。巧妙构造单调递增数列 $a_1, a_2, \ldots, a_N$ 使 $\sum_{i}|p_i – a_i|$ 最小。</p>
-<p>例如取 $a_i$ 从 $-A, -(A-1), \ldots, A-1, A$ 中选，则立刻想到 $O(NA)$ 时间的 DP 解法。记选到 $a_i = x$ 时的成本最小值为 $\dp_i(x)$，则例如如下要领可算所有 $\dp_i(x)$：</p>
-<div class="math-block">$$\dp_{i}(x) = |x-p_i| + \min_{y\leq x} \dp_{i-1}(y)$$</div>
-<p>仔细看此式，其实它只是 slope trick 做就完事的问题。不是把 DP 计算结果看作“计算各点值的表”，而是看作“在计算一个函数”。这个函数始终是分段线性凸函数，用 slope trick 管理后其余就简单了。</p>
-<p>结果如下即可求得答案：</p>
-<ul>
-<li>从常数函数 $f(x) = 0$ 开始。</li>
-<li>对 $i=1,2,\ldots$ 顺序，重复以下：<ul>
-<li>把 $f(x)$ 换成累积 $\min$。</li>
-<li>给 $f(x)$ 加上 $|x-p_i|$。</li>
-</ul>
-</li>
-<li>最后输出 $f$ 的最小值。</li>
-</ul>
-<p>解答例：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969672</p>
-<p>另外此问题中，一加上 $|x-p|$ 就取累积 min 并初始化 $R$，故无需持有 $R$。</p>
-<p>解答例 2：https://atcoder.jp/contests/dwango2016-prelims/submissions/20969720</p>
-<p><img src="images/14/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" /></p>
-<h3 id="sec-132">UTPC 2012 [L] じょうしょうツリー</h3>
-<p>L - じょうしょうツリー（AtCoder）</p>
-<p>首先，预先按深度加上值，把问题读成：从父向子作成广义单调递减列。考虑树 dp。</p>
-<p>记把子树 $v$ 变成“じょうしょうツリー”，且顶点 $v$ 的值变为 $x$ 的操作中最小成本为 $f_v(x)$。记 $v$ 的全体子节点为 $C(v)$，则易知</p>
-<div class="math-block">$$f_v(x) = |x-a_v| + \sum_{w\in C(v)}\min_{y\leq x}f_w(y)$$</div>
-<p>用 slope trick 管理所有这些函数 $f_v$。另外记 $g_v(x) = \min_{y\leq x} f_v(y)$。</p>
-<ul>
-<li>$g_v$ 可由 $f_v$ 在 $O(1)$ 时间算出（丢弃右侧集合）。</li>
-<li>$f_v$ 是 $\sum_{w\in C(v)}g_w$ 加上 $|x-a_v|$。</li>
-</ul>
-<p>$\sum_{w\in C(v)} g_w$ 的处理是问题。</p>
-<p>一般地，考虑给分段线性凸函数 $f$ 加上分段线性凸函数 $g$。记 $f, g$ 的数据大小为 $N_f$, $N_g$（请各自定义为持有的 $L$, $R$ 元素数之和等）。</p>
-<p>分段线性凸函数 $g$ 具有 $g(x) = \text{min}_{g} + \sum_{l\in L_g} (l-x)_{+} + \sum_{r \in R_g} (x-r)_{+}$ 这样的表示。因此，给 $g$ 加算等价于：</p>
-<ul>
-<li>加算 $(x-a)_+$</li>
-<li>加算 $(a-x)_+$</li>
-<li>加算 $\min_g$</li>
-</ul>
-<p>各约做 $N_g$ 次。于是可知，给 $f$ 加 $g$ 在时间复杂度 $O(N_g\log(N_f+N_g))$ 内可做。</p>
-<p>用 weighted union heuristic 计算 $\sum_{w\in C(v)} g_w$，可知本问题的树 dp 整体可在 $O(N\log^2N)$ 时间算。另外此问题也无需持有右侧集合 $R$。</p>
-<p>解答例：https://atcoder.jp/contests/utpc2012/submissions/20970281</p>
-<p>看解答例的 merge 部分可知，因 $R$ 为空，分段线性凸函数的加算与合并优先队列的操作完全一致。因此用 meldable 优先队列，也可在 $O(N\log N)$ 时间解。官方解说大概就是做这种事？</p>
-<h3 id="sec-133">KUPC 2015 [H] 壁壁壁壁壁壁壁</h3>
-<p><img src="images/14/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" />
-H - WAAAAAAAAAAAAALL（AtCoder）</p>
-<p>还是先试着把立刻想到的 DP 写成式。把加固材料移动这一操作，理解为对每 $i$ 决定从位置 $i$ 向 $i-1$ 移动的货物个数 $n_i$（正则为向左移，负则为向右移 $|n_i|$ 个）。</p>
-<p>记 $n_i = x$ 已定，使位置 $i-1$ 之前加固材料足够时的最小成本为 $f_i(x)$。</p>
-<p>则可知成立 <div class="math-block">$$f_{i+1}(x) = |x| + \min_{A_i – y + x \geq B_i}f_i(y)$$</div>。令 $C_i = A_i – B_i$ 改写为 <div class="math-block">$$f_{i+1}(x) = |x| + \min_{y\leq x + C_i} f_i(y)$$</div>。</p>
-<p>初始状态为 $f_0(x) = \begin{cases}0 & (x=0)\\\infty & (x\neq 0)\end{cases}$，所求为 $f_{N}(0)$。</p>
-<p>$f_0$ 看似不是分段线性凸函数，但可视为 $L = R = [0,0,0,\ldots]$（在 $x=0$ 处斜率变化无限次）而作为分段线性凸函数处理。</p>
-<p>$g_i(x) = \min_{y\leq x+C_i} f_i(y)$ 如何计算？令 $z = y – C_i$，则 $g_i(x) = \min_{z\leq x} f_i(z + C_i)$，故 $g_i$ 是 $f_i$ 平移后取累积 min。</p>
-<p>结果，从 $f_i$ 算 $f_{i+1}$ 的步骤可分解为：</p>
-<ul>
-<li>平移 $-C_i$</li>
-<li>取累积 $\min$</li>
-<li>加算 $|x|$</li>
-</ul>
-<p>这些全部可由 slope trick 简洁处理。因含平移操作，实现时也持有 $\text{add}_L$, $\text{add}_R$。</p>
-<p>最后想算的是 $f_N(0)$。这通过把 $f_N$ 分解为 $(a-x)_{+}$, $(x-a)_+$ 可在 $O(N)$ 时间算。</p>
-<p>首先，别忘了从 $L = [0,0,0,\ldots]$（足够多）开始。放入约 $2N$ 个就够。</p>
-<p>解答例：https://atcoder.jp/contests/kupc2016/submissions/20983323</p>
-<p>另外此问题也无需持有 $R$。</p>
-<p>解答例：https://atcoder.jp/contests/kupc2016/submissions/20983382</p>
-<h3 id="sec-134">ARC 070 [E] NarrowRectangles</h3>
-<p><img src="images/14/c251a9f89491340a113a707172a3cf57.png" alt="c251a9f89491340a113a707172a3cf57" />
-E - NarrowRectangles（AtCoder）</p>
-<p>我个人觉得，在 4 题 ARC 的第 3 题中最难。把 dp 表视为函数的想法，当时对我非常新颖，是留下强烈印象的喜欢的题。</p>
-<p>不过，基于到此的解说，我想已经相当好解了。还是考虑自然的 dp。记把前 $i$ 个矩形连起来、且第 $i$ 个矩形左端 $x$ 坐标为 $x$ 时到那里为止的最小成本为 $f_i(x)$。记矩形宽为 $w_i = r_i – l_i$。</p>
-<p>立刻可知可写为 <div class="math-block">$$f_{i}(x) = |x-l_i| + \min_{[x, x+w_i]\cap[y,y+w_{i-1}]\neq \emptyset}f_{i-1}(y)$$</div>。几乎是题面原话。区间相交条件可改写为 $x-w_{i-1}\leq y\leq x + w_i$，于是 <div class="math-block">$$f_i(x) = |x-l_i| + \min_{y\in [x-w_{i-1}, x+w_i]} f_{i-1}(y)$$</div>。</p>
-<p>这个操作，可通过给左集合、右集合加常数来完成。持有 $\text{add}_L$, $\text{add}_R$ 即可实现。</p>
-<p>解答例：https://atcoder.jp/contests/arc070/submissions/20983784</p>
-<h3 id="sec-135">其他问题</h3>
-<ul>
-<li>ARC 123 [D] Inc, Dec – Decomposition</li>
-<li>ABC 217 [H] Snuketoon</li>
-</ul>
-<h2 id="am15-slope1">slope trick (1) 解说编（slope trick (1) 解説編）</h2>
-<p>续 → (2) 问题编</p>
-<p>为顾及剧透，把能用此题的题整理到了别文 (2) 问题编。</p>
-<p>关于具体实现代码，必要时请参考 (2) 问题编中的解答例。</p>
-<p>日本竞技编程界没见过这个叫法，所以依 codeforces blog 文章称为 slope trick。</p>
-<p>看过去题时发现，能用它的题常被当作 boss 题放置，或 AC 人数少，或解说用了别的思路而显得难懂。感觉几乎没见过作为典型技巧介绍的中文文章，所以我这边简单整理一下。</p>
-<h3 id="sec-137">目录</h3>
-<ul>
-<li>参考文献</li>
-<li>ei1333 さん的实现例</li>
-<li>分段线性凸函数</li>
-<li>数据的持有方式</li>
-<li>可实现的操作</li>
-</ul>
-<h3 id="sec-138">参考文献</h3>
-<ul>
-<li>https://codeforces.com/blog/entry/47821</li>
-<li>https://codeforces.com/blog/entry/77298</li>
-</ul>
-<p>（感觉叫 slope trick 的东西与竞技编程界所称的相近）
-Rote, G. (2018). Isotonic regression by dynamic programming. In 2nd Symposium on Simplicity in Algorithms (SOSA 2019). Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik.
-（相当新的论文，但也相近）
-— 熨斗袋 (@noshi91) March 13, 2021</p>
-<h3 id="sec-139">ei1333 さん的实现例</h3>
-<ul>
-<li>https://ei1333.github.io/library/structure/others/slope-trick.hpp</li>
-<li>https://ei1333.github.io/library/structure/others/generalized-slope-trick.hpp</li>
-</ul>
-<h3 id="sec-140">分段线性凸函数</h3>
-<p>slope trick 是一种良好地管理如下连续函数 $f\colon \R\longrightarrow \R$ 的技巧：</p>
-<p><strong>【条件】</strong> $f$ 的图像，是从左起依次连接斜率为 $l, l+1, \ldots, r-1, r$ 的线段而成的折线。（※ 表述略粗略。）</p>
-<p><img src="images/15/slope1-1.png" alt="slope1-1" />
-就是这样的东西。连接了斜率为 $-2, -1, 0, 1, 2, 3$ 的线段。虽说线段，两端是半直线，但麻烦，也含这些统称为“线段”。</p>
-<p>另外，为方便也考虑长度为 $0$ 的线段。</p>
-<p><img src="images/15/slope2-1.png" alt="slope2-1" />
-上图中，视为按此顺序连接了：</p>
-<ul>
-<li>$(-\infty, a]$ 上斜率为 $-2$</li>
-<li>$[a,b]$ 上斜率为 $-1$</li>
-<li>$[b,b]$ 上斜率为 $0$</li>
-<li>$[b,c]$ 上斜率为 $1$</li>
-<li>$[c,c]$ 上斜率为 $2$</li>
-<li>$[c,\infty)$ 上斜率为 $3$</li>
-</ul>
-<p>的线段。结果，斜率跳变的情形也包含在考察对象中。</p>
-<p>以下把这样的函数称为分段线性凸函数。虽要求斜率的整数性，严格说仅“分段线性凸”还不够，但本文中应不会混乱。敬请注意。</p>
-<h4 id="sec-141">具体例</h4>
-<p>以下函数是分段线性凸函数：</p>
-<ul>
-<li>$|x|$ 的平移 $f(x) = |x-a|$</li>
-<li>形如 $f(x) = \max(0, x-a)$ 的函数。以下记为 $(x-a)_{+}$。</li>
-<li>形如 $f(x) = \max(0, a-x)$ 的函数。以下记为 $(a-x)_{+}$。</li>
-</ul>
-<p>特别把重要的后两个可视化一下。它们是 $|x-a|$ 的左半、右半那样的函数，且成立 $|x-a| = (x-a)_{+} + (a-x)_{+}$。</p>
-<p><img src="images/15/slope_3-2.png" alt="slope_3-2" />
-另外，分段线性凸函数的和也是分段线性凸函数，因此例如 $f(x) = \sum_{i} |x-a_i|$ 这样的函数也是分段线性凸函数。</p>
-<h3 id="sec-142">数据的持有方式</h3>
-<p>slope trick 是把分段线性凸函数替换为斜率变化点的多重集来管理，从而使特定函数操作能简洁进行。</p>
-<p>数据的细节似乎有几种模式，例如 https://codeforces.com/blog/entry/77298 中也有用变化点与 $x\to\infty$ 处样子来描述函数的尝试。这次介绍我自己想来觉得处理简单的。</p>
-<p><img src="images/15/a.png" alt="a" />
-对分段线性凸函数 $f$，持有如下 $3$ 个信息：</p>
-<ul>
-<li>$\text{min}_f$：$f$ 的最小值</li>
-<li>$L$：斜率 $\leq 0$ 的部分中，斜率变化点全体的多重集</li>
-<li>$R$：斜率 $\geq 0$ 的部分中，斜率变化点全体的多重集</li>
-</ul>
-<p>以下总以 $l_0$ 表示 $L$ 的最大值、$r_0$ 表示 $R$ 的最小值。另外 $L$ 或 $R$ 为空时，定 $l_0 = -\infty$, $r_0 = \infty$（也可显式放入哨兵）。作为“多重集”的持有方式，设想用优先队列，使总能取到 $l_0, r_0$。</p>
-<p>斜率变化 $2$ 以上的地方的例子。</p>
-<h4 id="sec-143">还原</h4>
-<p><img src="images/15/b.png" alt="b" />
-这样持有数据后，$f(x)$ 可如下表示：</p>
-<div class="math-block">$$f(x) = \text{min}_{f} + \sum_{l\in L} (l-x)_{+} + \sum_{r \in R} (x-r)_{+}$$</div>
-<p>实际上，只需验证左右两边：</p>
-<ul>
-<li>处处斜率相等</li>
-<li>在 $x\in [l_0,r_0]$ 处的值相等</li>
-</ul>
-<p>两者都容易。</p>
-<h3 id="sec-144">可实现的操作</h3>
-<p>记 $N = |L|+|R|$。此时可实现如下操作与复杂度。</p>
-<h4 id="sec-145">最小值的获取：$O(1)$ 时间</h4>
-<p>答 $\min_{x\in \R} f(x)$ 及其实现的 $x$，可在 $O(1)$ 时间。本来就是管理 $\text{min}_f$，最小值直接返回即可。取最小值的 $x$ 范围是斜率为 $0$ 的区间 $[l_0, r_0]$，这只读优先队列头部即可，故也 $O(1)$ 取得。</p>
-<h4 id="sec-146">加常数函数 $a$：$O(1)$ 时间</h4>
-<p>只需给 $\text{min}_f$ 加 $a$。当然。</p>
-<h4 id="sec-147">加 $(x-a)_+$：$O(\log N)$ 时间</h4>
-<p>加它时，斜率变化点处增加 $a$。另外斜率最小值不变、最大值 $+1$，故 $L$ 大小不变，$R$ 大小增 $1$。因此把多重集 $L\cup R\cup \{a\}$ 从小到大切成 $|L|$ 个、$|R|+1$ 个，重新作为 $L$, $R$ 即可。例如如下步骤更新：</p>
-<ul>
-<li>把 $a$ push 进 $L$。</li>
-<li>从 $L$ pop 一个值，push 进 $R$。</li>
-</ul>
-<p>$a > l_0$ 时最初的 push 是浪费，也可按 $a$ 与 $l_0$ 大小关系分支。或者用优先队列的 push/pop 合并方法，在 $a > l_0$ 时也几乎无浪费。例如 python 标准库 heapq 可用 heappushpop / heappush 各调一次实现。</p>
-<p>$L$, $R$ 的更新方法已知，接下来考虑 $\text{min}_f$ 的更新。虽因 $a$ 的位置出现分支而显得麻烦，其实简单。关注更新前 $f$ 中 $L$ 的最大值 $l_0$。</p>
-<p>其实更新后 $l_0$ 仍是给最小值的点。确实，$a$ 的插入使 $l_0$ 前后的斜率变为 $+0, +1$ 中某一种变化。更新前 $l_0$ 是斜率为 $-1, 0$ 的边界点，故更新后是斜率为 $-1, 0$ 或 $0, 1$ 的边界点。于是 $\text{min}_f$ 的变化等于 $f(l_0)$ 的变化，故</p>
-<div class="math-block">$$\text{min}_f \leftarrow \text{min}_f + (l_0-a)_+$$</div>
-<p>最小值的更新也完成。</p>
-<h4 id="sec-148">加 $(a-x)_+$：$O(\log N)$ 时间</h4>
-<p>相同。</p>
-<ul>
-<li>$\text{min}_f\leftarrow \text{min}_f + (a-r_0)_+$</li>
-<li>把 $a$ push 进 $R$</li>
-<li>从 $R$ pop 一个值，push 进 $L$</li>
-</ul>
-<p>即可。</p>
-<h4 id="sec-149">加 $|x-a|$：$O(\log N)$ 时间</h4>
-<p>由 $|x-a| = (x-a)_+ + (a-x)_+$ 成立，把上面 $2$ 个操作任意顺序都做即可。</p>
-<h4 id="sec-150">累积 min：$O(1)$ 时间</h4>
-<p><img src="images/15/left_min.png" alt="left_min" />
-即把 $f$ 替换为 $g(x) := \min_{y\leq x} f(y)$ 的操作。</p>
-<p>只需把 $R$ 换成空集。</p>
-<h4 id="sec-151">右侧累积 min：$O(1)$ 时间</h4>
-<p><img src="images/15/slope_trick-1.png" alt="slope_trick-1" />
-把 $f$ 替换为 $g(x) := \min_{y\geq x} f(y)$ 的操作。</p>
-<p>只需把 $L$ 换成空集。</p>
-<h3 id="sec-152">扩展</h3>
-<p>给数据结构再持有附加信息，可做更多操作。具体地，除了 $\text{min}_f$, $L$, $R$ 外，再持有给左侧统一加的值 $\text{add}_L$、给右侧统一加的值 $\text{add}_R$。</p>
-<p>插入或取出时，注意实际值与放入 $L$, $R$ 的值的差分来进行操作。这样，对左集合、右集合全体的加算可在 $O(1)$ 时间做。</p>
-<p>来确认可做哪些操作。</p>
-<h4 id="sec-153">平移：$O(1)$ 时间</h4>
-<p>有分段线性凸函数 $f(x)$ 时，考虑求 $g(x) = f(x-a)$ 的函数 $g$。</p>
-<p><img src="images/15/translation-1.png" alt="translation-1" />
-只需给集合 $L$, $R$ 统一加 $a$。</p>
-<h4 id="sec-154">滑动最小值函数：$O(1)$ 时间</h4>
-<p>名字这样行吗。是取 sliding window minimum 的操作。</p>
-<p>$a \leq b$ 时，计算由 <div class="math-block">$$g(x) = \min_{y\in [x-b,x-a]} f(y)$$</div> 确定的 $g$。其实这对应于分别对左集合、右集合平移。</p>
-<p><img src="images/15/range_translation-2.png" alt="range_translation-2" />
-$a$ 以上 $b$ 以下所有平移取 min，几何上想也合理吧。为保险用数式理解。</p>
-<ul>
-<li>若 $x\leq l_0 + a$，则 $x-a\leq l_0$，故在 $[x-b,x-a]$ 上 $f$ 单调递减。于是 $g(x) = \min_{y\in [x-b,x-a]}f(y) = f(x-a)$</li>
-<li>若 $x\geq r_0 + b$，则 $x-b\geq r_0$，故在 $[x-b,x-a]$ 上 $f$ 单调递增。于是 $g(x) = f(x-b)$</li>
-<li>若 $l_0+a\leq x\leq r_0+b$，则 $[x-b,x-a]\cap [l_0,r_0]\neq \emptyset$，故 $g(x) = \text{min}_f$</li>
-</ul>
-<p>得以验证。</p>
-<p>另外，平移可视为此处的 $a = b$ 情形。</p>
-<p>累积 min 操作可视为 $b = \infty$ 情形。不过，$\infty$ 多次加加减减运算可疑，且把 $\infty$ 替换为足够大常数实现时也有溢出与误差之忧，所以还是直接把 $R$ 置空的实现更好。</p>
-<p>续 → (2) 问题编</p>
 <h2 id="am16-fft">FFT 与卷积（フーリエ変換と畳み込み / FFT による畳み込み）</h2>
-<h3 id="sec-156">概要</h3>
+<h3 id="sec-113">概要</h3>
 <p>在“用 Python 做竞技编程”的语境下，整理使用快速傅里叶变换的基础知识。</p>
 <p>快速傅里叶变换本身在竞技编程之外也是重要的算法，但本文不打算应对那种需求。</p>
 <p>本文不触及快速傅里叶变换的详细算法（已有大量解说）。作为替代，稍微整理了一下关于傅里叶变换的基础知识。这里是与使用语言无关的部分。</p>
 <p>只想看 Python 实现的人，大部分可以跳过。</p>
-<h3 id="sec-157">傅里叶变换的性质</h3>
-<h4 id="sec-158">傅里叶变换的定义</h4>
+<h3 id="sec-114">傅里叶变换的性质</h3>
+<h4 id="sec-115">傅里叶变换的定义</h4>
 <p>详细内容本文不处理。</p>
 <p>设 $K$ 为持有 $n$ 个 $1$ 的 $n$ 次根的域（竞技编程语境下 $K=\C$ 与 $K=\F_p$ 重要）。</p>
 <p>对取值于 $K$ 的数列 $A = (a_0,a_1,\ldots,a_{n-1})$，定义其傅里叶变换 $\mathcal{F}_n(A) = (\hat{a}_0,\ldots,\hat{a}_{n-1})$。也有逆变换 $\mathcal{F}_n^{-1}$。这些映射 $\mathcal{F}_n, \mathcal{F}_n^{-1}$ 依赖于 $n$。</p>
@@ -1641,18 +1310,18 @@ $a$ 以上 $b$ 以下所有平移取 min，几何上想也合理吧。为保险�
 <li>竞技编程中 $G=(\Z/2\Z)^n$ 的情形也有名（阿达马变换）</li>
 <li>含非 Abel 群的一般化，有由不可约表示作群环分解。有兴趣者请沿“有限群表示论”关键词学习。</li>
 </ul>
-<h4 id="sec-159">与卷积的关系</h4>
+<h4 id="sec-116">与卷积的关系</h4>
 <p>数列 $A = (a_0,\ldots,a_{n-1})$ 与 $B = (b_0,\ldots,b_{n-1})$ 的卷积 $C = (c_0,\ldots, c_{n-1})$ 由 $c_k = \sum_{i+j\equiv k\pmod{n}} a_ib_j$ 定义（即群 $\Z/n\Z$ 上的卷积，也称周期 $n$ 的循环卷积）。此时成立：</p>
 <div class="callout-theorem"><p><strong>【定理】（卷积定理）</strong> $\mathcal{F}_n(C)$ 与 $\mathcal{F}_n(A)$ 和 $\mathcal{F}_n(B)$ 的点积一致：$\hat{c}_i = \hat{a}_i\cdot \hat{b}_i$。因此可由 $C = \mathcal{F}_n^{-1}(\mathcal{F}_n(A)\cdot \mathcal{F}_n(B))$ 计算卷积。</p></div>
 <p>特别地，设对长度 $n$ 数列做傅里叶变换/逆变换的复杂度为 $F(n)$，则卷积可在复杂度 $3F(n) + \Theta(n)$ 下计算（基于定义的单纯算法复杂度为 $\Theta(n^2)$ 时间）。</p>
-<h3 id="sec-160">快速傅里叶变换</h3>
+<h3 id="sec-117">快速傅里叶变换</h3>
 <p>本文不触及算法，但请一定学一学。</p>
 <div class="callout-theorem"><p><strong>【定理】（快速傅里叶变换）</strong> 当 $n = \prod p_i$ 分解为自然数之积时，$\mathcal{F}_n$, $\mathcal{F}_n^{-1}$ 可在复杂度 $\Theta(n\sum p_i)$ 下计算。特别地取 $n = 2^k$ 时，复杂度为 $\Theta(n\cdot 2k) = \Theta(n\log n)$。</p></div>
 <p>因此得到：</p>
 <div class="callout-theorem"><p><strong>【定理】（快速傅里叶变换的循环卷积）</strong> 当 $n = \prod p_i$ 时，数列 $A = (a_0,\ldots,a_{n-1})$ 与 $B = (b_0,\ldots,b_{n-1})$ 的卷积 $C = (c_0,\ldots,c_{n-1})$ 可在复杂度 $\Theta(n\sum p_i)$ 下计算。</p></div>
 <p>傅里叶变换本身对任意 $n$ 都能定义与计算。基于定义的单纯方法复杂度为 $\Theta(n^2)$，但当能分解为小质因数时复杂度大幅改善，那种情形就称为快速傅里叶变换。</p>
 <p>从群表示的视角看，是利用子群塔 $\Z/n\Z=G_0\supset G_1\supset G_2\supset \cdots \supset G_k=0$ 与诱导表示来分解傅里叶变换（也可一般化到非 Abel 群）。</p>
-<h3 id="sec-161">通常加法下的卷积（多项式之积）</h3>
+<h3 id="sec-118">通常加法下的卷积（多项式之积）</h3>
 <p>上述卷积是 $\Z/n\Z$ 上加法相关者 $c_k = \sum_{i+j\equiv k\pmod{n}}a_ib_j$。想计算不取 $\pmod{n}$ 的情形，例如多项式之积即属此类。</p>
 <p>对 $A=(a_0,a_1,\ldots)$ 与 $B = (b_0,b_1,\ldots)$，由 $c_k = \sum_{i+j=k}a_ib_j$ 定义 $C = (c_0,c_1,\ldots)$。进一步设</p>
 <ul>
@@ -1667,21 +1336,21 @@ $a$ 以上 $b$ 以下所有平移取 min，几何上想也合理吧。为保险�
 <p>完全相同，也用多项式形表述一下：</p>
 <div class="callout-theorem"><p><strong>【定理】（快速傅里叶变换的卷积）</strong> 多项式 $A, B$ 之积可在复杂度 $\Theta((\deg(A)+\deg(B))\log(\deg(A)+\deg(B)))$ 下计算。</p></div>
 <p>题外话，竞技编程语境下，有时把上述步骤整体的“卷积计算”称为“快速傅里叶变换”的文献也偶见。正确的理解应是：快速傅里叶变换是卷积所用到的子算法。</p>
-<h3 id="sec-162">numpy.fft 的使用</h3>
-<h4 id="sec-163">基本实现</h4>
+<h3 id="sec-119">numpy.fft 的使用</h3>
+<h4 id="sec-120">基本实现</h4>
 <p>基本的事还是好好读官方文档为好。</p>
 <p>Discrete Fourier Transform (numpy.fft) — NumPy v1.19 Manual（numpy.org）</p>
 <p>姑且做个简单实现。</p>
 <p>FFT 中，除变换前数列外，还要指定在哪个周期（哪个 $\Z/n\Z$）变换。什么都不指定时，按与输入长度相同的周期做傅里叶变换。另外，虽称“快速”傅里叶变换，长度马虎的话也不快。这里以 $2$ 次幂长度实现。</p>
 <p>细节：输入仅有实数时，与 numpy.fft.fft 相比，numpy.fft.rfft 性能稍好。</p>
-<h4 id="sec-164">与 numpy.convolve 的比较</h4>
+<h4 id="sec-121">与 numpy.convolve 的比较</h4>
 <p><img src="images/16/image.png" alt="image" />
 numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$。</p>
 <p><img src="images/16/image-1.png" alt="image-1" />
 长度约 1000 起，基于 FFT 的方法更快。</p>
-<h4 id="sec-165">$n$ 的选择</h4>
+<h4 id="sec-122">$n$ 的选择</h4>
 <p>fft 所用的长度不一定要是 $2$ 次幂。下一个 $2$ 次幂很远时，选能分解为小素数的适当长度也可能性能更好。</p>
-<h3 id="sec-166">mod p 下的计算</h3>
+<h3 id="sec-123">mod p 下的计算</h3>
 <p>设 $f,g$ 为 $n$ 次多项式，想计算积 $h = fg$。特别地，在竞技编程语境中常见要求 $\pmod{p}$ 下计算。$p$ 一般为 $10^9+7$ 或 $998244353$。</p>
 <p>此时计算误差成为问题。当 $|f_i| &lt; p$, $|g_j| &lt; p$ 时 $|h_i| &lt; np^2$，但 $n=10^5$ 且 $p=10^9+7$ 时 $np^2$ 约达 $10^{23}$，远超 64bit 浮点数能正确计算的范围。</p>
 <p><img src="images/16/image-3.png" alt="image-3" />
@@ -1692,7 +1361,7 @@ numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$
 <p>另外，FFT+$\bmod p$ 计算需 $3$ 次卷积，但对可取 $1$ 的 $n$ 次根的 $p$，在域 $\F_p$ 上应用 FFT（也称 NTT）的情形更快。以此为正解的问题大多是 $p=998244353$。numpy.fft 没有这个，所以要么接受慢 $3$ 倍，要么自己学 NTT 实现。</p>
 <h2 id="am17-segtree2">Segment Tree 的学习 (2) 延迟传播（遅延伝搬 Segment 木のお勉強）</h2>
 <p>目标是把延迟传播 Segment Tree 从 $0$ 开始实现，认真自学了一遍。难得，所以写成文章。</p>
-<h3 id="sec-168">目录</h3>
+<h3 id="sec-125">目录</h3>
 <ul>
 <li>概要</li>
 <li>参考文献</li>
@@ -1702,7 +1371,7 @@ numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$
 <li>1 点更新</li>
 <li>取得要传播的下标</li>
 </ul>
-<h3 id="sec-169">概要</h3>
+<h3 id="sec-126">概要</h3>
 <p>前回 → Segment Tree 的学习 (1) 为前提。</p>
 <p>能进行 1 点更新、区间作用、区间积获取的 Segment Tree。</p>
 <p>所谓非递归实现</p>
@@ -1721,7 +1390,7 @@ numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$
 <p>的 Segment Tree。利用 $x_1^ax_2^ax_3^ax_4^a = (x_1x_2x_3x_4)^a$ 等成立，把对区间积的作用汇总计算，从而实现每查询 $O(\log N)$ 次运算（monoid 的运算或作用）。</p>
 <p>作用也有依赖于元素数或两端下标者，但那种也能在此框架下处理。例如取 monoid $X$ 时，令 $Y = \N\times\N\times X$，把 $y_1=(L_1,R_1,x_1)$ 与 $y_2=(L_2,R_2,x_2)$ 的积定义为 $(L_1,R_2,x_1x_2)$ 的 monoid $X$（适当加单位元），就能把两端下标包含进作用的定义。当 $R_1 = L_2$ 不成立时虽应视为未定义、或视为处理的是范畴而非 monoid，但不管它继续。</p>
 <p>边观察实现，特别是具体值上仔细可视化算法，目标是获得能立刻从 $0$ 实现的老练理解。</p>
-<h3 id="sec-170">参考文献</h3>
+<h3 id="sec-127">参考文献</h3>
 <ul>
 <li>data-structures / Lazy Segment Tree https://scrapbox.io/data-structures/Lazy_Segment_Tree</li>
 <li>延迟传播 Segment Tree 能做的操作与复杂度简洁总结。</li>
@@ -1736,13 +1405,13 @@ numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$
 <li>分段树之上承载的结构不是 monoid 而是范畴 https://kimiyuki.net/blog/2018/12/06/categories-on-segment-tree/</li>
 <li>如文章标题。</li>
 </ul>
-<h3 id="sec-171">可视化</h3>
+<h3 id="sec-128">可视化</h3>
 <p>我的实现例：https://yukicoder.me/submissions/470340</p>
 <p><img src="images/17/operate_range_2-1.png" alt="operate_range_2-1" />
 <img src="images/17/operate_range_1-1.png" alt="operate_range_1-1" />
 <img src="images/17/operate_range_0.png" alt="operate_range_0" />
 首先以 $N = 8$ 来做。在放代码前，先一味地可视化“做什么会怎样”吧（这点尤其非交换时不够充实，很困扰）。</p>
-<h4 id="sec-172">区间作用</h4>
+<h4 id="sec-129">区间作用</h4>
 <p>省略作用元的单位元。把目标区间分割为 $O(\log N)$ 个区间，在那里追加作用元。这立刻能想象。此外还需前处理与后处理，需要如下 $3$ 步：</p>
 <ul>
 <li>（１）作用元的传播</li>
@@ -1759,12 +1428,12 @@ numpy 也有卷积用的函数 numpy.convolve。它的复杂度是 $\Theta(N^2)$
 <p>步骤（１）在作用元可交换时不需要。作用非交换时，须注意别让作用顺序迷路。因此，先把要追加作用的区间上部改写为没有作用元残留的状态，再追加作用元。保持“上方的”作用元比“下方的”作用元在时系列顺序上后追加的状态。</p>
 <p><img src="images/17/lazy_fold-3.png" alt="lazy_fold-3" />
 实现确认留后，区间积的计算、1 点更新的计算也先可视化。</p>
-<h4 id="sec-173">区间积</h4>
+<h4 id="sec-130">区间积</h4>
 <p>该做的很简单。对参照的区间，传播来上方的作用元。其余与普通（无延迟传播的）Segment Tree 相同。上例计算积 $x_8^ax_9^{ac}x_{10}^{abc}x_{11}^{abc}x_{12}^{abc}$。</p>
 <p><img src="images/17/lazy_seg-1.png" alt="lazy_seg-1" /></p>
-<h4 id="sec-174">1 点更新</h4>
+<h4 id="sec-131">1 点更新</h4>
 <p>只要把含目标点的区间里残留的作用元传播掉，其余只需从下段更新上去。（１）中传播时计算了 $x_{10}^{abc}x_{11}^{abc}$ 部分，但这里反正会被重算，所以也能省略（实现仅稍增）。</p>
-<h4 id="sec-175">取得要传播的下标</h4>
+<h4 id="sec-132">取得要传播的下标</h4>
 <p>区间作用 （１）（３）</p>
 <p>区间积 （１）</p>
 <p>各自需要对目标单元格正上方的单元格群做作用元传播或再计算。只要知道那群单元格到底是什么，实现的难点就结束了。</p>
@@ -1814,7 +1483,7 @@ for n in range(h, 0, -1):
 </code></pre>
 <h2 id="am18-segtree1">Segment Tree 的学习 (1)（Segment Tree のお勉強 (1)）</h2>
 <p>延迟传播 Segment Tree 日后另文。→ Segment Tree 的学习 (2)</p>
-<h3 id="sec-177">目录</h3>
+<h3 id="sec-134">目录</h3>
 <ul>
 <li>概要</li>
 <li>参考文献</li>
@@ -1825,7 +1494,7 @@ for n in range(h, 0, -1):
 <li>不假设 $N=2^n$ 的情形</li>
 <li>顺便</li>
 </ul>
-<h3 id="sec-178">概要</h3>
+<h3 id="sec-135">概要</h3>
 <p>处理 monoid 的数列。能进行 1 点更新、区间积获取的 Segment Tree。</p>
 <p>所谓非递归实现</p>
 <p>当作获取性能的手段来学，结果反而觉得这样更易懂。</p>
@@ -1839,7 +1508,7 @@ for n in range(h, 0, -1):
 <li>计算 $\prod_{L\leq i &lt; R} x_i$</li>
 </ul>
 <p>的 Segment Tree。边观察实现，特别在具体值上仔细可视化算法，目标是获得能立刻从 $0$ 实现的老练理解。</p>
-<h3 id="sec-179">参考文献</h3>
+<h3 id="sec-136">参考文献</h3>
 <ul>
 <li>data-structures / Segment Tree https://scrapbox.io/data-structures/Segment_Tree</li>
 <li>Segment Tree 能做的操作与复杂度简洁总结。</li>
@@ -1854,10 +1523,10 @@ for n in range(h, 0, -1):
 <li>非递归 Segment Tree 最棒！最爱的 Segment Tree https://hcpc-hokudai.github.io/archive/structure_segtree_001.pdf</li>
 <li>与本文同方针。也有 $N\neq 2^n$ 的图，也处理二分探索。</li>
 </ul>
-<h3 id="sec-180">实现・可视化</h3>
+<h3 id="sec-137">实现・可视化</h3>
 <p>我的实现例：https://judge.yosupo.jp/submission/7795</p>
 <p>首先以 $N = 8$ 来做。</p>
-<h4 id="sec-181">初始化</h4>
+<h4 id="sec-138">初始化</h4>
 <pre><code>def build(self, seq):
     for i, x in enumerate(seq, self.N):
         self.X[i] = x
@@ -1866,7 +1535,7 @@ for n in range(h, 0, -1):
 </code></pre>
 <p><img src="images/18/seg_build.png" alt="seg_build" />
 实际数据放在下标 $[N, 2N)$ 部分。设下标 $i$ 处数据为 $x_i$ 时，使 $x_i = x_{2i}x_{2i+1}$ 成立。可从后往前顺序算。</p>
-<h4 id="sec-182">1 点更新</h4>
+<h4 id="sec-139">1 点更新</h4>
 <p><img src="images/18/seg_set_val.png" alt="seg_set_val" /></p>
 <pre><code>def set_val(self, i, x):
     i += self.N
@@ -1876,7 +1545,7 @@ for n in range(h, 0, -1):
         self.X[i] = self.X_f(self.X[i &lt;&lt; 1], self.X[i &lt;&lt; 1 | 1])
 </code></pre>
 <p>改写最下段适当位置，就此往上。对含某元素的区间，把下标不断除以 $2$ 即可迁移。</p>
-<h4 id="sec-183">区间获取</h4>
+<h4 id="sec-140">区间获取</h4>
 <p><img src="images/18/seg_fold.png" alt="seg_fold" /></p>
 <pre><code>def fold(self, L, R):
     L += self.N
@@ -1899,13 +1568,13 @@ for n in range(h, 0, -1):
 <p>不假设交换律的实现中，注意积的顺序。例如上例中注意别把右侧积变成 $x_{14}x_6$。</p>
 <p><img src="images/18/seg_not_pow2.png" alt="seg_not_pow2" />
 若假设交换律，则无需分左右持有计算过程，按喜欢的顺序从喜欢的方向不断追加到计算结果即可。</p>
-<h4 id="sec-184">不假设 $N=2^n$ 的情形</h4>
+<h4 id="sec-141">不假设 $N=2^n$ 的情形</h4>
 <p>其实完全相同的代码就能动。初听时很惊讶。例如以 $N=11$ 画图。</p>
 <p>上面的图见过，但觉得下面的图更适合理解（个人差异？）。</p>
 <p><img src="images/18/seg_fold_11.png" alt="seg_fold_11" />
 像至今那样，按 $x_i = x_{2i}x_{2i+1}$ 的规则填。填满所有格，但此时一部分 $x_i$ 会进不对应区间积的异常值（$x_{5}=x_{20}x_{21}x_{11}$ 等）。但这些值不被用于计算，所以其实不会坏。</p>
 <p>回想区间积的计算。只是从最下段起，孤立的两端计算。两个两个能汇总的区间归约到上一段。虽说会产生一部分进异常值的地方，但两个两个汇总、其上正常值所在处的上方也进正常值，所以区间积计算正常运作。</p>
-<h3 id="sec-185">顺便</h3>
+<h3 id="sec-142">顺便</h3>
 <p>$x_1 = x_{16}x_{17}x_{18}x_{19}x_{20}x_{21}x_{11}x_{12}x_{13}x_{14}x_{15}$ 呢。</p>
 <p>无论 $N$ 如何，$x_1$ 都这样进全体元素的积。不过因积的顺序坏了，是异常值之类。</p>
 <p>但若说可交换 monoid，则 $x_1$ 成为正常的全体元素积。记住的话，或许常有用？</p>
@@ -1913,7 +1582,7 @@ for n in range(h, 0, -1):
 <h2 id="am19-euler-tour">Euler Tour（Euler Tour のお勉強）</h2>
 <p>整理自己学过的东西。</p>
 <p>没有新颖性或强主张。</p>
-<h3 id="sec-187">目录</h3>
+<h3 id="sec-144">目录</h3>
 <p><img src="images/19/euler0.png" alt="euler0" /></p>
 <ul>
 <li>Euler Tour</li>
@@ -1923,7 +1592,7 @@ for n in range(h, 0, -1):
 <li>路径查询</li>
 <li>LCA</li>
 </ul>
-<h3 id="sec-188">Euler Tour</h3>
+<h3 id="sec-145">Euler Tour</h3>
 <ul>
 <li>(1) 按 DFS 顺序探索，记录走过的顶点列（$1,2,3,4,3,2,5,2,1,6,1$）。</li>
 <li>(2) 对各顶点 $i$，记住最初经过的时刻与最后经过的时刻 $\mathrm{in}[i]$, $\mathrm{out}[i]$。</li>
@@ -1934,7 +1603,7 @@ for n in range(h, 0, -1):
 </ul>
 <p><img src="images/19/euler1.png" alt="euler1" />
 虽排列出现的顶点，但计算上更需要的是 $\mathrm{in}[i]$, $\mathrm{out}[i]$。例如看闭区间 $[\mathrm{in}[i], \mathrm{out}[i]]$，有“可知以 $i$ 为根的子树 $\mathrm{subtree}_i$ 的顶点”这一特征。于是能把对树的主要计算之一部分，改说成对区间的计算。</p>
-<h3 id="sec-189">排列走过的边</h3>
+<h3 id="sec-146">排列走过的边</h3>
 <p><img src="images/19/admin-ajax-1.png" alt="admin-ajax-1" /></p>
 <p><em>66</em>
 与蚂蚁本解说同样，“按顺序排走过的顶点”我以为是 Euler Tour 的基础。搜博客文章，这种说明似乎更多（不过找的话，下面讲的、以边为基础的解说也存在多个）。给顶点 $i$ 靠根侧的边编号为 $i$。从上往下经过时排 $+i$，从下往上经过时排 $-i$。</p>
@@ -1951,19 +1620,19 @@ for n in range(h, 0, -1):
 <p>来数有多少个，答案大概是 Catalan 数？
 — maspy (@maspy_stars) April 20, 2020</p>
 <p>从“排过的边”复原“排过的顶点”很简单，把各边的终点对应即可转换（边 $+i$ 对应顶点 $i$、边 $-i$ 对应顶点 $\mathrm{parent}[i]$）。反向稍费事（需看 in, out、前后顶点）。所以曾想“排所有顶点而成的列”几乎没优势？</p>
-<h3 id="sec-190">各类查询</h3>
-<h4 id="sec-191">子树查询</h4>
+<h3 id="sec-147">各类查询</h3>
+<h4 id="sec-148">子树查询</h4>
 <p><img src="images/19/euler4-1.png" alt="euler4-1" />
 设所有顶点（边）都持有值。顶点 $i$ 的值记为 $v_i$、边 $i$ 的值记为 $e_i$（假设取值于可交换 monoid）。</p>
 <p>能计算以顶点 $i$ 为根的子树的和。为不重复计算同一顶点，仅对向下的边持有值。</p>
 <p>例如以空栏为单位元用 Segment Tree，就能做值的 1 点变更、子树获取。同样的事，用延迟传播 Segment Tree 也能对应子树更新吧。若是群，或许也能用累积和或 Fenwick Tree 替换。</p>
 <p><img src="images/19/826ddd244d633277d168b815aaa15114.png" alt="826ddd244d633277d168b815aaa15114" />
 如所见，这样持有 index 时，只用数组一半。“仅对向下的边持有值”刚说过，所以只用向下移动就能把数组变小。beet さん的文章中称为顶点属性的 Euler Tour。我不学无术，没实现过。</p>
-<h4 id="sec-192">路径查询</h4>
+<h4 id="sec-149">路径查询</h4>
 <p>考虑从根到某顶点 $i$ 的路径时，能获取此路径上顶点・边的值的和。</p>
 <p><img src="images/19/euler5-1.png" alt="euler5-1" />
 各时刻，使累积和与计算对象一致。取值于群（可逆元可取）时这可行。不要求可交换性。可得 父 → 子 顺序的和（适当做也可得 子 → 父 顺序）。</p>
-<h4 id="sec-193">LCA</h4>
+<h4 id="sec-150">LCA</h4>
 <p>蚂蚁本有，所以以为有名，但这是 Euler Tour 最费思量的用法。</p>
 <p><img src="images/19/lca-1.png" alt="lca-1" />
 想成“含两顶点的最小子树”不太行，改成“从 $i$ 向 $j$ 按 DFS 顺序移动时经过的、最靠根的顶点”这一绝妙改说，就归约为区间最小值计算。上例中以边 $-2$ 的终点，可算 $\mathrm{LCA}(3,6) = 1$。</p>
@@ -1976,7 +1645,7 @@ for n in range(h, 0, -1):
 <h2 id="am20-rolling-hash">Rolling Hash 与冲突概率的下界（Rolling Hash を殺す話 / 乱択と衝突確率）</h2>
 <p>不提出新的数值设定或实现方法。</p>
 <p>对冲突概率的下界，做了未见过的考察，故记之。</p>
-<h3 id="sec-195">目录</h3>
+<h3 id="sec-152">目录</h3>
 <ul>
 <li>前提知识</li>
 <li>Rolling Hash 是什么</li>
@@ -1988,9 +1657,9 @@ for n in range(h, 0, -1):
 <li>参考</li>
 <li>致谢</li>
 </ul>
-<h3 id="sec-196">前提知识</h3>
+<h3 id="sec-153">前提知识</h3>
 <p>本文为简单，设字母表为 $\Sigma = \{0,1,\ldots,\sigma-1\}$。若是英文字母，用 ASCII 码把字母对应到小于 $128$ 的整数，或平移对应到小于 $26$ 的整数，就能把字母视为整数。</p>
-<h3 id="sec-197">Rolling Hash 是什么</h3>
+<h3 id="sec-154">Rolling Hash 是什么</h3>
 <p>Rolling Hash 是把字符串 $S = S_0,S_1,S_2,\ldots$ 如下 Hash 化的手法：</p>
 <p><strong>【Rolling Hash】</strong> 以某方法取模 $m$、基数 $r$。字符串 $S = S_0,S_1,S_2,\ldots$ 的 Hash 值定义为 $\mathrm{hash}(S) = \sum S_i r^i\pmod{m}$。</p>
 <p>计算的容易性，特别是适当预处理下任意子串的 Hash 值都能每件 $\Theta(1)$ 时间算出，这一点出色。对此 Hash 值，期待如下。</p>
@@ -2001,20 +1670,20 @@ for n in range(h, 0, -1):
 <li>$N$ 为充分大的自然数，$S$, $T$ 是从长度 $N$ 以下字符串全体中完全随机选的。</li>
 </ul>
 <p>顺便，连此主张的证明似乎都没见过，故本文末尾以附录记之。</p>
-<h3 id="sec-198">对抗性输入与随机算法</h3>
+<h3 id="sec-155">对抗性输入与随机算法</h3>
 <p>此主张虽正确，但由此唱此 Hash 函数的万能性却不行。上述条件中，前提 $S, T$ 从任意字母列完全随机选。但例如“从世间书籍随机选的长度 $N$ 字符串”这种情形，输入字符串应有某种偏倚（例如元音 a, i, u, e, o 的出现比例会比 $1/\sigma$ 高）。对有偏倚的字符串群，上述概率分析未必成立。</p>
 <p>特别这种概率分析中，作为 worst case 的、对（对抗性的/恶意的）输入的概率分析常被讨论。本文也以此为主题。</p>
 <div class="callout-problem"><p><strong>【问题】</strong> 攻击者可在确认 $m$, $r$ 的选择算法后，选字符串 $S$, $T$ $(S\neq T)$。把 $\mathrm{hash}(S) = \mathrm{hash}(T)$ 的概率压低（对可实现的概率做考察）。</p></div>
 <p>无论多巧妙地定值，一旦使用的 $m, r$ 值被固定，那一刻就完全败北。那怎么办？解决这种问题的一般方法有随机算法。特别地讨论如下解决策。</p>
 <p><strong>【随机算法】</strong> 预先固定 $m$。随机取 $0\leqq r &lt; m$。用此 $m, r$ 计算 Hash 值。</p>
 <p>用随机化，即使对抗性攻击者也难故意造成 hash 冲突。</p>
-<h3 id="sec-199">基本评价</h3>
+<h3 id="sec-156">基本评价</h3>
 <div class="callout-theorem"><p><strong>【定理１】</strong> 把 $m$ 作素数用上述手法，则对任一长度 $N$ 的字符串 $S, T$ $(S\neq T)$，$\mathrm{hash}(S) = \mathrm{hash}(T)$ 的概率在 $\frac{N}{m}$ 以下。</p></div>
 <p>证明如下。</p>
 <p>$\mathrm{hash(S)}$ 等于某多项式 $f_S$ 的值 $f_S(r)$。Hash 冲突发生的条件可写为 $f_S(r)-f_T(r) = 0$。$f = f_S-f_T$ 是 $0$ 次以上的 $N$ 次以下多项式。在体中，$0$ 次以上的 $N$ 次以下多项式至多只有 $N$ 个根，故使 Hash 冲突的 $r$ 至多 $N$ 种。因此若随机取 $r$，其概率在 $\frac{N}{m}$ 以下。</p>
 <p>注意1：在体中，$N$ 次多项式根在 $N$ 个以下，由因式定理可知。在实数或复数证过的人，请确认在任意体完全相同。$N$ 个解存在则 $f(x) = 0\iff c(x-a_1)\cdots(x-a_N) = 0$ 这样变形，再由是体知无其他解。</p>
 <p>注意2：任意环不成立，例如环 $\Z/8\Z$ 中 $2$ 次方程 $x^2 -1 = 0$ 有 $4$ 个解 $x=1,3,5,7$。</p>
-<h3 id="sec-200">参考文献</h3>
+<h3 id="sec-157">参考文献</h3>
 <ul>
 <li>（１）hos さん： 让 Hash 冲突的话</li>
 <li>（２）eto_nagisa さん：杀 Rolling Hash 的话</li>
@@ -2027,7 +1696,7 @@ for n in range(h, 0, -1):
 <li>（２）对好 Rolling Hash 的要求更具体汇总。说明即使固定 $r$、并用多个 Hash 也会被攻击。还详细说明了进行攻击的具体算法。可知随机取基数 $r$ 很重要。</li>
 <li>（３）在满足以上 Rolling Hash 要求之上，提出了在 64bit 整数范围内性能好的 Rolling Hash 构造法。只想得好实现的话，这里举的是最捷径。</li>
 </ul>
-<h3 id="sec-201">对冲突概率的详细考察（本文主题）</h3>
+<h3 id="sec-158">对冲突概率的详细考察（本文主题）</h3>
 <p>固定素数 $m$ 随机取 $r$ 时，考察对抗性输入的 Hash 冲突概率。此问题可改写如下。</p>
 <div class="callout-problem"><p><strong>【问题】</strong> 考虑 $N$ 次多项式 $f = \sum_{i=0}^N a_i x^i$（其中 $0\leqq |a_i| &lt; \sigma$）。巧妙取 $f\neq 0$ 使根尽量多时，评价根的个数 $\mathrm{root}(N)$。</p></div>
 <p>关于此问题，报告得到如下结果。</p>
@@ -2040,7 +1709,7 @@ for n in range(h, 0, -1):
 <p>用 $\mathrm{eval}\colon A_+\longrightarrow (\Z/m\Z)^k$，$\mathrm{eval}(f) = \bigl(f(0), f(1), \ldots, f(k-1)\bigr)$ 定义。成立 $|A_+| = \sigma^{N+1}$, $|(\Z/m\Z)^k| = m^k$，且由 $k$ 的取法成立 $|A_+| > |(\Z/m\Z)^k|$。因此某 $f_1, f_2\in A$（其中 $f_1\neq f_2$）满足 $\mathrm{eval}(f_1) = \mathrm{eval}(f_2)$。它们的差 $f = f_1 – f_2 \in A$ 满足条件。由此存在得证。</p>
 <p>注意：非构造性的存在证明。虽证了存在，基于此证明方法的攻击或许困难。</p>
 <p>题外话：出题 https://yukicoder.me/problems/no/1017 的翌日，惊讶地遇到了能用它的问题。</p>
-<h3 id="sec-202">Appendix</h3>
+<h3 id="sec-159">Appendix</h3>
 <p>本文开头述，当无对抗性攻击者、输入完全随机时，成立如下期待。</p>
 <p><strong>【期待】</strong> $\mathrm{hash}(S)$ 在 $\pmod{m}$ 下大概随机吧。因此对字符串 $S, T$ $(S\neq T)$，$\mathrm{hash}(S) = \mathrm{hash}(T)$ 的概率大概 $1/m$ 吧。</p>
 <p>给证明。这也似乎没见过证明…？</p>
@@ -2049,19 +1718,19 @@ for n in range(h, 0, -1):
 <p>只需证使 $r^i \equiv 1\pmod{m}$ 的 $i$ 全体集合 $I$ 中 $\sum_{i\in I} a_i$ 均等分布。用多项式调查此分布。</p>
 <p>对充分大的 $N$ 与 $f = 1 + x + \dots + x^{\sigma-1}$，只需评价 $\sum_{i\equiv k\pmod{m}}[x^i]f^N$。令 $g = x^{m-k}f^N$，只需评价 $\sum_{i\equiv 0\pmod{m}}[x^i]g$。</p>
 <p>此值可用 $1$ 的 $m$ 次根全体 $\mu_m = \{e^{2\pi i\cdot (j/m)}\in\C \mid 0\leqq j &lt; m\}$ 写为 $\frac{1}{m}\sum_{\zeta\in \mu_m}g(\zeta)=\frac{1}{m}\sum_{\zeta}\zeta^{m-k}f(\zeta)^N$。对 $N$，是公比为 $f(\zeta)$ 的等比数列的线性组合。复绝对值 $|f(\zeta)|$ 仅当 $\zeta = 1$ 时取最大值 $\sigma$。$N\to\infty$ 极限中其他 $\zeta$ 的贡献被忽略，得到 $N\to\infty$ 极限下的均匀分布。</p>
-<h3 id="sec-203">参考</h3>
+<h3 id="sec-160">参考</h3>
 <p>定理3收敛到均匀分布处，用特征函数似是标准（本质在做同样的事）。把 $i = 1,\ldots,N$ 的 $A_i$ 当作 $0,\ldots,\sigma-1$ 上独立均匀分布，则 $E[\exp(it (A_1 + \ldots + A_N))] = E[\exp(it A_1)]^N$，故 $t = 0$ 时为 $1$、$t = 1,\ldots,m-1$ 时收敛到 $0$。
 — Mori (@Ryuhei_Mori) April 5, 2020</p>
 <p>考虑 $0,1,\ldots, \sigma – 1$ 均匀变动的随机变量 $X$ 加 $N$ 个的分布。对随机变量 $X$，其矩母函数 $M_X(t) = E(e^{tX})$ 或特征函数 $\phi_X(t) = M_X(it)$，对独立随机变量 $X_1, \ldots, X_N$ 有 $M_{X_1+\cdots+X_n}(t) = \prod_i M_{X_i}(t)$ 的性质，是分析概率分布卷积的定石手法（与 Fourier 变换几乎相同，函数卷积转换为点积的）。</p>
 <p>本次情形，由 $N$ 个和 $X = X_1 + \cdots + X_N$ 满足 $\phi_X(t) = \phi _{X_1}(t)^N$，也能简洁计算 $E(e^{i tX})$（相当于上述 $g(\zeta)$）。</p>
-<h3 id="sec-204">致谢</h3>
+<h3 id="sec-161">致谢</h3>
 <p>讨论与文章细节，是与 noshi91 さん讨论中完成的。</p>
 <h2 id="am21-matroid">Matroid 与贪心法（マトロイドを知っていれば一発）</h2>
 <p>问题文 → ■
 自己的提交 → ■（竞赛外）
 官方解说 pdf → ■</p>
 <p>官方解说 pdf，特别是“知道 matroid 就一发”的部分，学了 matroid 基础、也看了别人处理本题的博客等，却很难抵达潇洒的理解（“学 ○○ 就懂”“证明显载于 ○○”都很难到手）。也许有同样的人，故以我的方式整理理解记之。</p>
-<h3 id="sec-206">目录</h3>
+<h3 id="sec-163">目录</h3>
 <ul>
 <li>解法概要</li>
 <li>matroid 的定义・与贪心法的关系</li>
@@ -2075,7 +1744,7 @@ for n in range(h, 0, -1):
 <li>秩函数的定义</li>
 <li>matroid 与秩函数</li>
 </ul>
-<h3 id="sec-207">解法概要</h3>
+<h3 id="sec-164">解法概要</h3>
 <p>非主题，不深究。</p>
 <p>把格子 $(x,y)$ 改写为看作连接顶点“$x$行”与顶点“$y$列”的边的二分图问题。归约为从各顶点最多选 1 条边、最大化边价值和的问题。</p>
 <p>考虑可取边集合应满足的条件。按连通分量，成立（边数）$\leqq$（顶点数）是必要充分条件。</p>
@@ -2100,8 +1769,8 @@ for n in range(h, 0, -1):
 <li>→ 证明是 matroid 时的思考模式稍整理出来了，想必也有在同处苦战的人，故记成文章。</li>
 <li>→ 最终发现此 $M$ 本身也是有 Bicircular matroid、Pseudoforest matroid 等名字的 matroid。深学 matroid 的话也知道这种例，“知道 matroid（含此具体例）就一发”地写的解说或许就是这心情。</li>
 </ul>
-<h3 id="sec-208">matroid 的定义・与贪心法的关系</h3>
-<h4 id="sec-209">定义</h4>
+<h3 id="sec-165">matroid 的定义・与贪心法的关系</h3>
+<h4 id="sec-166">定义</h4>
 <p>先大体抄 Wikipedia。有限集 $E$ 与 $E$ 的子集族 $F\subset 2^E$ 满足</p>
 <ul>
 <li>$\emptyset \in F$.</li>
@@ -2109,7 +1778,7 @@ for n in range(h, 0, -1):
 <li>$X,Y\in F, |X|>|Y| \implies \exists x\in X\setminus Y, Y\cup\{x\} \in F$.</li>
 </ul>
 <p>时，称 $(E,F)$ 为 matroid。</p>
-<h4 id="sec-210">贪心法</h4>
+<h4 id="sec-167">贪心法</h4>
 <p>matroid 中的成本最大化问题，可用 Kruskal 法的要领解。更形式地：</p>
 <ul>
 <li>给定成本函数 $c\colon E\longrightarrow \mathbb{R}_{+}$，对 $X\in F$ 想最大化成本和 $c(X) = \sum_{x\in X} c(x)$。</li>
@@ -2118,28 +1787,28 @@ for n in range(h, 0, -1):
 <li>对所有 $e\in E$ 做此操作所得 $X$ 即为最大化问题的解。</li>
 </ul>
 <p>证明也不难。追证明同时与 Kruskal 法证明对照，我觉得 matroid 像是“抽出抽象化 Kruskal 法证明所需要素”的东西。</p>
-<h3 id="sec-211">证明是 matroid</h3>
+<h3 id="sec-168">证明是 matroid</h3>
 <p>本文主题。学了上述 matroid 定义与性质，若终究不能判定或证明是否 matroid，则对具体问题适用困难。特别，交换性</p>
 <ul>
 <li>$X,Y\in F, |X|>|Y| \implies \exists x\in X\setminus Y, Y\cup\{x\} \in F$</li>
 </ul>
 <p>的证明每次从零生出这种思考法，终究辛苦不断。</p>
 <p>边确认几个 matroid 交换性的证明，边确认共同战略。</p>
-<h4 id="sec-212">向量 matroid (vector matroid)</h4>
+<h4 id="sec-169">向量 matroid (vector matroid)</h4>
 <p>觉得图比向量空间难的人，跳过读下例也好。</p>
 <p>固定向量空间 $V$ 的有限子集 $E$，令 $F$ 为 $E$ 的线性无关子集全体。证是 matroid，特别证交换性。</p>
 <p>对 $E$ 的子集 $X$，记 $X$ 生成的 $V$ 子空间为 $\mathrm{span}(X)$，$r(X) = \mathrm{dim} (\mathrm{span}(X))$。成立 $X\in F\iff |X| = r(X)$。</p>
 <p>设 $X,Y\in F, |X|>|Y|$。此时 $r(X) > r(Y)$。</p>
 <p>令 $X\setminus Y = \{x_1,x_2,\ldots,x_n\}$，考虑把这些元一个个加到 $Y$。即令 $Y_k = Y\cup\{x_1,\ldots,x_k\}$，考虑列 $[Y = Y_0\subset Y_1\subset Y_2\subset \cdots \subset Y_n = X\cup Y]$（注：这些不保证属 $F$）。由 $r(Y) &lt; r(X) \leq r(X\cup Y)$，存在 $r$ 初次增大的瞬间：某 $k$ 使 $r(Y) = r(Y_{k-1}) &lt; r(Y_{k})$。</p>
 <p>此时 $x_k\notin \mathrm{span}(Y_{k-1}) = \mathrm{span}(Y)$，故 $Y\cup\{x_k\}\in F$。交换性得证。</p>
-<h4 id="sec-213">闭路 matroid (cycle matroid)</h4>
+<h4 id="sec-170">闭路 matroid (cycle matroid)</h4>
 <p>固定图 $G = (V,E)$，令 $F$ 为不含闭路的边集合全体。证是 matroid，特别证交换性。</p>
 <p>对 $E$ 的子集 $X$，记子图 $(V,X)$ 的连通分量个数为 $r(X)$。</p>
 <p>$X\in F$ 时，各连通分量是树。故各连通分量成立 $\text{顶点数} = \text{边数} + 1$，整体成立 $r(X) = |V| – |X|$。</p>
 <p>设 $X,Y\in F, |X|>|Y|$。由 $|V| = r(X) + |X| = r(Y) + |Y|$ 得 $r(X) &lt; r(Y)$。</p>
 <p>令 $X\setminus Y = \{x_1,x_2,\ldots,x_n\}$，考虑一个个加到 $Y$。即令 $Y_k = Y\cup\{x_1,\ldots,x_k\}$，考虑列 $[Y = Y_0\subset Y_1\subset Y_2\subset \cdots \subset Y_n = X\cup Y]$。由 $r(Y) > r(X)\geq r(X\cup Y)$，存在 $r$ 初次减少的瞬间：某 $k$ 使 $r(Y) = r(Y_{k-1}) > r(Y_{k})$。</p>
 <p>边 $x_k$ 连接子图 $(V,Y_{k-1})$ 中相异的 2 连通分量。$Y$ 与 $Y_{k-1}$ 在顶点连通分量分解上无变化。故 $x_k$ 在子图 $(V,Y)$ 中也连接相异的 2 连通分量，所以 $Y\cup\{x_k\}\in F$。交换性得证。</p>
-<h4 id="sec-214">本题的 matroid (Bicircular matroid, Pseudoforest matroid)</h4>
+<h4 id="sec-171">本题的 matroid (Bicircular matroid, Pseudoforest matroid)</h4>
 <p>用几个图论用语：</p>
 <ul>
 <li>树 (tree)：略。另外只有 1 顶点 0 边的图也是树。</li>
@@ -2153,7 +1822,7 @@ for n in range(h, 0, -1):
 <p>设 $X,Y\in F, |X|>|Y|$。由 $|V| = r(X) + |X| = r(Y) + |Y|$ 得 $r(X) &lt; r(Y)$。</p>
 <p>令 $X\setminus Y = \{x_1,x_2,\ldots,x_n\}$，考虑一个个加到 $Y$。即令 $Y_k = Y\cup\{x_1,\ldots,x_k\}$，考虑列 $[Y = Y_0\subset Y_1\subset Y_2\subset \cdots \subset Y_n = X\cup Y]$。由 $r(Y) > r(X)\geq r(X\cup Y)$，存在 $r$ 初次减少的瞬间：某 $k$ 使 $r(X) = r(Y_{k-1}) > r(Y_{k})$。</p>
 <p>边 $x_k$ 在子图 $(V,Y_{k-1})$ 中连接“同一树分量的 2 点”或“相异树分量的 2 点”。$Y$ 与 $Y_{k-1}$ 中树分量无变化。故 $x_k$ 在子图 $(V,Y)$ 中也连接“同一树分量的 2 点”或“相异树分量的 2 点”或“相异树分量与伪树分量”，所以 $Y\cup\{x_k\}\in F$。交换性得证。</p>
-<h3 id="sec-215">由秩函数刻画</h3>
+<h3 id="sec-172">由秩函数刻画</h3>
 <p>对 3 个 matroid 给了交换性证明。证明本身也极像。各自关注</p>
 <ul>
 <li>生成的向量空间维数</li>
@@ -2163,7 +1832,7 @@ for n in range(h, 0, -1):
 <p>几乎能写同样证明。另外，matroid 皆是“仅允许向此量增大的方向添加元”的那种子集。</p>
 <p>这样，作为证明是 matroid 的一个方针，似乎有“找好量并观察”（一个个添加～）这种模式。不是突然想“证交换性！”，而是想找表示 matroid 的“好量”，我觉得证明前的思路相当清晰了。</p>
 <p>这里说的“好量”在 matroid 理论中称为秩函数，可用秩函数刻画 matroid。即，“找好量观察以证 matroid 性”这一方针，理论上知对任意 matroid 适用。</p>
-<h4 id="sec-216">秩函数的定义</h4>
+<h4 id="sec-173">秩函数的定义</h4>
 <p>$E$ 为有限集。$r\colon 2^E\longrightarrow \mathbb{Z}_{+}$ 对任意 $X,Y\subset E$ 满足</p>
 <ul>
 <li>$r(X)\leq |X|$.</li>
@@ -2172,7 +1841,7 @@ for n in range(h, 0, -1):
 </ul>
 <p>时称为秩函数。最后条件称劣模（submodular），也有其他易解的等价改说（这里采用了与上述证明直接相连的条件）。</p>
 <p>另外上述 matroid 性证明中出现的 $r$，全是秩函数或其变种（变号平移常数）。例如闭路 matroid 中，把“连通分量个数”改为“$|V| – $连通分量个数”重设为 $r$，就成了秩函数。</p>
-<h4 id="sec-217">matroid 与秩函数</h4>
+<h4 id="sec-174">matroid 与秩函数</h4>
 <p>如下对应，有限集 $E$ 上的 matroid 与秩函数一一对应：</p>
 <ul>
 <li>$F\subset 2^E$ 是 matroid。此时 $r(X) = \max\{|Y|\mid Y\subset X, Y\in F\}$ 定义秩函数。</li>
@@ -2189,7 +1858,7 @@ for n in range(h, 0, -1):
 <h2 id="am22-power">$a^n$ 的计算（べき乗の計算 / バイナリ法）</h2>
 <p>整理 $a^n$ 的计算。本文大部分不仅限实数的幂，适用于所有定义了满足结合律的积的东西。实数以外，矩阵的幂、多项式的幂等居多吧。</p>
 <p>另外，python 有内置函数 pow()，基本的 $a^n$ 或 $a^n \pmod{m}$ 等计算无需自己实现。</p>
-<h3 id="sec-219">目录</h3>
+<h3 id="sec-176">目录</h3>
 <ul>
 <li>二进制法</li>
 <li>递归实现</li>
@@ -2202,8 +1871,8 @@ for n in range(h, 0, -1):
 <li>Fermat 小定理・Euler 定理</li>
 <li>$\mathbb{F}_p$ 上矩阵的幂与周期</li>
 </ul>
-<h3 id="sec-220">二进制法</h3>
-<h4 id="sec-221">递归实现</h4>
+<h3 id="sec-177">二进制法</h3>
+<h4 id="sec-178">递归实现</h4>
 <p>计算 $a^{101}$ 如下：</p>
 <ul>
 <li>计算 $a^{101}$，令 $x = a^{50}$，算 $ax^2$ 即可。</li>
@@ -2222,7 +1891,7 @@ for n in range(h, 0, -1):
     x *= x
     return a * x if n &amp; 1 else x
 </code></pre>
-<h4 id="sec-222">循环实现</h4>
+<h4 id="sec-179">循环实现</h4>
 <p>计算 $a^{101}$ 如下：</p>
 <ul>
 <li>二进制下，$101 = 64 + 32 + 4 + 1$ 分解。因此 $a^{101} = a^{64}\cdot a^{32}\cdot a^{4}\cdot a$ 可算。</li>
@@ -2238,13 +1907,13 @@ for n in range(h, 0, -1):
         a *= a
     return x
 </code></pre>
-<h3 id="sec-223">关于复杂度</h3>
+<h3 id="sec-180">关于复杂度</h3>
 <p>介绍了 $2$ 种实现，但本质复杂度都不变。把 $n$ 看二进制，bit 立着时算 $1$ 次、位数增 $1$ 时算 $1$ 次乘法。乘法次数、if 分支次数两种实现都一致。因做 $2$ 进制位数 $1$～$2$ 倍的乘法，复杂度为 $O(\log n)$。（此时把两数之积的操作成本视为常数。实际处理巨大位数自然数等时情况会变。）</p>
 <p>while 循环比递归调用成本低，故后者性能稍优。我多写前者。（后者同时更新 $2$ 种值，印象上稍费脑 w）</p>
 <p>另外乘法次数不变，但例如矩阵幂 $A^n$ 计算时若 $A$ 是稀疏矩阵，则前者每次积的成本更便宜。</p>
-<h3 id="sec-224">通过预处理减少复杂度</h3>
+<h3 id="sec-181">通过预处理减少复杂度</h3>
 <p>反复做 $n$ 次幂计算时，依条件可减少复杂度。</p>
-<h4 id="sec-225">平方分割・k 次根分割的方法</h4>
+<h4 id="sec-182">平方分割・k 次根分割的方法</h4>
 <p>例如，对同一 $a$ 算各种 $1\leqq n\leqq 10^7$ 的 $a^n$。此时有如下方法：</p>
 <ul>
 <li>对 $1\leqq k\leqq 10^3$ 预计算 $a^k$。</li>
@@ -2262,7 +1931,7 @@ for n in range(h, 0, -1):
 <li>基于 $O(kN^{1/k})$ 的预处理，每件 $n$ 次幂用 $k-1$ 次乘法计算</li>
 </ul>
 <p>也可能。有预处理量・内存容量与每件 $a^n$ 计算量的权衡，依目的选 $k$ 也好。$k$ 次根分割最极端的情形是 $k = 1$。全预计算的话，全无乘法取值…理所当然（笑）</p>
-<h4 id="sec-226">原始根的使用</h4>
+<h4 id="sec-183">原始根的使用</h4>
 <p>平方分割的预处理有 $a$ 的值被固定的缺点。</p>
 <p>若想对小的素数 $p$ 为模的各种 $a,n$ 算 $a^n \pmod{p}$，则可用别的方法。此想法在 $p$ 为素数幂时（也有原始根）或合数时（用中国剩余定理归约到素数幂）也可用，但本文省略。</p>
 <p>例如考虑算 $a^n\pmod{13}$。$\pmod{13}$ 中，除 $0$ 外所有整数都与某 $2^k$ 同余。</p>
@@ -2274,8 +1943,8 @@ for n in range(h, 0, -1):
 123^{4567} \equiv (123 \pmod{13})^{4567\pmod{12}} \equiv 6^7 \equiv (2^{5})^7\equiv 2^{35}\equiv 2^{11}\equiv 7\pmod{13}.
 $$</div>
 更一般的对 mod，计算这样的表（$O(p)$ 预处理），则对任意 $a, n$ 的 $a^n\pmod{p}$ 都能 $O(1)$ 计算时间算。</p>
-<h3 id="sec-227">周期的使用</h3>
-<h4 id="sec-228">Fermat 小定理・Euler 定理</h4>
+<h3 id="sec-184">周期的使用</h3>
+<h4 id="sec-185">Fermat 小定理・Euler 定理</h4>
 <p>mod 下计算时，反复同样操作常成周期数列。</p>
 <p>特别关于幂，Fermat 小定理 $p\nmid a\implies a^{p-1}\equiv 1$ 有名。此定理可一般化到合数模，成立 $\gcd(a,n) = 1\implies a^{\phi(n)} \equiv 1\pmod{n}$（Euler 定理）。</p>
 <p>因此，算 $\gcd(a,n) = 1$ 情形的 $a^n\pmod{m}$ 时，只需在 $\pmod{\phi(m)}$ 下求 $n$ 的值即可。一般地 $a^n\pmod{m}$ 计算是 $O(\log n)$，但 $n$ 变大时，先取余数可成 $O(\log m)$，有时是本质改善。也易与平方分割等组合吧。</p>
@@ -2286,7 +1955,7 @@ $$</div>
 <li>因此 $X\equiv 98^{76}\pmod{125}$。用二进制法算得 $X\equiv 86\pmod{125}$。</li>
 <li>与 $X$ 是 $8$ 的倍数合，$X\equiv 336\pmod{1000}$。</li>
 </ul>
-<h3 id="sec-229">$\mathbb{F}_p$ 上矩阵的幂与周期</h3>
+<h3 id="sec-186">$\mathbb{F}_p$ 上矩阵的幂与周期</h3>
 <p>（这里是给代数相当强的人？）
 另外矩阵计算等情形，mod 下的周期比（Fermat 小定理等）复杂。</p>
 <p>例如 $A\in \mathrm{GL}(2,\mathbb{F}_p)$ 时，矩阵的 Jordan 标准形如
@@ -2295,7 +1964,7 @@ $$</div>
 <h2 id="am23-gcd">最大公约数（ユークリッドの互除 / gcd の計算）</h2>
 <p>计算 $x,y$ 的最大公约数 $\mathrm{gcd}(x,y)$（最大公约数英语为 greatest common divisor，故略为 gcd）。</p>
 <p>另外 $x=y=0$ 时，任意整数都是 $x,y$ 的公约数。故公约数最大值不存在，$\mathrm{gcd}(0,0)$ 通常不定（从理想论视角，也有定义为 $0$ 的）。</p>
-<h3 id="sec-231">目录</h3>
+<h3 id="sec-188">目录</h3>
 <ul>
 <li>数学背景</li>
 <li>复杂度</li>
@@ -2305,7 +1974,7 @@ $$</div>
 <li>相关：a mod N 的逆元</li>
 <li>相关：中国剩余定理</li>
 </ul>
-<h3 id="sec-232">数学背景</h3>
+<h3 id="sec-189">数学背景</h3>
 <p>$d$ 整除 $n$ 时写 $d\mid n$。成立：
 <div class="math-block">$$
 d\mid x \text{ 且 } d\mid y \iff d\mid x \text{ 且 } d\mid x – ky
@@ -2315,7 +1984,7 @@ $$</div>
 \mathrm{gcd}(345,100) = \mathrm{gcd}(100,45) = \mathrm{gcd}(45,10) = \mathrm{gcd}(10,5) = \mathrm{gcd}(5,0) = 5.
 $$</div>
 此计算方法称 Euclid 的互除法。反复把大数替换为被小数除的余数。</p>
-<h3 id="sec-233">复杂度</h3>
+<h3 id="sec-190">复杂度</h3>
 <p>设 $a>b>0$，且 $a$ 被 $b$ 除的余数为 $c$。由
 <div class="math-block">$$
 a \geq 2b \implies b+c \leq b+b \leq \frac23(a+b),\qquad
@@ -2323,7 +1992,7 @@ a \leq 2b \implies b+c \leq b+(a-b) \leq \frac23(a+b)
 $$</div>
 知 Euclid 互除法推进 $1$ 步，两数之和变为 $\frac23$ 倍以下。因此 $\gcd(x,y)$ 计算在 $O(\log(x+y))$ 可做。因第一次除法两者都降到 $\min(x,y)$ 以下，也可 $O(\log \min(x,y))$。（由上证明，计算次数上界可评价为 $\log_{1.5}(x+y)$，此底 $1.5$ 精密化可改善到黄金比 $\frac{1+\sqrt{5}}{2} = 1.618$。）</p>
 <p>我们熟悉的 $2, 3$ 位整数，由质因数求最大公约数看似简洁，但位数变大时 Euclid 互除法性能压倒性高，计算机连数百位数的 gcd 都能瞬时算。</p>
-<h3 id="sec-234">实现</h3>
+<h3 id="sec-191">实现</h3>
 <p>gcd 函数在 math・numpy 等库也有，但这里自做一个。</p>
 <pre><code>def gcd(a, b):
     while b:
@@ -2334,7 +2003,7 @@ $$</div>
     return gcd(b, a % b) if b else a
 </code></pre>
 <p>举了循环实现、递归实现 $2$ 种，但处理内容相同。另外函数调用开销部分，循环实现性能更好。（若函数单次处理足够重，调用负担相对可忽略，但本次只做 $1$ 次除法，故调用差异相对多。性能另文打算处理测量结果等。）</p>
-<h3 id="sec-235">相关：最小公倍数</h3>
+<h3 id="sec-192">相关：最小公倍数</h3>
 <p>$2$ 数 $a,b$ 的最小公倍数写为 $\mathrm{lcm}(a,b)$（least common multiple）。与 $\mathrm{gcd}$ 间有如下关系：
 <div class="math-block">$$ \mathrm{lcm}(a,b) = \frac{ab}{\mathrm{gcd}(a,b)}.$$</div>
 这由考虑质因数分解证得（$3$ 数以上的最大公约数・最小公倍数间无此关系）。</p>
@@ -2343,7 +2012,7 @@ $$</div>
     return a // gcd(a,b) * b
 </code></pre>
 <p>gcd 当然是 $a,b$ 的约数，故能在积之前插入除法。特别处理 64 位整数等时，先取积（即使最小公倍数在 64 位整数范围内可取）也可能溢出。</p>
-<h3 id="sec-236">相关：ax+by=d 的整数解</h3>
+<h3 id="sec-193">相关：ax+by=d 的整数解</h3>
 <p>当 $d = \mathrm{gcd}(a,b)$，由 Euclid 互除法能算 $ax + by = d$ 的解之一。这高中数学也常涉及。也称“扩展互除法”。</p>
 <pre><code>def extgcd(a, b):
     &quot;&quot;&quot;
@@ -2361,7 +2030,7 @@ $$</div>
 <li>给定使 $bx + ry = d$ 成立的 $x,y$，求使 $(qb+r)s + bt = d$ 成立的 $s,t$</li>
 </ul>
 <p>即可。由系数比较令 $x = qs + t$ 且 $y = s$ 成立即可，故如上实现。另外 $x,y$ 可能返回负数（一般一方正一方负），依用途注意返回值处理。</p>
-<h3 id="sec-237">相关：a mod N 的逆元</h3>
+<h3 id="sec-194">相关：a mod N 的逆元</h3>
 <p>$a,N$ 为整数且 $\mathrm{gcd}(a,N) = 1$ 时，使 $ax \equiv 1\pmod{N}$ 的 $x$ 称为 $a\bmod N$ 的逆元。如上，由 Euclid 互除法能算满足 $ax + Ny = 1$ 的整数 $(x,y)$。此 $x$ 当然满足 $ax\equiv 1\pmod{N}$，故这就是逆元。不想要 $x &lt; 0$ 时，负数则加 $N$ 的处理即可。</p>
 <pre><code>def inv_mod(a, N):
     &quot;&quot;&quot;
@@ -2370,7 +2039,7 @@ $$</div>
     return extgcd(a, N)[0]
 </code></pre>
 <p>另外 $N$ 为素数时，由 Fermat 小定理可用 $a^{N-2} \bmod N$ 算 $a$ 的逆元。设 $a &lt; N$，互除法计算量 $O(\log a)$、Fermat 小定理方法 $O(\log N)$。几乎无需区分用，但只对付小 $a$ 时互除法计算量更少（应用上，需要算的不是单一 $a$ 而是 $1$ 以上 $n$ 以下所有 $a$ 的逆元时，也能 $O(n)$ 算）。</p>
-<h3 id="sec-238">相关：中国剩余定理</h3>
+<h3 id="sec-195">相关：中国剩余定理</h3>
 <p>设 $a_1$, $a_2$ 为整数，$m_1$, $m_2$ 为互素整数。此时满足
 <div class="math-block">$$ x \equiv a_1\pmod{m_1},\qquad x\equiv a_2\pmod{m_2} $$</div>
 的整数 $x$ 在 $\bmod m_1m_2$ 下唯一确定。这称中国剩余定理。</p>

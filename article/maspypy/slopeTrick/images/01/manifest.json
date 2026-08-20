@@ -1,54 +1,54 @@
 [
  {
-  "local": "images/15/slope1-1.png",
+  "local": "images/01/slope1-1.png",
   "alt": "slope1-1",
   "gfrac": 0.22277064823955248,
   "caption": ""
  },
  {
-  "local": "images/15/slope2-1.png",
+  "local": "images/01/slope2-1.png",
   "alt": "slope2-1",
   "gfrac": 0.24383020730503455,
   "caption": ""
  },
  {
-  "local": "images/15/slope_3-2.png",
+  "local": "images/01/slope_3-2.png",
   "alt": "slope_3-2",
   "gfrac": 0.34386311286607435,
   "caption": ""
  },
  {
-  "local": "images/15/a.png",
+  "local": "images/01/a.png",
   "alt": "a",
   "gfrac": 0.40111878907535375,
   "caption": ""
  },
  {
-  "local": "images/15/b.png",
+  "local": "images/01/b.png",
   "alt": "b",
   "gfrac": 0.46265218821980914,
   "caption": ""
  },
  {
-  "local": "images/15/left_min.png",
+  "local": "images/01/left_min.png",
   "alt": "left_min",
   "gfrac": 0.7653833497861139,
   "caption": ""
  },
  {
-  "local": "images/15/slope_trick-1.png",
+  "local": "images/01/slope_trick-1.png",
   "alt": "slope_trick-1",
   "gfrac": 0.7834814083580125,
   "caption": ""
  },
  {
-  "local": "images/15/translation-1.png",
+  "local": "images/01/translation-1.png",
   "alt": "translation-1",
   "gfrac": 0.8525830865416255,
   "caption": ""
  },
  {
-  "local": "images/15/range_translation-2.png",
+  "local": "images/01/range_translation-2.png",
   "alt": "range_translation-2",
   "gfrac": 0.8881210924646266,
   "caption": ""
