@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>决策单调性与凸性加速 · 算法竞赛 DP 优化速查</title>
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  --bg:#0f1317; --bg-soft:#161c23; --code-bg:#0b0e12;
+  --border:#242c36; --border-strong:#323d4a;
+  --text:#d9dee4; --text-dim:#97a1ad;
+  --accent:#6cb5ff; --accent-2:#ffc46b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);
+  font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+:not(pre)>code{font-family:ui-monospace,"JetBrains Mono",Consolas,monospace;font-size:.87em;
+  background:#20262f;color:#9cd3ff;padding:1px 6px;border-radius:5px}
+.m{font-family:Cambria,Georgia,"Times New Roman",serif;font-style:italic}
+
+/* ---------- header ---------- */
+header.site{max-width:960px;margin:0 auto;padding:34px 20px 16px}
+header.site h1{font-size:25px;font-weight:700;letter-spacing:.3px}
+header.site h1 span{color:var(--accent);font-family:Georgia,serif;font-style:italic;font-weight:400}
+header.site p{color:var(--text-dim);margin-top:6px;font-size:13.5px}
+
+/* ---------- tabs ---------- */
+nav.tabs{position:sticky;top:0;z-index:10;background:rgba(15,19,23,.88);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 20px}
+nav.tabs .inner{width:max-content;max-width:100%;margin:0 auto;display:flex;gap:4px;padding:9px 0;
+  overflow-x:auto;scrollbar-width:none}
+nav.tabs .inner::-webkit-scrollbar{display:none}
+.tabbtn{flex:none;font:inherit;font-size:13.5px;color:var(--text-dim);background:none;
+  border:1px solid transparent;border-radius:8px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.tabbtn:hover{color:var(--text);background:var(--bg-soft)}
+.tabbtn.active{color:var(--accent);background:rgba(108,181,255,.10);border-color:rgba(108,181,255,.35)}
+.tabbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- panels ---------- */
+main{max-width:960px;margin:0 auto;padding:26px 20px 70px}
+.js .panel{display:none}
+.js .panel.active{display:block;animation:rise .28s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel h2{font-size:22px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.panel h2 .alias{font-size:14px;color:var(--text-dim);font-weight:400;font-family:Georgia,serif;font-style:italic}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.chip{font-size:12px;padding:3px 11px;border-radius:999px;border:1px solid;white-space:nowrap}
+.chip .lbl{color:var(--text-dim);margin-right:6px;font-style:normal}
+.chip.p{color:#7ec3ff;border-color:rgba(126,195,255,.35);background:rgba(126,195,255,.08)}
+.chip.c{color:var(--accent-2);border-color:rgba(255,196,107,.35);background:rgba(255,196,107,.08)}
+.chip.s{color:#89d98f;border-color:rgba(137,217,143,.35);background:rgba(137,217,143,.08)}
+
+h3.sec{display:flex;align-items:center;gap:9px;font-size:16px;margin:30px 0 10px}
+h3.sec::before{content:"";width:8px;height:8px;background:var(--accent);border-radius:2px;flex:none}
+p{margin:8px 0}
+ul.list{margin:8px 0;list-style:none}
+ul.list li{padding-left:18px;position:relative;margin:7px 0}
+ul.list li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--border-strong)}
+ol.steps{margin:8px 0 8px 6px;padding-left:18px}
+ol.steps li{margin:9px 0}
+
+.box{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:14px;border:1px solid;line-height:1.7}
+.box .bt{font-weight:600;margin-bottom:3px}
+.box.info{background:rgba(108,181,255,.07);border-color:rgba(108,181,255,.25)}
+.box.warn{background:rgba(255,139,115,.07);border-color:rgba(255,139,115,.3)}
+.box.tip{background:rgba(137,217,143,.07);border-color:rgba(137,217,143,.25)}
+
+.fml{font-family:Cambria,Georgia,serif;font-style:italic;font-size:16.5px;text-align:center;
+  padding:12px 16px;margin:12px 0;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px}
+.fml .cond{font-style:normal;font-size:12.5px;color:var(--text-dim)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:center;padding:12px;margin:12px 0}
+.chain .node{font-family:Georgia,serif;font-style:italic;font-size:15px;padding:4px 12px;
+  border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-soft)}
+.chain .arr{color:var(--accent-2);font-weight:700;font-size:17px}
+
+/* ---------- table ---------- */
+.tblwrap{overflow-x:auto;margin:14px 0;border:1px solid var(--border);border-radius:10px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+.tbl th{background:var(--bg-soft);text-align:left;font-weight:600;padding:9px 12px;
+  border-bottom:1px solid var(--border-strong);white-space:nowrap}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text-dim)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+.tbl .cx{font-family:ui-monospace,Consolas,monospace;color:var(--accent-2);white-space:nowrap}
+
+/* ---------- code ---------- */
+.codeblock{margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--code-bg)}
+.codehead{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;
+  background:var(--bg-soft);border-bottom:1px solid var(--border);font-size:12px;color:var(--text-dim)}
+.copy{font:inherit;font-size:12px;color:var(--text-dim);background:none;border:1px solid var(--border-strong);
+  border-radius:6px;padding:2px 10px;cursor:pointer}
+.copy:hover{color:var(--text);border-color:var(--accent)}
+.copy.ok{color:#89d98f;border-color:#89d98f}
+pre{margin:0;padding:14px 16px;overflow-x:auto;color:#c9d4de;
+  font:13px/1.6 ui-monospace,"JetBrains Mono","Cascadia Code",Consolas,Menlo,monospace}
+.tk-c{color:#5b6673;font-style:italic}
+.tk-s{color:#96d382}
+.tk-k{color:#c79bf2}
+.tk-n{color:#f5a66b}
+
+/* ---------- misc ---------- */
+.xref{color:var(--accent);border-bottom:1px dashed rgba(108,181,255,.45);cursor:pointer}
+.xref:hover{text-decoration:none;border-bottom-style:solid}
+.related{margin-top:32px;padding-top:14px;border-top:1px dashed var(--border-strong);font-size:13.5px;color:var(--text-dim)}
+.refgroup{margin:28px 0 6px}
+.ref{display:flex;gap:14px;padding:13px 4px;border-bottom:1px solid var(--border)}
+.ref .n{flex:none;width:28px;height:28px;border-radius:8px;background:var(--bg-soft);
+  border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--accent);margin-top:2px}
+.ref .t{font-weight:600}
+.ref .t em{font-family:Georgia,serif}
+.ref .src{font-size:12.5px;color:var(--text-dim);margin-top:3px}
+.ref .note{font-size:13px;color:var(--text-dim);margin-top:4px}
+footer{border-top:1px solid var(--border);color:var(--text-dim);font-size:12.5px;text-align:center;padding:22px}
+kbd{font-family:ui-monospace,monospace;font-size:11px;padding:1px 6px;
+  border:1px solid var(--border-strong);border-radius:5px;background:var(--bg-soft)}
+@media (max-width:600px){
+  header.site{padding-top:24px}
+  header.site h1{font-size:20px}
+  main{padding:20px 14px 60px}
+  .fml{font-size:14.5px}
+}
+@media print{
+  .panel{display:block!important}
+  nav.tabs,footer{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>决策单调性与凸性加速 <span>· Monotone &amp; Convex DP Speedups</span></h1>
+  <p>SMAWK / Monotone Minima / Knuth / LARSCH / CHT / Li-Chao / Aliens Trick / Kinetic …… 算法竞赛向速查笔记</p>
+</header>
+
+<nav class="tabs" aria-label="算法分类">
+  <div class="inner">
+    <button class="tabbtn" data-tab="overview" role="tab">总览</button>
+    <button class="tabbtn" data-tab="monotone" role="tab">Monotone Minima</button>
+    <button class="tabbtn" data-tab="smawk" role="tab">SMAWK</button>
+    <button class="tabbtn" data-tab="dnc" role="tab">D&amp;C 优化</button>
+    <button class="tabbtn" data-tab="knuth" role="tab">Knuth 优化</button>
+    <button class="tabbtn" data-tab="larsch" role="tab">LARSCH</button>
+    <button class="tabbtn" data-tab="cht" role="tab">斜率优化 CHT</button>
+    <button class="tabbtn" data-tab="lichao" role="tab">Li-Chao 树</button>
+    <button class="tabbtn" data-tab="aliens" role="tab">Aliens Trick</button>
+    <button class="tabbtn" data-tab="kinetic" role="tab">Kinetic 段树</button>
+    <button class="tabbtn" data-tab="deque" role="tab">单调队列</button>
+    <button class="tabbtn" data-tab="minplus" role="tab">Min-plus 卷积</button>
+    <button class="tabbtn" data-tab="refs" role="tab">资料来源</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= 总览 ================= -->
+<section class="panel" id="panel-overview">
+  <h2>总览 <span class="alias">Overview</span></h2>
+  <div class="box info">
+    <div class="bt">这一族算法在做什么</div>
+    利用 DP 转移中代价函数或最优决策位置的隐藏结构（单调性、凸性、Monge 性等），把暴力的
+    <span class="m">O(n²)</span> 乃至 <span class="m">O(n³)</span> 转移降到近线性。按视角可分为：矩阵类（Monotone Minima / SMAWK / LARSCH / Knuth）、DP 结构类（D&amp;C / Aliens）、数据结构类（CHT / Li-Chao / Kinetic / 单调队列）。
+  </div>
+
+  <h3 class="sec">统一视角：把转移看成一张矩阵</h3>
+  <div class="fml">dp[i] = min<sub>j</sub> { dp[j] + C(j, i) }</div>
+  <p>把 <span class="m">A<sub>i,j</sub> = dp[j] + C(j, i)</span> 排成一张 <span class="m">n×n</span> 的矩阵，逐行取最小值。矩阵满足的性质决定能用的算法：</p>
+  <ul class="list">
+    <li><b>Monotone（单调）</b>：每行最优列位置（argmin）随行号单调不减；</li>
+    <li><b>Totally Monotone（TM）</b>：任意子矩阵都单调，等价于每个 <span class="m">2×2</span> 子矩阵单调；</li>
+    <li><b>Monge（四边形不等式）</b>：
+      <div class="fml" style="margin:6px 0 0">A<sub>i,p</sub> + A<sub>j,q</sub> ≤ A<sub>i,q</sub> + A<sub>j,p</sub> <span class="cond">（i &lt; j, p &lt; q）</span></div>
+    </li>
+  </ul>
+  <div class="chain">
+    <span class="node">Monge</span><span class="arr">⇒</span>
+    <span class="node">Totally Monotone</span><span class="arr">⇒</span>
+    <span class="node">Monotone</span>
+  </div>
+  <div class="box tip">
+    <div class="bt">判定顺序</div>
+    Monge 最容易手工验证（直接证四边形不等式），所以实战里通常<b>先证 Monge，再免费拿到 TM / Monotone 性</b>。反方向的蕴含都不成立。
+  </div>
+
+  <h3 class="sec">算法总览</h3>
+  <div class="tblwrap">
+  <table class="tbl">
+    <tr><th>算法</th><th>所需性质</th><th>时间复杂度</th><th>典型场景 / 经典题</th></tr>
+    <tr><td><span class="xref" data-xref="monotone">Monotone Minima</span></td>
+      <td>Monotone</td><td class="cx">O((n+m) log n)</td>
+      <td>1D1D DP 转移、<span class="m">min<sub>j</sub>{A<sub>j</sub>+B<sub>i−j</sub>}</span> 卷积</td></tr>
+    <tr><td><span class="xref" data-xref="smawk">SMAWK</span></td>
+      <td>Totally Monotone</td><td class="cx">O(n+m)</td>
+      <td>Monge 矩阵行最小值、IOI 2014 Holiday、Milutin's Plums</td></tr>
+    <tr><td><span class="xref" data-xref="dnc">D&amp;C 优化</span></td>
+      <td>Monotone（opt 单调）</td><td class="cx">O(kn log n)</td>
+      <td><span class="m">dp[i][j]=min<sub>k&lt;j</sub>{dp[i−1][k]+C[k][j]}</span> 分层 DP</td></tr>
+    <tr><td><span class="xref" data-xref="knuth">Knuth / Knuth-Yao</span></td>
+      <td>四边形不等式 + 区间单调</td><td class="cx">O(n²)（原 O(n³)）</td>
+      <td>区间 DP：石子合并、最优二叉搜索树</td></tr>
+    <tr><td><span class="xref" data-xref="larsch">LARSCH</span></td>
+      <td>Totally Monotone + 在线</td><td class="cx">O(n)</td>
+      <td><span class="m">dp[i]=min<sub>j</sub>{dp[j]+C(j+1,i)}</span>，C 为 Monge</td></tr>
+    <tr><td><span class="xref" data-xref="cht">Convex Hull Trick</span></td>
+      <td>斜率单调</td><td class="cx">O(n) / O(n log n)</td>
+      <td><span class="m">dp[i]=min<sub>j</sub>{dp[j]+b<sub>j</sub>·a<sub>i</sub>}</span> 线性转移</td></tr>
+    <tr><td><span class="xref" data-xref="lichao">Li-Chao 树</span></td>
+      <td>无需单调</td><td class="cx">O(n log n)</td>
+      <td>动态插线段、任意顺序插入的线性函数最小值</td></tr>
+    <tr><td><span class="xref" data-xref="aliens">Aliens Trick</span></td>
+      <td>凸性（f(x) 凹/凸）</td><td class="cx">O(n log V)</td>
+      <td>恰好选 K 段的划分 DP：IOI 2016 Aliens、USACO Tall Barn</td></tr>
+    <tr><td><span class="xref" data-xref="kinetic">Kinetic Segment Tree</span></td>
+      <td>函数交点 O(1) 次</td><td class="cx">均摊 O(n log² n)</td>
+      <td>时间递增的区间线性函数最小值，可替代 Li-Chao</td></tr>
+    <tr><td><span class="xref" data-xref="minplus">Min-plus 卷积（凸）</span></td>
+      <td>一侧凸</td><td class="cx">O(n)</td>
+      <td><span class="m">C<sub>i</sub>=min<sub>j</sub>{A<sub>j</sub>+B<sub>i−j</sub>}</span>，B 为凸</td></tr>
+  </table>
+  </div>
+
+  <h3 class="sec">选型检查清单</h3>
+  <ol class="steps">
+    <li><b>先把转移写成矩阵形式</b> <span class="m">A<sub>i,j</sub>=dp[j]+C(j,i)</span>，看 argmin 是否随 <span class="m">i</span> 单调——是则进入下一步。</li>
+    <li><b>证 C 的四边形不等式</b>：<span class="m">C(a,c)+C(b,d) ≤ C(a,d)+C(b,c)</span>。常见套路是对离散项求和 / 对区间长度求导；凸代价函数（<span class="m">|x−y|<sup>p</sup>, p≥1</span>）几乎都满足。</li>
+    <li><b>看 DP 是分层的还是 1D1D 在线的</b>：
+      <ul class="list">
+        <li>分层 <span class="m">dp[i][j]</span> 依赖 <span class="m">dp[i−1][k]</span> → <span class="xref" data-xref="dnc">D&amp;C 优化</span>，<span class="m">O(kn log n)</span>；</li>
+        <li>单层 <span class="m">dp[i]</span> 依赖 <span class="m">dp[j]</span>，代价矩阵 Monge → <span class="xref" data-xref="larsch">LARSCH</span> <span class="m">O(n)</span>，或退而求其次用 D&amp;C 写法 <span class="m">O(n log n)</span>。</li>
+      </ul>
+    </li>
+    <li><b>如果是区间 DP</b>（<span class="m">dp[i][j]</span> 由 <span class="m">dp[i][k]+dp[k+1][j]</span> 合并）→ <span class="xref" data-xref="knuth">Knuth 优化</span>。</li>
+    <li><b>代价能写成 <span class="m">b<sub>j</sub>·a<sub>i</sub>+dp[j]</span> 的线性形式</b> → <span class="xref" data-xref="cht">CHT</span> / <span class="xref" data-xref="lichao">Li-Chao</span>，看斜率与询问的单调性决定用哪种。</li>
+    <li><b>约束是“恰好 K 个 / 段”且 f(x) 凸</b> → <span class="xref" data-xref="aliens">Aliens Trick</span>。</li>
+    <li><b>查询点全局单调递增且涉及线性函数族</b> → 考虑 <span class="xref" data-xref="kinetic">Kinetic Segment Tree</span>。</li>
+  </ol>
+
+  <h3 class="sec">常见误区</h3>
+  <div class="box warn">
+    <ul class="list" style="margin:0">
+      <li><b>把 Monotone 当 TM 用</b>：Monotone Minima 只需 Monotone，SMAWK 需 TM；Monge ⇒ TM 但 TM 不 ⇒ Monge，反例存在。证 TM 最省事的路子就是证 Monge。</li>
+      <li><b>D&amp;C 优化和 Knuth 混淆</b>：D&amp;C 处理“分层依赖上一层的 DP”，Knuth 处理“区间合并 DP”，形式不同；能用 Knuth 的题一定能用 D&amp;C 风格的写法（甚至 SMAWK），反之不然。</li>
+      <li><b>Aliens Trick 忘了凸性条件</b>：<span class="m">f(x)</span> 不凸时二分可能永远碰不到 <span class="m">f(K)</span>，或在整点 λ 处跳跃漏解，必须验证凹凸性。</li>
+      <li><b>LARSCH 被误当作 SMAWK 的别名</b>：SMAWK 要求矩阵“离线可知”，LARSCH 专门处理 dp 在线生成的场景，两者不能互换。</li>
+      <li><b>盲目追 SMAWK</b>：D&amp;C 常数极小，多数数据范围下 D&amp;C 更快也更短；SMAWK 的实际收益要到百万级或访问次数受限的交互题才体现。</li>
+    </ul>
+  </div>
+
+  <h3 class="sec">练习路线</h3>
+  <p>入门顺序：先做 <span class="xref" data-xref="knuth">Knuth</span> 的基础区间 DP 题（石子合并变体）→ <span class="xref" data-xref="dnc">D&amp;C 优化</span> 的分层 DP 题单（CF / AtCoder 上 tagged “divide and conquer optimization”）→ <span class="xref" data-xref="cht">CHT / Li-Chao</span> 斜率优化系列 → 进阶 <span class="xref" data-xref="aliens">Aliens Trick</span>（USACO Tall Barn、IOI 2016 Aliens）和 <span class="xref" data-xref="smawk">SMAWK / LARSCH</span>（IOI 2014 Holiday 是必做经典）。ko_osaga 的 Kinetic 文章和 cp-algorithms 的 CHT 页是进阶阅读的好起点。具体出处见<span class="xref" data-xref="refs">资料来源</span>。</p>
+</section>
+
+<!-- ================= Monotone Minima ================= -->
+<section class="panel" id="panel-monotone">
+  <h2>Monotone Minima <span class="alias">单调最小值 · 决策单调性分治</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>Monotone</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O((n+m) log n)</span>
+    <span class="chip s"><span class="lbl">场景</span>1D1D DP · min-plus 卷积</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>矩阵 <span class="m">A</span> 满足<b>每行 argmin 随行号单调不减</b>，求每行最小值位置，复杂度 <span class="m">O((n+m) log n)</span>。</p>
+
+  <h3 class="sec">核心思路</h3>
+  <p>经典分治：取中间行暴力扫出其 argmin，然后左上 / 右下两个子矩阵递归。因为左下和右上区域被单调性排除，<b>每层总代价 <span class="m">O(n+m)</span></b>。</p>
+
+  <div class="codeblock">
+    <div class="codehead"><span>monotone_minima.cpp · C++</span><button class="copy">复制</button></div>
+<pre><code>// 求 argmin(row) 随 row 单调不减的矩阵每行最小值位置
+void solve(int l, int r, int optl, int optr) {
+    if (l &gt; r) return;
+    int mid = (l + r) / 2, best = optl;
+    for (int j = optl; j &lt;= min(optr, mid); j++)
+        if (cost(mid, j) &lt; cost(mid, best)) best = j;
+    ans[mid] = best;
+    solve(l, mid - 1, optl, best);
+    solve(mid + 1, r, best, optr);
+}</code></pre>
+  </div>
+
+  <h3 class="sec">适用判定</h3>
+  <p>写出矩阵 <span class="m">A<sub>i,j</sub> = dp[j] + C(j, i)</span>，如果 <span class="m">i</span> 增大时最优 <span class="m">j</span> 单调不减，即可用。实际操作中大多是先证 <span class="m">C</span> 满足四边形不等式（Monge），从而推出矩阵单调。</p>
+
+  <h3 class="sec">延伸应用：min-plus 卷积</h3>
+  <p>一个不太显然的应用：<span class="m">C<sub>i</sub> = min<sub>j</sub>{A<sub>j</sub> + B<sub>i−j</sub>}</span>，当 <span class="m">B</span> 是下凸序列时，把 <span class="m">A<sub>j</sub> + B<sub>i−j</sub></span> 排成矩阵后是 Monge 的，于是可以 <span class="m">O(n log n)</span> 求卷积。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="smawk">SMAWK</span> · <span class="xref" data-xref="dnc">D&amp;C 优化</span> · <span class="xref" data-xref="minplus">Min-plus 卷积</span></div>
+</section>
+
+<!-- ================= SMAWK ================= -->
+<section class="panel" id="panel-smawk">
+  <h2>SMAWK <span class="alias">Totally Monotone 矩阵行最小值</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>Totally Monotone</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n+m)</span>
+    <span class="chip s"><span class="lbl">场景</span>Monge 行最小值 · IOI 2014 Holiday · Milutin's Plums</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>Totally Monotone 矩阵的行最小值，<span class="m">O(n+m)</span>，比 Monotone Minima 少一个 <span class="m">log</span>。</p>
+
+  <h3 class="sec">算法结构</h3>
+  <ul class="list">
+    <li><b>Reduce</b>：用栈删列，把列数压到不超过行数；</li>
+    <li><b>Interpolate</b>：只递归奇数行，再由相邻奇数行夹出偶数行的候选范围。</li>
+  </ul>
+
+  <h3 class="sec">与 D&amp;C 的关系</h3>
+  <p>SMAWK 能用的地方 D&amp;C 一定能用（TM ⇒ Monotone），<b>反之不成立</b>。但实测 D&amp;C 常数极小，几千到几十万规模时往往 D&amp;C 更快；SMAWK 的优势要到百万级才显现，或者题目<b>限制了矩阵访问次数</b>（如只允许 <span class="m">4(n+m)</span> 次询问）时才必须用。</p>
+
+  <div class="box tip">
+    <div class="bt">实战建议</div>
+    除非卡常，一般用 <span class="xref" data-xref="monotone">Monotone Minima</span> / D&amp;C 就够了；SMAWK 当作“知道存在、需要时能抄”的工具即可。
+  </div>
+
+  <div class="related">相关：<span class="xref" data-xref="monotone">Monotone Minima</span> · <span class="xref" data-xref="larsch">LARSCH</span> · <span class="xref" data-xref="knuth">Knuth 优化</span></div>
+</section>
+
+<!-- ================= D&C ================= -->
+<section class="panel" id="panel-dnc">
+  <h2>D&amp;C Optimization <span class="alias">分治优化</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>Monotone（opt 单调）</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(kn log n)</span>
+    <span class="chip s"><span class="lbl">场景</span>分层 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>分层 DP：</p>
+  <div class="fml">dp[i][j] = min<sub>k&lt;j</sub> { dp[i−1][k] + C[k][j] }</div>
+  <p>其中 <span class="m">C</span> 满足四边形不等式（等价于每层内部 opt 单调）。复杂度从 <span class="m">O(kn²)</span> 降到 <span class="m">O(kn log n)</span>。</p>
+
+  <h3 class="sec">与 Monotone Minima 的区别</h3>
+  <p>D&amp;C 优化处理的是“<b>转移依赖上一层 dp</b>”的分层结构，而 Monotone Minima 处理的是单层内已知代价矩阵的行最小值。本质上，D&amp;C 优化每层就是在跑一次 <span class="xref" data-xref="monotone">Monotone Minima</span>。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="monotone">Monotone Minima</span> · <span class="xref" data-xref="knuth">Knuth 优化</span> · <span class="xref" data-xref="larsch">LARSCH</span></div>
+</section>
+
+<!-- ================= Knuth ================= -->
+<section class="panel" id="panel-knuth">
+  <h2>Knuth Optimization <span class="alias">Knuth-Yao Speedup</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>四边形不等式 + 区间单调</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n²)（原 O(n³)）</span>
+    <span class="chip s"><span class="lbl">场景</span>区间 DP · 石子合并 · 最优 BST</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>区间 DP：</p>
+  <div class="fml">dp[i][j] = min<sub>i≤k&lt;j</sub> { dp[i][k] + dp[k+1][j] } + C[i][j]</div>
+  <p>其中 <span class="m">C</span> 满足四边形不等式 + 区间单调，复杂度 <span class="m">O(n²)</span>（朴素 <span class="m">O(n³)</span>）。</p>
+
+  <h3 class="sec">核心：决策点单调</h3>
+  <div class="fml">K(i, j−1) ≤ K(i, j) ≤ K(i+1, j)</div>
+  <p>按区间长度从小到大填表时，每个 <span class="m">dp[i][j]</span> 只需在 <span class="m">[K(i,j−1), K(i+1,j)]</span> 这个小区间内枚举 <span class="m">k</span>，总枚举量 <span class="m">O(n²)</span>。</p>
+
+  <h3 class="sec">经典题目</h3>
+  <p>石子合并、最优二叉搜索树（这正是 Knuth 1971 年原始论文处理的问题）、Breaking String。</p>
+
+  <h3 class="sec">理论注记</h3>
+  <p>Bein–Golin–Larmore–Zhang (2009) 证明了 Knuth-Yao 能用的地方 <span class="xref" data-xref="smawk">SMAWK</span> 也能用，两者本质同源。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="dnc">D&amp;C 优化</span> · <span class="xref" data-xref="smawk">SMAWK</span></div>
+</section>
+
+<!-- ================= LARSCH ================= -->
+<section class="panel" id="panel-larsch">
+  <h2>LARSCH <span class="alias">在线 Totally Monotone 行最小值</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>Totally Monotone + 在线</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n)</span>
+    <span class="chip s"><span class="lbl">场景</span>1D1D 在线 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <div class="fml">dp[i] = min<sub>j</sub> { dp[j] + C(j+1, i) }</div>
+  <p><span class="m">C</span> 为 Monge，但 DP 是<b>在线</b>的——<span class="m">dp[i]</span> 本身参与后面的转移，不能预先整张矩阵。LARSCH 做到 <span class="m">O(n)</span>。</p>
+
+  <h3 class="sec">本质：在线版 SMAWK</h3>
+  <p>它保证算第 <span class="m">i</span> 行的 argmin 时，只用到已经算好的 <span class="m">dp[1..i−1]</span>，正好匹配自底向上的 DP 顺序。如果题目是这个形式（转移代价 Monge、dp 自己也在矩阵里），LARSCH 是<b>唯一能做到 <span class="m">O(n)</span></b> 的算法；<span class="xref" data-xref="smawk">SMAWK</span> 和 <span class="xref" data-xref="monotone">Monotone Minima</span> 都因为“需要整行先知道”而不可用。</p>
+
+  <h3 class="sec">实现</h3>
+  <p>LARSCH 实现上比较繁琐，竞赛中 noshi91 等人的库有现成模板（见<span class="xref" data-xref="refs">资料来源</span>）。很多场合用 <span class="xref" data-xref="dnc">D&amp;C 优化</span>（<span class="m">O(n log n)</span>）也能过。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="smawk">SMAWK</span> · <span class="xref" data-xref="dnc">D&amp;C 优化</span></div>
+</section>
+
+<!-- ================= CHT ================= -->
+<section class="panel" id="panel-cht">
+  <h2>Convex Hull Trick <span class="alias">斜率优化 · CHT</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>斜率单调</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n) / O(n log n)</span>
+    <span class="chip s"><span class="lbl">场景</span>线性转移 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <div class="fml">dp[i] = min<sub>j</sub> { dp[j] + b<sub>j</sub>·a<sub>i</sub> }</div>
+  <p>把每个 <span class="m">j</span> 看成直线 <span class="m">y = b<sub>j</sub>x + dp[j]</span>，每次在 <span class="m">x = a<sub>i</sub></span> 处取最小值。</p>
+
+  <h3 class="sec">三种情形</h3>
+  <ul class="list">
+    <li><b>斜率 <span class="m">b<sub>j</sub></span> 单调、询问 <span class="m">a<sub>i</sub></span> 也单调</b>：单调栈 / 双端队列维护下凸壳，均摊 <span class="m">O(1)</span>；</li>
+    <li><b>斜率单调但询问任意</b>：凸壳上二分，<span class="m">O(log n)</span>；</li>
+    <li><b>完全动态（任意插入）</b>：<span class="xref" data-xref="lichao">Li-Chao 树</span> 或平衡树维护动态凸壳。</li>
+  </ul>
+
+  <h3 class="sec">判定要点</h3>
+  <p>把转移重写成 <span class="m">b<sub>j</sub>·a<sub>i</sub> + dp[j]</span> 的“斜率 × 自变量 + 截距”形式，看 <span class="m">b<sub>j</sub></span> 和 <span class="m">a<sub>i</sub></span> 的单调性。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="lichao">Li-Chao 树</span> · <span class="xref" data-xref="kinetic">Kinetic 段树</span> · <span class="xref" data-xref="deque">单调队列</span></div>
+</section>
+
+<!-- ================= Li Chao ================= -->
+<section class="panel" id="panel-lichao">
+  <h2>Li-Chao Segment Tree <span class="alias">李超线段树</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>无需单调</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(log n) 插入 / 查询</span>
+    <span class="chip s"><span class="lbl">场景</span>动态插线段</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p><span class="xref" data-xref="cht">CHT</span> 的动态版：线段树每个节点存“在该区间中点最优的线”，插入时与节点当前线比较，<b>留优去劣递归一侧</b>。不需要任何单调性，插入 / 查询均 <span class="m">O(log n)</span>，实现比动态 CHT 简单很多。</p>
+
+  <div class="box tip">
+    <div class="bt">何时首选</div>
+    当插入顺序或询问顺序无法保证单调时，Li-Chao 是首选。
+  </div>
+
+  <div class="related">相关：<span class="xref" data-xref="cht">斜率优化 CHT</span> · <span class="xref" data-xref="kinetic">Kinetic 段树</span></div>
+</section>
+
+<!-- ================= Aliens ================= -->
+<section class="panel" id="panel-aliens">
+  <h2>Aliens Trick <span class="alias">WQS 二分 · Lagrangian 松弛</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>f(x) 凸（或凹）</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n log V)</span>
+    <span class="chip s"><span class="lbl">场景</span>恰好 K 段的划分 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>形如“<b>恰好选 K 段 / K 个物品</b>”的 DP，朴素需要带一维状态记录已选个数。Aliens Trick 去掉这一维：给每次“开新段”附加惩罚 <span class="m">λ</span>，变成无约束 DP <span class="m">dp<sub>λ</sub></span>（<span class="m">O(n)</span>），再二分 <span class="m">λ</span> 使选的段数恰好等于 <span class="m">K</span>。</p>
+
+  <h3 class="sec">适用条件：f(x) 必须凸（或凹）</h3>
+  <p><span class="m">f(x)</span> 是“选 <span class="m">x</span> 段的最优值”，要求 <span class="m">f(x)</span> 的差分单调，这样 <span class="m">f(x) − λ·x</span> 才能通过 <span class="m">λ</span> 的调整触到 <span class="m">f(K)</span> 这个点。二分时选“最大 / 最小的 <span class="m">λ</span> 使段数 ≥ K”（或 ≤ K，方向取决于凹凸），答案为 <span class="m">v(λ) + λ·K</span>。</p>
+
+  <h3 class="sec">经典题目</h3>
+  <p>IOI 2016 Aliens（名字即由此而来）、USACO 2017 Tall Barn、CF 868F 等“恰好 K 段最大和 / 最小代价”题。</p>
+
+  <h3 class="sec">常见坑</h3>
+  <div class="box warn">
+    <ul class="list" style="margin:0">
+      <li>不凸时（<span class="m">f</span> 有拐点）会二分到错误答案；</li>
+      <li>整点 <span class="m">λ</span> 时可能多个 <span class="m">λ</span> 对应同一 <span class="m">K</span>，需要选对边界方向；</li>
+      <li>答案要<b>回加 <span class="m">λ·K</span></b>，而不是直接用 <span class="m">dp<sub>λ</sub></span>。</li>
+    </ul>
+  </div>
+
+  <div class="related">相关：<span class="xref" data-xref="dnc">D&amp;C 优化</span> · <span class="xref" data-xref="cht">斜率优化 CHT</span></div>
+</section>
+
+<!-- ================= Kinetic ================= -->
+<section class="panel" id="panel-kinetic">
+  <h2>Kinetic Segment Tree <span class="alias">Kinetic Tournament</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>函数交点 O(1) 次</span>
+    <span class="chip c"><span class="lbl">复杂度</span>均摊 O(n log² n)（heaten）</span>
+    <span class="chip s"><span class="lbl">场景</span>时间递增的区间线性函数最小值</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <p>维护 <span class="m">n</span> 条直线 <span class="m">A<sub>i</sub>t + B<sub>i</sub></span>，支持：</p>
+  <ul class="list">
+    <li>区间更新、区间查询 <span class="m">min<sub>i∈[l,r]</sub> A<sub>i</sub>t + B<sub>i</sub></span>：每次 <span class="m">O(log n)</span>；</li>
+    <li>全局“加热”heaten（时间 <span class="m">t</span> 单调前进）：总代价均摊 <span class="m">O(n log² n)</span>（线性函数情形）。</li>
+  </ul>
+
+  <h3 class="sec">理解与实现</h3>
+  <p>可以把它理解成“<b>支持区间查询的 <span class="xref" data-xref="lichao">Li-Chao</span> + 时间递增</b>”。核心技巧：每个线段树节点记子树内“最小值何时会换人”的阈值 <span class="m">melt</span>，heaten 时沿根向下找过期节点重建——这正是 <span class="m">Segment Tree Beats</span> 的势能分析思路。它出自 ko_osaga 的文章，竞赛中已出现在 FBHC Round 2（Kinetic Tournament 名字即来自 CF 上的讨论）。</p>
+
+  <h3 class="sec">适用场景</h3>
+  <p>查询的 <span class="m">x</span>（时间）整体单调递增、函数是线性或至多相交常数次的曲线。函数相交次数是 <span class="m">s</span> 时复杂度变为 <span class="m">O(λ<sub>s+2</sub>(n) log² n)</span>，<span class="m">s</span> 小时近似线性。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="lichao">Li-Chao 树</span> · <span class="xref" data-xref="cht">斜率优化 CHT</span></div>
+</section>
+
+<!-- ================= 单调队列 ================= -->
+<section class="panel" id="panel-deque">
+  <h2>单调队列 / 单调栈 <span class="alias">Sliding Window Optimization</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>滑动窗口</span>
+    <span class="chip c"><span class="lbl">复杂度</span>均摊 O(1)</span>
+    <span class="chip s"><span class="lbl">场景</span>窗口类 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <div class="fml">dp[i] = min<sub>i−k ≤ j &lt; i</sub> { dp[j] } + C<sub>i</sub></div>
+  <p>这类滑动窗口最小值，用单调队列做到均摊 <span class="m">O(1)</span> 转移。它其实是 <span class="xref" data-xref="monotone">Monotone Minima</span> 在“窗口固定宽度”退化情形下的特例，也是最基础、最常被忽略的一类优化。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="cht">斜率优化 CHT</span> · <span class="xref" data-xref="monotone">Monotone Minima</span></div>
+</section>
+
+<!-- ================= Min-plus ================= -->
+<section class="panel" id="panel-minplus">
+  <h2>Min-plus Convolution <span class="alias">(min, +) 卷积的单调 / 凸版本</span></h2>
+  <div class="meta">
+    <span class="chip p"><span class="lbl">性质</span>一侧凸</span>
+    <span class="chip c"><span class="lbl">复杂度</span>O(n)（凸+任意）/ 归并（凸+凸）</span>
+    <span class="chip s"><span class="lbl">场景</span>分层背包 · 期望 DP</span>
+  </div>
+
+  <h3 class="sec">解决什么问题</h3>
+  <div class="fml">C<sub>i</sub> = min<sub>j</sub> { A<sub>j</sub> + B<sub>i−j</sub> }</div>
+  <p>一般的 <span class="m">(min,+)</span> 卷积被认为是无法显著亚二次的（有 SETH 类下界）。但当一侧序列是凸的：</p>
+  <ul class="list">
+    <li><b>一侧凸</b>：借助 Monge 矩阵行最小值做到 <span class="m">O(n)</span>；</li>
+    <li><b>两侧都凸</b>：就是 Minkowski 和，直接归并。</li>
+  </ul>
+  <p>这个技巧在分层背包、期望 DP 中频繁出现。</p>
+
+  <div class="related">相关：<span class="xref" data-xref="monotone">Monotone Minima</span> · <span class="xref" data-xref="smawk">SMAWK</span></div>
+</section>
+
+<!-- ================= 资料来源 ================= -->
+<section class="panel" id="panel-refs">
+  <h2>资料来源 <span class="alias">References</span></h2>
+  <p>以下按 教程 / 原始论文 / 社区资源 / 题目 分类，整理本文内容所依据的参考来源。</p>
+
+  <div class="refgroup">
+    <h3 class="sec">教程与知识库</h3>
+    <div class="ref"><div class="n">01</div><div class="body">
+      <div class="t"><em>Convex hull trick and Li Chao tree</em> · cp-algorithms</div>
+      <div class="src"><a href="https://cp-algorithms.com/geometry/convex_hull_trick.html" target="_blank" rel="noopener">cp-algorithms.com/geometry/convex_hull_trick.html ↗</a></div>
+      <div class="note">CHT 三种情形（双单调 / 单调 + 任意询问 / 动态）与 Li-Chao 线段树的标准讲解。</div>
+    </div></div>
+    <div class="ref"><div class="n">02</div><div class="body">
+      <div class="t"><em>Divide and Conquer DP</em> · cp-algorithms</div>
+      <div class="src"><a href="https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html" target="_blank" rel="noopener">cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html ↗</a></div>
+      <div class="note">D&amp;C 优化的标准讲解（分层 DP + opt 单调）。</div>
+    </div></div>
+    <div class="ref"><div class="n">03</div><div class="body">
+      <div class="t"><em>SMAWK algorithm</em> · Wikipedia</div>
+      <div class="src"><a href="https://en.wikipedia.org/wiki/SMAWK_algorithm" target="_blank" rel="noopener">en.wikipedia.org/wiki/SMAWK_algorithm ↗</a></div>
+      <div class="note">Reduce / Interpolate 结构、O(n+m) 复杂度与原始文献索引。</div>
+    </div></div>
+    <div class="ref"><div class="n">04</div><div class="body">
+      <div class="t"><em>Monge array</em> · Wikipedia</div>
+      <div class="src"><a href="https://en.wikipedia.org/wiki/Monge_array" target="_blank" rel="noopener">en.wikipedia.org/wiki/Monge_array ↗</a></div>
+      <div class="note">Monge / Totally Monotone 性质的定义与关系。</div>
+    </div></div>
+  </div>
+
+  <div class="refgroup">
+    <h3 class="sec">原始论文</h3>
+    <div class="ref"><div class="n">05</div><div class="body">
+      <div class="t">D. E. Knuth — <em>Optimum binary search trees</em> · Acta Informatica, 1971</div>
+      <div class="note">Knuth 优化出处（最优 BST 的 O(n²) 加速）。</div>
+    </div></div>
+    <div class="ref"><div class="n">06</div><div class="body">
+      <div class="t">A. Aggarwal, M. Klawe, S. Moran, P. Shor, R. Wilber — <em>Geometric applications of a matrix-searching algorithm</em> · Algorithmica, 1987</div>
+      <div class="note">totally monotone 矩阵行最小值系列工作；SMAWK 之名通常认为源于五位作者姓氏首字母。</div>
+    </div></div>
+    <div class="ref"><div class="n">07</div><div class="body">
+      <div class="t">L. Larmore, B. Schieber — <em>On-line dynamic programming with applications to the prediction of RNA secondary structure</em> · Journal of Algorithms</div>
+      <div class="note">LARSCH：在线 TM 矩阵行最小值，1D1D DP 的 O(n) 算法。</div>
+    </div></div>
+    <div class="ref"><div class="n">08</div><div class="body">
+      <div class="t">P. Bein, M. Golin, L. Larmore, Y. Zhang — <em>The Knuth–Yao quadrangle-inequality speedup is a consequence of total monotonicity</em> · ACM TALG, 2009</div>
+      <div class="note">证明 Knuth-Yao 与 SMAWK 本质同源。</div>
+    </div></div>
+    <div class="ref"><div class="n">09</div><div class="body">
+      <div class="t">V. Vassilevska Williams — <em>Fine-Grained Algorithms and Complexity</em>（综述）</div>
+      <div class="note">min-plus 卷积亚二次下界等 fine-grained 复杂度结论的出处。</div>
+    </div></div>
+  </div>
+
+  <div class="refgroup">
+    <h3 class="sec">竞赛社区资源</h3>
+    <div class="ref"><div class="n">10</div><div class="body">
+      <div class="t">ko_osaga — <em>Kinetic Segment Tree / Kinetic Tournament</em>（Codeforces 博文）</div>
+      <div class="note">kinetic tournament 的提出与整理，含 melt 阈值、势能/均摊分析。</div>
+    </div></div>
+    <div class="ref"><div class="n">11</div><div class="body">
+      <div class="t">jiry_2 — <em>Segment tree beats</em>（Codeforces 博文）</div>
+      <div class="src"><a href="https://codeforces.com/blog/entry/57349" target="_blank" rel="noopener">codeforces.com/blog/entry/57349 ↗</a></div>
+      <div class="note">区间势能分析思想，与 Kinetic 段树的均摊分析同源。</div>
+    </div></div>
+    <div class="ref"><div class="n">12</div><div class="body">
+      <div class="t">noshi91 — 算法库与博客（LARSCH / SMAWK 实现）</div>
+      <div class="src"><a href="https://noshi91.hatenablog.com/" target="_blank" rel="noopener">noshi91.hatenablog.com ↗</a></div>
+      <div class="note">竞赛中常用的 LARSCH 现成模板出处之一。</div>
+    </div></div>
+    <div class="ref"><div class="n">13</div><div class="body">
+      <div class="t">Codeforces / AtCoder — “divide and conquer optimization” 等标签题单</div>
+      <div class="note">按优化类型分类的练习题集合，可自行在两家 OJ 按关键词 / 标签检索。</div>
+    </div></div>
+  </div>
+
+  <div class="refgroup">
+    <h3 class="sec">题目</h3>
+    <div class="ref"><div class="n">14</div><div class="body">
+      <div class="t">IOI 2014 <em>Holiday</em></div>
+      <div class="src"><a href="https://ioinformatics.org/" target="_blank" rel="noopener">ioinformatics.org ↗</a></div>
+      <div class="note">SMAWK / 决策单调性必做经典。</div>
+    </div></div>
+    <div class="ref"><div class="n">15</div><div class="body">
+      <div class="t">IOI 2016 <em>Aliens</em></div>
+      <div class="src"><a href="https://ioinformatics.org/" target="_blank" rel="noopener">ioinformatics.org ↗</a></div>
+      <div class="note">Aliens Trick 得名出处。</div>
+    </div></div>
+    <div class="ref"><div class="n">16</div><div class="body">
+      <div class="t">USACO 2017 <em>Tall Barn</em></div>
+      <div class="src"><a href="http://usaco.org/" target="_blank" rel="noopener">usaco.org ↗</a></div>
+      <div class="note">Aliens Trick 经典练习。</div>
+    </div></div>
+    <div class="ref"><div class="n">17</div><div class="body">
+      <div class="t">Codeforces 868F <em>Yet Another Minimization Problem</em></div>
+      <div class="src"><a href="https://codeforces.com/problemset/problem/868F" target="_blank" rel="noopener">codeforces.com/problemset/problem/868F ↗</a></div>
+      <div class="note">“恰好 K 段最小代价”划分，Aliens Trick 经典练习。</div>
+    </div></div>
+    <div class="ref"><div class="n">18</div><div class="body">
+      <div class="t"><em>Milutin's Plums</em></div>
+      <div class="note">SMAWK 应用题（塞尔维亚 OI 系）。</div>
+    </div></div>
+    <div class="ref"><div class="n">19</div><div class="body">
+      <div class="t">Facebook Hacker Cup 2019 Round 2</div>
+      <div class="note">Kinetic Tournament 的出处赛题（“Kinetic Tournament”一名即来自 CF 上的相关讨论）。</div>
+    </div></div>
+  </div>
+
+  <div class="box info" style="margin-top:22px">
+    <div class="bt">说明</div>
+    社区博客与题面链接随时间可能失效，此处列出作者 / 赛事与关键词，失效时可据此检索定位。
+  </div>
+</section>
+
+</main>
+
+<footer>
+  单文件静态页面 · 无外部依赖，可离线使用 · <kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd> 切换标签 · 打印时自动展开全部内容
+</footer>
+
+<script>
+(function(){
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+
+  function activate(id){
+    if(!btns.some(function(b){return b.dataset.tab===id})) id='overview';
+    btns.forEach(function(b){
+      var on = b.dataset.tab===id;
+      b.classList.toggle('active',on);
+      b.setAttribute('aria-selected',on);
+    });
+    panels.forEach(function(p){ p.classList.toggle('active', p.id==='panel-'+id); });
+    try{ history.replaceState(null,'','#'+id); }catch(e){}
+    var ab = btns.find(function(b){return b.dataset.tab===id;});
+    if(ab) ab.scrollIntoView({block:'nearest',inline:'nearest'});
+  }
+
+  btns.forEach(function(b){ b.addEventListener('click',function(){activate(b.dataset.tab);}); });
+
+  // 跨 tab 引用链接
+  document.addEventListener('click',function(e){
+    var x = e.target.closest ? e.target.closest('.xref') : null;
+    if(x){ e.preventDefault(); activate(x.dataset.xref); window.scrollTo({top:0,behavior:'smooth'}); }
+  });
+
+  // Alt + 左右方向键切换
+  window.addEventListener('keydown',function(e){
+    if(!e.altKey || (e.key!=='ArrowLeft' && e.key!=='ArrowRight')) return;
+    var cur = btns.findIndex(function(b){return b.classList.contains('active');});
+    var d = e.key==='ArrowRight' ? 1 : -1;
+    activate(btns[(cur+d+btns.length)%btns.length].dataset.tab);
+    e.preventDefault();
+  });
+
+  window.addEventListener('hashchange',function(){ activate(location.hash.slice(1)); });
+  activate(location.hash.slice(1)||'overview');
+
+  // 轻量 C++ 语法高亮 + 复制按钮
+  var esc = function(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  var RE = /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*')|(\b\d+(?:\.\d+)?\b)|(\b(?:void|int|long|short|bool|char|double|float|unsigned|if|else|for|while|do|return|break|continue|const|auto|struct|class|template|typename|using|namespace|new|delete|static)\b)/g;
+  function hl(t){
+    return t.replace(RE,function(m,com,str,num,kw){
+      if(com) return '<span class="tk-c">'+com+'</span>';
+      if(str) return '<span class="tk-s">'+str+'</span>';
+      if(num) return '<span class="tk-n">'+num+'</span>';
+      if(kw)  return '<span class="tk-k">'+kw+'</span>';
+      return m;
+    });
+  }
+  document.querySelectorAll('.codeblock').forEach(function(bl){
+    var code = bl.querySelector('code');
+    if(code) code.innerHTML = hl(esc(code.textContent));
+    var cp = bl.querySelector('.copy');
+    if(cp) cp.addEventListener('click',function(){
+      if(!code || !navigator.clipboard) return;
+      navigator.clipboard.writeText(code.textContent).then(function(){
+        cp.textContent='已复制'; cp.classList.add('ok');
+        setTimeout(function(){cp.textContent='复制';cp.classList.remove('ok');},1400);
+      }).catch(function(){});
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -22,3 +22,5 @@ maspypy/集合幂级数/集合幂级数讲解_中文.html
 maspypy/形式幂级数/形式幂级数讲解_中文.html
 maspypy/algorithm_math/algorithm_math讲解_中文.html
 maspypy/slopeTrick/slopeTrick讲解_中文.html
+gen-by-ai/决策单调性算法导览.html
+gen-by-ai/Monotone & Convex DP Speedups.html

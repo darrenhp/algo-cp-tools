@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>决策单调性与 DP 优化算法导览</title>
+<meta name="description" content="SMAWK、Monotone Minima、LARSCH、Knuth-Yao、WQS 二分、Slope Trick、Li Chao 等算法竞赛 DP 优化技术的对照表、原理、代码骨架与资料索引。">
+<style>
+:root {
+  --bg: #f6f7fb;
+  --bg-panel: #ffffff;
+  --bg-soft: #f1f3f9;
+  --bg-code: #1b1f2a;
+  --text: #1a1d29;
+  --text-soft: #55596b;
+  --text-dim: #848a9d;
+  --border: #e2e5ee;
+  --border-soft: #edeff6;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+  --accent-2: #0f766e;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --danger: #be123c;
+  --danger-soft: #ffe4e6;
+  --ok: #15803d;
+  --ok-soft: #dcfce7;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .06);
+  --radius: 12px;
+  --mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+html[data-theme="dark"] {
+  --bg: #0e1016;
+  --bg-panel: #151823;
+  --bg-soft: #1b1f2c;
+  --bg-code: #0b0d13;
+  --text: #e6e8f0;
+  --text-soft: #a8adbe;
+  --text-dim: #767c90;
+  --border: #262b3a;
+  --border-soft: #1f2432;
+  --accent: #8b8cf9;
+  --accent-soft: #1e2140;
+  --accent-2: #2dd4bf;
+  --warn: #fbbf24;
+  --warn-soft: #3a2f14;
+  --danger: #fb7185;
+  --danger-soft: #3d1a24;
+  --ok: #4ade80;
+  --ok-soft: #12301f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.app { display: flex; min-height: 100vh; }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  width: 286px;
+  flex: 0 0 286px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  padding: 20px 12px 48px;
+}
+
+.brand {
+  padding: 4px 10px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 12px;
+}
+.brand h1 {
+  font-size: 16px;
+  margin: 0 0 2px;
+  letter-spacing: -.2px;
+}
+.brand p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.search-box { padding: 0 8px 12px; }
+.search-box input {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+.search-box input:focus { border-color: var(--accent); background: var(--bg-panel); }
+
+.nav-group { margin-bottom: 6px; }
+.nav-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 12px 12px 5px;
+}
+.nav-link {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: var(--text-soft);
+  font-size: 13.5px;
+  cursor: pointer;
+  line-height: 1.45;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover { background: var(--bg-soft); color: var(--text); text-decoration: none; }
+.nav-link.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  border-left-color: var(--accent);
+}
+.nav-link .cx {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.nav-link.active .cx { color: var(--accent); opacity: .8; }
+.nav-link.hidden { display: none; }
+
+/* ---------- main ---------- */
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 28px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.icon-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-soft);
+  border-radius: 8px;
+  width: 32px; height: 32px;
+  cursor: pointer;
+  font-size: 14px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.crumb { font-size: 12.5px; color: var(--text-dim); }
+.crumb b { color: var(--text-soft); font-weight: 600; }
+
+.content { padding: 34px 28px 100px; max-width: 1080px; width: 100%; }
+
+/* ---------- typography ---------- */
+.page-head { margin-bottom: 26px; }
+.page-head h2 {
+  font-size: 27px;
+  margin: 0 0 8px;
+  letter-spacing: -.4px;
+  line-height: 1.3;
+}
+.page-head .sub { color: var(--text-soft); font-size: 15px; margin: 0; }
+.page-head .en {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin: 4px 0 0;
+}
+
+h3.sec {
+  font-size: 16.5px;
+  margin: 34px 0 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -.2px;
+}
+h3.sec:first-of-type { margin-top: 22px; }
+h4.sec {
+  font-size: 14px;
+  margin: 20px 0 8px;
+  color: var(--text-soft);
+}
+
+p { margin: 0 0 12px; }
+
+ul.list, ol.list { margin: 0 0 12px; padding-left: 22px; }
+ul.list li, ol.list li { margin-bottom: 7px; }
+ul.list li::marker { color: var(--text-dim); }
+
+code {
+  font-family: var(--mono);
+  font-size: .88em;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 5px;
+  padding: .1em .38em;
+  word-break: break-word;
+}
+pre {
+  background: var(--bg-code);
+  color: #d7dbe8;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: 12.9px;
+  line-height: 1.65;
+  margin: 0 0 14px;
+  border: 1px solid #2a3040;
+}
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+html[data-theme="dark"] pre { border-color: #232838; }
+pre.tree {
+  background: var(--bg-soft);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
+  font-size: 12.4px;
+  line-height: 1.85;
+}
+pre.tree code { color: inherit; }
+pre.tree a { font-weight: 600; }
+
+/* ---------- badges ---------- */
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.badge {
+  font-size: 11.5px;
+  padding: 2.5px 9px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+.badge.cx { font-family: var(--mono); background: var(--accent-soft); color: var(--accent); border-color: transparent; font-weight: 600; }
+.badge.online { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.badge.offline { background: var(--bg-soft); color: var(--text-dim); border-color: var(--border); }
+.badge.moving { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.badge.rand { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+
+/* ---------- table ---------- */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  margin-bottom: 16px;
+}
+table.grid { border-collapse: collapse; width: 100%; font-size: 13.3px; min-width: 780px; }
+table.grid th {
+  text-align: left;
+  padding: 11px 13px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--text-soft);
+  font-weight: 700;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+table.grid td {
+  padding: 10px 13px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+  color: var(--text-soft);
+}
+table.grid tbody tr:hover { background: var(--bg-soft); }
+table.grid tbody tr:last-child td { border-bottom: none; }
+table.grid td.name { color: var(--text); font-weight: 600; white-space: nowrap; }
+table.grid td.name a { color: inherit; }
+td .cx-cell { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600; }
+tr.group-row td {
+  background: var(--bg-soft);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+  padding: 7px 13px;
+}
+
+/* ---------- cards ---------- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px 16px;
+  display: block;
+  color: inherit;
+  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.card:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.card .t { font-weight: 700; font-size: 14.5px; margin-bottom: 4px; color: var(--text); }
+.card .d { font-size: 12.8px; color: var(--text-soft); line-height: 1.6; }
+.card .m { font-family: var(--mono); font-size: 11.5px; color: var(--accent); margin-top: 8px; font-weight: 600; }
+
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+  font-size: 13.8px;
+  color: var(--text-soft);
+}
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.danger { border-left-color: var(--danger); background: var(--danger-soft); }
+.callout.ok { border-left-color: var(--ok); background: var(--ok-soft); }
+.callout b { color: var(--text); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip {
+  font-size: 12.5px;
+  padding: 5px 13px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-soft);
+  cursor: pointer;
+  font-family: inherit;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.on { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 8px 18px; font-size: 13.5px; margin-bottom: 6px; }
+.kv dt { color: var(--text-dim); }
+.kv dd { margin: 0; color: var(--text-soft); }
+
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 14px; font-size: 13.5px; }
+.chain .node {
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: 9px;
+  padding: 7px 14px;
+  color: var(--text-soft);
+}
+.chain .node strong { color: var(--text); }
+.chain .arrow { color: var(--accent); font-weight: 700; }
+
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--border); }
+.pager a {
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  color: var(--text-soft);
+  max-width: 46%;
+}
+.pager a:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.pager a .lb { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 1px; }
+
+.ref-item { margin-bottom: 11px; font-size: 13.6px; }
+.ref-item .rt { color: var(--text); font-weight: 600; }
+.ref-item .rd { color: var(--text-dim); font-size: 12.5px; }
+.ref-item a { font-family: var(--mono); font-size: 11.8px; word-break: break-all; }
+
+.footer-note { margin-top: 40px; font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 14px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.3px; color: var(--text-dim); margin-bottom: 14px; }
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform .2s ease;
+    box-shadow: var(--shadow);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .icon-btn { display: flex; }
+  .content { padding: 24px 18px 80px; }
+  .topbar { padding: 10px 14px; }
+  .page-head h2 { font-size: 22px; }
+  .scrim {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 50;
+    display: none;
+  }
+  .scrim.show { display: block; }
+}
+
+@media print {
+  .sidebar, .topbar, .pager { display: none; }
+  .content { max-width: none; padding: 0; }
+}
+
+/* ---------- code highlight ---------- */
+pre code .c { color: #6b7590; font-style: italic; }
+pre code .s { color: #9ae6b4; }
+pre code .k { color: #c4a7f7; }
+pre code .n { color: #f6ad55; }
+html[data-theme="dark"] pre code .c { color: #5c6478; }
+
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <h1>DP 优化算法导览</h1>
+      <p>决策单调性 · Monge · 凸性</p>
+    </div>
+    <div class="search-box">
+      <input id="search" type="search" placeholder="搜索算法 / 性质…" autocomplete="off">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="菜单">☰</button>
+      <div class="crumb" id="crumb"><b>总览</b></div>
+      <button class="icon-btn" id="themeBtn" style="margin-left:auto" aria-label="切换主题">☾</button>
+    </header>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+<script>
+/* ===== 分组定义 ===== */
+const FAMILIES = [
+  {
+    id: "monge",
+    name: "Ⅰ · 决策单调性与 Monge 矩阵族",
+    desc: "核心：四边形不等式 ⟹ 决策点单调 ⟹ 不必枚举全部决策点。"
+  },
+  {
+    id: "linear",
+    name: "Ⅱ · 凸包与线性函数最值族",
+    desc: "转移关于查询点呈线性，用凸壳 / 线段树维护直线集合。"
+  },
+  {
+    id: "convex",
+    name: "Ⅲ · 凸性与卷积族",
+    desc: "依赖「答案对某个参数凸」或「序列凸」，砍掉状态的一维。"
+  },
+  {
+    id: "appendix",
+    name: "Ⅳ · 附录",
+    desc: "性质层级、访问模型、选型决策树与资料索引。"
+  }
+];
+
+/* ===== 算法数据 ===== */
+const ALGOS = [
+
+/* ---------- 1 ---------- */
+{
+  id: "monotone-minima",
+  name: "Monotone Minima",
+  en: "Divide-and-conquer row minima on a monotone matrix",
+  family: "monge",
+  tagline: "中点行暴力扫一遍，用它的最优列把矩阵切成两半递归。",
+  props: ["Monotone（行最优列位置非降）"],
+  access: ["随机访问", "移动访问"],
+  mode: "离线",
+  cx: "O((n+m) log m)",
+  cxNote: "n 列、m 行。共 log m 层递归，每层扫描总长 O(n+m)。常见简写 O(m log n)。",
+  cxTable: [
+    { c: "标准（w 可 O(1) 取）", v: "O((n+m) log m)" },
+    { c: "移动访问（双指针跳转）", v: "O((n+m) log m) 次 w 计算" }
+  ],
+  when: [
+    "求单调矩阵每行（列）的最小值位置：1D/1D DP 的 <code>dp[i] = min_{j&lt;i}{dp[j] + w(j,i)}</code>（离线形态）。",
+    "<b>成本函数只支持「移动访问」时</b>——即 <code>w(j,i)</code> 无法 O(1) 随机取，只能从当前格移到相邻格增量维护（莫队式双指针）。这是它压过 SMAWK 的杀手锏。",
+    "<code>min_j{A_j + B_{i-j}}</code> 形态的卷积 / 合并类转移。",
+    "作为更大算法的内层子程序：CDQ 分治里批量处理「左半 → 右半」的转移。"
+  ],
+  how: [
+    "定义 <code>solve(l, r, L, R)</code>：计算第 <code>l..r</code> 行的最优列，且已知这些行的 opt 都落在 <code>[L,R]</code> 内。",
+    "取中点行 <code>mid</code>，在 <code>[L,R]</code> 上暴力扫一遍得到 <code>opt(mid)</code>。",
+    "由单调性：左半所有行的 opt ≤ opt(mid)，右半所有行的 opt ≥ opt(mid)。递归 <code>solve(l,mid-1,L,opt(mid))</code> 与 <code>solve(mid+1,r,opt(mid),R)</code>。",
+    "每层递归中各子问题的扫描区间互不重叠（只在端点处重合），故每层总代价 O(n+m)。"
+  ],
+  code: `// A(row, col) 可 O(1) 计算，或由双指针增量维护
+// 求 opt[0..m-1]：每行最小值所在的列
+void solve(int l, int r, int L, int R) {
+    if (l > r) return;
+    int mid = (l + r) >> 1;
+    pair<T, int> best = {INF, -1};
+    for (int j = L; j <= R; ++j) {        // 暴力扫中点行
+        T v = A(mid, j);                  // 移动访问时：把指针从上一位置跳到 (mid,j)
+        if (v < best.first) best = {v, j};
+    }
+    opt[mid] = best.second;
+    solve(l, mid - 1, L, best.second);
+    solve(mid + 1, r, best.second, R);
+}
+// 调用：solve(0, m - 1, 0, n - 1)`,
+  pitfalls: [
+    "<b>只需 Monotone，不需要 Totally Monotone。</b>它比 SMAWK 的条件弱，但比 SMAWK 多一个 log。",
+    "<b>tie-breaking 必须自洽</b>：决定取「最左最优列」还是「最右最优列」后，比较符号与递归方向要一致，否则单调性会被等号破坏。",
+    "移动访问时，扫描顺序要规划好：向左右两个子递归跳指针的代价与区间长度相关，总跳转次数仍是 O((n+m) log m)。",
+    "递归里 <code>[L,R]</code> 是<b>列</b>区间，<code>[l,r]</code> 是<b>行</b>区间，别写反。"
+  ],
+  problems: [
+    "CF 868F Yet Another Minimization Problem —— 分治 + 莫队移动指针算 w，是「移动访问」的教科书用例",
+    "任何 <code>dp[i][k] = min_j{dp[j][k-1] + C(j,i)}</code> 且 C 满足四边形不等式的分层 DP"
+  ],
+  refs: [
+    { t: "OI Wiki · 四边形不等式优化", u: "https://oi-wiki.org/dp/opt/quadrangle/", d: "含分治 + 移动访问的完整讨论" },
+    { t: "Jeff Erickson · Advanced Dynamic Programming", u: "https://jeffe.cs.illinois.edu/teaching/comptop/2017/notes/D-faster-dynprog.pdf", d: "TM / Monge 的定义与 D&C 界" }
+  ]
+},
+
+/* ---------- 2 ---------- */
+{
+  id: "smawk",
+  name: "SMAWK",
+  en: "Aggarwal–Klawe–Moran–Shor–Wilber, 1987",
+  family: "monge",
+  tagline: "Reduce 删列 + Interpolate 插值，线性时间取完全单调矩阵的所有行最优。",
+  props: ["Totally Monotone（TM）", "Monge ⟹ TM"],
+  access: ["随机访问"],
+  mode: "离线",
+  cx: "O(m + n)",
+  cxNote: "m 行 n 列。原始更精确的界是 O(m(1 + log(n/m)))，当行数远多于列数时比 O(m+n) 更强。",
+  cxTable: [
+    { c: "完全单调矩阵行最优", v: "O(m + n)" },
+    { c: "原始界（m ≫ n 时）", v: "O(m(1 + log(n/m)))" },
+    { c: "两个 n×n Monge 矩阵的 min-plus 乘积", v: "O(n²)" }
+  ],
+  when: [
+    "隐式给出的完全单调（或 Monge）矩阵，求每一行的最值位置，且 <code>A(i,j)</code> 可 O(1) 随机取。",
+    "分层 DP 的离线转移：每层一次 SMAWK，总 O(kn)。",
+    "<b>min-plus 卷积中一侧序列为凸</b>：矩阵 <code>A[i][j] = a[j] + b[i-j]</code> 在 b 凸时是 Monge，故可 O(n) 求出整个卷积。",
+    "计算几何：凸多边形顶点间的最远点、最优包围多边形。"
+  ],
+  how: [
+    "<b>Reduce</b>：从左到右扫列，用一个栈（类似 Graham scan / 最近更小值）删掉绝不可能成为任何行最优的列。删完后剩余列数 ≤ 行数。",
+    "<b>Interpolate</b>：只递归求解偶数行的最优列；由于 <code>opt(2k-1) ≤ opt(2k) ≤ opt(2k+1)</code>，奇数行的候选只需在相邻两个偶数行的最优列之间暴力枚举。",
+    "两者交替：Interpolate 把行数减半，Reduce 把列数压到不超过行数，总代价线性。"
+  ],
+  code: `// 结构骨架（竞赛中建议直接用成熟板子，如 maspy's library / 资料页）
+// cmp(r, u, v): 在第 r 行，列 u 是否「不优于」列 v
+vector<int> smawk(const vector<int>& row, const vector<int>& col, auto cmp) {
+    int n = row.size();
+    if (n == 0) return {};
+    // ---- Reduce：栈式删列，剩余列数 <= n ----
+    vector<int> c2;
+    for (int c : col) {
+        while (!c2.empty() && cmp(row[c2.size() - 1], c2.back(), c)) c2.pop_back();
+        if ((int)c2.size() < n) c2.push_back(c);
+    }
+    // ---- Interpolate：只递归偶数行 ----
+    vector<int> r2;
+    for (int i = 1; i < n; i += 2) r2.push_back(row[i]);
+    auto a2 = smawk(r2, c2, cmp);
+    vector<int> ans(n);
+    for (int i = 0; i < n; i += 2) ans[i] = a2[i >> 1];
+    // ---- 奇数行：夹在相邻偶数行 opt 之间暴力填 ----
+    for (int i = 1; i < n; i += 2) {
+        int L = ans[i - 1], R = (i + 1 < n ? ans[i + 1] : c2.back());
+        ans[i] = L;
+        for (int c = L; c <= R; ++c) if (cmp(row[i], ans[i], c)) ans[i] = c;
+    }
+    return ans;
+}`,
+  pitfalls: [
+    "<b>TM 比 Monotone 强</b>：能用 SMAWK 一定能用 Monotone Minima / 分治，反之不成立。",
+    "<b>需要随机访问</b>：Reduce 阶段要反复比较 <code>A(row[k], col)</code>，只支持移动访问的成本函数用不了——这时退回 Monotone Minima。",
+    "<b>不能在线</b>：算某行时要求整行可随时取值，<code>dp[i]</code> 依赖尚未算出的 <code>dp[j]</code> 的场景直接不可用（需 CDQ 分治）。",
+    "TM 的定义与 min/max 无关；若你的 opt 序列是<b>非增</b>的，把行序反转即可。",
+    "Monge 矩阵的转置仍是 Monge（可求列最优），但 <b>TM 矩阵的转置未必是 TM</b>。",
+    "常数较大：在 N ≈ 2×10⁵ 量级上，Monotone Minima 的 O(n log n) 常常跑得比 SMAWK 的 O(n) 还快。"
+  ],
+  problems: [
+    "IOI 2014 Holiday —— SMAWK 的经典应用",
+    "Monge 矩阵行最值的模板题（AtCoder / CF 上大量出现）",
+    "凹凸序列的 min-plus 卷积"
+  ],
+  refs: [
+    { t: "Golin · DP Speedups II: The Monge Property (SMAWK.pdf)", u: "https://cse.hkust.edu.hk/~golin/COMP572/Notes/SMAWK.pdf", d: "SMAWK 定理最清晰的证明之一" },
+    { t: "Codeforces Blog 110844", u: "https://codeforces.com/blog/entry/110844", d: "从 D&C Optimization 视角切入 SMAWK，讲清 TM 与 Monge 的关系" },
+    { t: "Golin · Revisiting The Monge Property", u: "https://www.cse.ust.hk/faculty/golin/Talks/Revisiting_Monge.pdf", d: "Monge / TM / SMAWK / LARSCH 全景" }
+  ]
+},
+
+/* ---------- 3 ---------- */
+{
+  id: "dc-optimization",
+  name: "D&C Optimization",
+  en: "Divide and Conquer DP Optimization",
+  family: "monge",
+  tagline: "分层 DP 上按决策点分治，是离线决策单调性题的默认首选。",
+  props: ["四边形不等式（QI）", "opt 单调"],
+  access: ["随机访问", "移动访问"],
+  mode: "离线",
+  cx: "O(k · n log n)",
+  cxNote: "k 层、n 个状态。单层 O(n log n)。若 w 只支持移动访问，用双指针暴力跳转，每层总移动 O(n)，总代价不变。",
+  cxTable: [
+    { c: "单层（w 随机访问）", v: "O(n log n)" },
+    { c: "k 层分层 DP", v: "O(k · n log n)" },
+    { c: "w 仅移动访问（莫队式）", v: "O(k · n log n) 次 w 计算" }
+  ],
+  when: [
+    "<code>dp[i][j] = min_{k&lt;j}{dp[i-1][k] + C(k, j)}</code> 这类<b>分层转移</b>，且 C 满足四边形不等式。",
+    "层与层之间只依赖上一层，因此同一层内所有状态可任意顺序计算 —— 这就是「离线」。",
+    "成本函数计算昂贵、只能靠双指针维护时（同层内跳转总次数可控）。"
+  ],
+  how: [
+    "<code>solve(l, r, optL, optR)</code>：计算 <code>dp[cur][l..r]</code>，已知其最优决策点在 <code>[optL, optR]</code>。",
+    "暴力扫中点 <code>mid</code> 的所有候选得到 <code>opt(mid)</code>，用 dp[cur-1] 的值填 <code>dp[cur][mid]</code>。",
+    "递归左右两半，候选区间分别收窄为 <code>[optL, opt(mid)]</code> 与 <code>[opt(mid), optR]</code>。",
+    "移动访问版：每层按 mid 的访问顺序维护一对指针，向子递归定位时按需跳转。"
+  ],
+  code: `// 第 cur 层：dp[cur][j] = min_{k<j} { dp[cur-1][k] + C(k, j) }
+void solve(int l, int r, int optL, int optR) {
+    if (l > r) return;
+    int mid = (l + r) >> 1;
+    pair<T, int> best = {INF, -1};
+    for (int k = optL; k <= min(mid, optR); ++k) {
+        T v = dp[cur - 1][k] + C(k, mid);   // 移动访问时改为指针跳转
+        if (v < best.first) best = {v, k};
+    }
+    dp[cur][mid] = best.first;
+    int opt = best.second;
+    solve(l, mid - 1, optL, opt);
+    solve(mid + 1, r, opt, optR);
+}`,
+  pitfalls: [
+    "<b>无法处理在线</b>：左半区间的 dp 尚未算出时，就算不出中点的 opt——这正是它和二分栈的分水岭。",
+    "候选上界要写 <code>min(mid, optR)</code>，防止决策点跑到状态点右侧。",
+    "移动访问实现里，指针跳转次数与「当前区间长度 + 候选区间长度」相关，不要写成本区间内乱跳。"
+  ],
+  problems: [
+    "CF 868F Yet Another Minimization Problem",
+    "CF 833B The Bakery",
+    "APIO 2014 Split the Sequence",
+    "NOI 2019 回家路线"
+  ],
+  refs: [
+    { t: "OI Wiki · 四边形不等式优化", u: "https://oi-wiki.org/dp/opt/quadrangle/", d: "分治与二分队列两档的完整讲解" },
+    { t: "HKOI · Dynamic Programming (III)", u: "https://assets.hkoi.org/training2025/dp-iii.pdf", d: "含 D&C 优化正确性的图形化证明" }
+  ]
+},
+
+/* ---------- 4 ---------- */
+{
+  id: "binary-stack",
+  name: "二分栈",
+  en: "Monotone queue + binary search / 单调队列 + 二分",
+  family: "monge",
+  tagline: "在线增量地维护「每个决策点统治哪些问题位置」，弹栈 + 二分断点。",
+  props: ["四边形不等式", "在线可用"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(n log n)",
+  cxNote: "n 个决策点各入栈一次，每次插入时二分找断点。",
+  cxTable: [
+    { c: "在线 1D/1D DP（随机访问）", v: "O(n log n)" },
+    { c: "作为 Monge 最短路 / WQS 的内层 check", v: "O(n log n)" }
+  ],
+  when: [
+    "<code>dp[i] = min_{j&lt;i}{dp[j] + w(j,i)}</code> 且必须<b>在线</b>：算 dp[i] 时 dp[j&lt;i] 才刚确定。",
+    "WQS 二分 / Aliens Trick 的 check 函数内部退化成的一维在线决策单调性子问题。",
+    "决策点数量与问题数量同阶、且不能离线重排的场合。"
+  ],
+  how: [
+    "完全单调矩阵等价于：<code>A[k][i] ≥ A[k][j] ⟹ A[k+1][i] ≥ A[k+1][j]</code>。因此一列一旦在某行成为非最优，之后永远非最优。",
+    "每个决策点（列）作为最优解的行集合必是一个连续区间，且这些区间随列序号单调递增。",
+    "用栈维护非冗余列 j 及其统治区间 <code>[l_j, r_j]</code>；插入新列 i 时：若栈顶列 j 在 <code>l_j</code> 处已被 i 击败 → 弹栈；否则二分出最大的 k 使 <code>A[k][j] &lt; A[k][i]</code>，截断 j 的右端点，把 i 接在后面。"
+  ],
+  code: `// 栈中元素：{列 j, 统治行区间 [l, r]}
+vector<tuple<int,int,int>> st;   // (j, l, r)
+for (int i = 0; i < m; ++i) {    // 依次插入列 i
+    while (!st.empty() && A(get<1>(st.back()), i) <= A(get<1>(st.back()), get<0>(st.back())))
+        st.pop_back();                       // 栈顶列在它自己的左端点处就被击败 → 冗余
+    if (st.empty()) {
+        st.emplace_back(i, 0, n - 1);
+    } else {
+        int j = get<0>(st.back()), l = get<1>(st.back());
+        int lo = l, hi = n - 1, k = l - 1;   // 二分最大的 k 使 A[k][j] < A[k][i]
+        while (lo <= hi) {
+            int mid = (lo + hi) >> 1;
+            if (A(mid, j) < A(mid, i)) k = mid, lo = mid + 1;
+            else hi = mid - 1;
+        }
+        get<2>(st.back()) = k;
+        if (k != n - 1) st.emplace_back(i, k + 1, n - 1);
+    }
+}`,
+  pitfalls: [
+    "比较符号要与「取最左 / 最右最优」的约定一致，等号处理不当会在有并列最优时出错。",
+    "<code>A(row, col)</code> 必须是<b>纯函数</b>：在线场景下被比较的行（问题位置）的值此时还没算出，但矩阵元素本身必须已知。",
+    "它要求随机访问（要能直接算 <code>A(k, j)</code> 与 <code>A(k, i)</code>）；若成本函数只能移动访问，改用 Simplified LARSCH。"
+  ],
+  problems: [
+    "一维在线决策单调性模板题（邮局选址类）",
+    "作为 Aliens Trick 内层：Monge 最短路、分 k 段类问题"
+  ],
+  refs: [
+    { t: "OI Wiki · 四边形不等式优化（二分队列）", u: "https://oi-wiki.org/dp/opt/quadrangle/", d: "二分队列 / 单调队列的标准写法" },
+    { t: "博客园 · 决策单调性与四边形不等式", u: "https://www.cnblogs.com/apjifengc/p/17804772.html", d: "分治与二分栈两种解法的对照" }
+  ]
+},
+
+/* ---------- 5 ---------- */
+{
+  id: "simplified-larsch",
+  name: "Simplified LARSCH",
+  en: "noshi91's simplified LARSCH algorithm",
+  family: "monge",
+  tagline: "在线 + 只要求移动访问，代码极短——日系近年题目的标配。",
+  props: ["四边形不等式", "在线", "移动访问"],
+  access: ["移动访问", "随机访问"],
+  mode: "在线",
+  cx: "O(n log n)",
+  cxNote: "分治结构，每层指针总移动 O(n)。",
+  cxTable: [
+    { c: "在线 + 移动访问", v: "O(n log n)" },
+    { c: "在线 + 随机访问", v: "O(n log n)（常数优于二分栈）" }
+  ],
+  when: [
+    "<b>同时</b>要求在线与移动访问——这是唯一实用的选择：SMAWK 要随机访问，二分栈也要随机访问，普通分治要离线。",
+    "<code>w(j,i)</code> 需要用双指针（如莫队）维护，同时 <code>dp[i]</code> 又依赖前面的 dp。",
+    "近年 AtCoder 较难的决策单调性题。"
+  ],
+  how: [
+    "分治 <code>dfs(l, r)</code>，但顺序被严格安排以满足依赖：",
+    "① 先扫一遍计算中点 <code>m</code> 的最优决策——候选区间来自 <code>frm[l]</code> 到 <code>frm[r]</code>（此时这些 dp 值都已知）；",
+    "② 递归 <code>dfs(l, m)</code>，把左半区间的 dp 全部算出；",
+    "③ 再用左半的完整信息（<code>l+1 .. m</code>）更新右端点 <code>r</code>；",
+    "④ 递归 <code>dfs(m, r)</code>。",
+    "第 ① ③ 步的扫描都是<b>单向</b>的，因此可以用移动指针维护 w。"
+  ],
+  code: `// 来自 maspy's library 的 simple larsch 骨架（monge_shortest_path.hpp）
+// check(from, to): 用已知的 dp[from] 尝试更新 dp[to]
+auto dfs = [&](auto& dfs, int l, int r) -> void {
+    if (r - l == 1) return;
+    int m = (l + r) / 2;
+    FOR(k, frm[l], frm[r] + 1) check(m, k);   // ① 用已知区间更新中点
+    dfs(dfs, l, m);                           // ② 递归左半，算出左半全部 dp
+    FOR(k, l + 1, m + 1) check(r, k);         // ③ 用左半更新右端点
+    dfs(dfs, m, r);                           // ④ 递归右半
+};
+check(0, n);          // 初始化
+dfs(dfs, 0, n);`,
+  pitfalls: [
+    "四步顺序不能乱：①③ 的扫描方向相反，是为了让移动指针单调推进；调换顺序会导致指针来回跳，退化成 O(n²)。",
+    "它解的是<b>最短路形态</b>（<code>dp[r] = min_l{dp[l] + w(l,r)}</code>），与「分层 DP」的分治优化不是同一个东西。",
+    "有 O(n) 的完整 LARSCH，但实现复杂得多；竞赛中 n ≤ 2×10⁵ 时这个简化版通常足够。"
+  ],
+  problems: [
+    "需要在线 + 移动访问的决策单调性 DP（AtCoder 高难度题）",
+    "无法把 w 做成 O(1) 随机访问的区间代价类问题"
+  ],
+  refs: [
+    { t: "noshi91 · simplified LARSCH", u: "https://noshi91.hatenablog.com/entry/2023/02/18/005856", d: "原始博文（日文），含正确性说明" },
+    { t: "maspy's library", u: "https://maspypy.github.io/library/convex/monge/monge_shortest_path.hpp", d: "可直接抄的 C++ 实现" }
+  ]
+},
+
+/* ---------- 6 ---------- */
+{
+  id: "larsch",
+  name: "LARSCH",
+  en: "Larmore–Schieber, 1991",
+  family: "monge",
+  tagline: "在线求解完全单调矩阵行最优的线性算法，SMAWK 的在线替代。",
+  props: ["TM / Monge（用于保证前置条件）", "在线"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(m + n)",
+  cxNote: "与 SMAWK 同阶，但支持在线——这是它的核心价值。",
+  cxTable: [
+    { c: "在线行最优（随机访问）", v: "O(m + n)" },
+    { c: "一维凹 DP <code>dp[i] = min_j{dp[j] + w(j,i)}</code>", v: "O(n)" }
+  ],
+  when: [
+    "必须在线（<code>dp[i]</code> 依赖前面刚算出的 dp），同时 <code>w(j,i)</code> 可 O(1) 随机取，且 n 大到 O(n log n) 会 TLE。",
+    "理论上替代二分栈 / Simplified LARSCH 的 log 因子。"
+  ],
+  how: [
+    "Bein–Golin 给出的三条形式化条件：① <code>i &lt; j</code> 之外为 ∞（即上三角不可用）；② 存在非降的阈值 <code>C_i</code>，使得 <code>j &gt; C_i</code> 时矩阵元素为 ∞；③ <code>A[i][j]</code> 在已知前 <code>i-1</code> 行的最优值之后可 O(1) 计算。",
+    "Monge / TM 并不是「条件」本身，而是<b>保证</b>这些条件成立的充分条件。",
+    "算法按块推进，块内调用 SMAWK 求解，用势函数论证总代价线性。"
+  ],
+  code: `// 实现较长（约 150+ 行），竞赛中建议直接使用成熟板子。
+// 关键接口约定：
+//   A(i, j)           : 矩阵元素，可 O(1) 计算（依赖前 i-1 行的最优值）
+//   C[i]              : 第 i 行最右侧可用列的阈值，C[i] <= C[i+1]
+// 算法按块推进，每块内部对已知区域调用 SMAWK，
+// 用势函数 (r + c) 论证「正常迭代」的总代价为 O(n)。`,
+  pitfalls: [
+    "<b>复杂度虽是 O(n)，但代码量与调试成本极高</b>。n ≤ 2×10⁵ 时 O(n log n) 的二分栈 / Simplified LARSCH 几乎总是更划算，只有 n 卡到 10⁶ 才值得掏。",
+    "必须随机访问；移动访问场景退回 Simplified LARSCH。",
+    "与 Wilber、Galil–Park 是同一问题的三种不同解法，三者难度相当，任选其一掌握即可。"
+  ],
+  problems: [
+    "凹最小权子序列问题（concave least-weight subsequence）",
+    "文本排版的最优断行（Knuth–Plass 的代价函数满足凹性）"
+  ],
+  refs: [
+    { t: "Bein–Golin–Larmore–Zhang (SODA'05)", u: "https://www.cse.ust.hk/faculty/golin/Talks/Knuth_Yao_SODA05.pdf", d: "给出 LARSCH 的前置条件形式化，并证明 Knuth-Yao 是 TM 的推论" },
+    { t: "Golin · Revisiting The Monge Property", u: "https://www.cse.ust.hk/faculty/golin/Talks/Revisiting_Monge.pdf", d: "SMAWK 与 LARSCH 的关系" }
+  ]
+}
+];
+
+
+/* ---------- 7 ---------- */
+ALGOS.push({
+  id: "online-linear",
+  name: "在线线性三兄弟",
+  en: "Wilber (1988) / Galil–Park (1989) / LARSCH (1991)",
+  family: "monge",
+  tagline: "三条不同的路径，都把在线凹 DP 做到 O(n)。",
+  props: ["w 凹 / 满足四边形不等式", "在线"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(n)",
+  cxNote: "三者渐进复杂度相同，思路不同，难度都高。",
+  cxTable: [
+    { c: "Wilber 1988（concave least-weight subsequence）", v: "O(n)" },
+    { c: "Galil–Park 1989（concave 1D DP）", v: "O(n)" },
+    { c: "LARSCH 1991", v: "O(n)" }
+  ],
+  when: [
+    "一维凹（或凸）动态规划 <code>E[j] = min_{i&lt;j}{D[i] + w(i,j)}</code>，要求在线且需要线性时间。",
+    "凹最小权子序列问题：把序列切成若干段使代价和最小——文本排版的最优断行即此模型。",
+    "只有在 O(n log n) 明确超时、且已经排除其它优化时才考虑。"
+  ],
+  how: [
+    "<b>Wilber</b>：把问题分块，块内借助 SMAWK 一次性求解，用势函数（r + c 的增长）论证总代价线性。",
+    "<b>Galil–Park</b>：把矩阵分成若干「活动区」，同样以 SMAWK 为子程序，通过维护候选列的死亡信息推进。",
+    "<b>LARSCH</b>：以三条形式化条件刻画「在线可解」，块内调 SMAWK。",
+    "三者的共同点：<b>都以 SMAWK 作为核心子程序</b>，外层用分块 / 势函数把在线依赖消掉。"
+  ],
+  code: "// 三者实现都很长，通常直接使用成熟板子。\n// 共同结构示意：\n//   for each block:\n//       // 已知前若干行的最优值，可 O(1) 算出块内矩阵元素\n//       SMAWK(block_rows, candidate_cols);   // 块内一次性求解\n//       advance();                           // 势函数推进，保证总代价线性",
+  pitfalls: [
+    "三者是<b>并列替代</b>而非递进关系，不必全学；选一个能背下来的板子即可。",
+    "都需要随机访问；移动访问场景只能用 Simplified LARSCH（O(n log n)）。",
+    "论文中「凹 / 凸」的约定方向与竞赛常见写法可能相反，套板子前务必核对 min/max 与不等式方向。"
+  ],
+  problems: [
+    "凹最小权子序列（least-weight subsequence）",
+    "最优断行 / 最优分段（代价满足凹性）"
+  ],
+  refs: [
+    { t: "Wilber · The concave least-weight subsequence problem revisited", u: "https://doi.org/10.1016/0196-6774(88)90032-6", d: "J. Algorithms 9(3), 1988：无条件 O(n)" },
+    { t: "Galil & Park · A Linear-Time Algorithm for Concave One-Dimensional Dynamic Programming", u: "https://gwern.net/doc/cs/algorithm/1990-galil.pdf", d: "Information Processing Letters, 1990" }
+  ]
+});
+
+/* ---------- 8 ---------- */
+ALGOS.push({
+  id: "knuth-yao",
+  name: "Knuth / Knuth-Yao",
+  en: "Quadrangle Inequality Speedup for Interval DP",
+  family: "monge",
+  tagline: "区间 DP 的最优分割点被夹在左右邻居之间，O(n³) → O(n²)。",
+  props: ["四边形不等式（QI）", "区间单调性 MLI"],
+  access: ["随机访问"],
+  mode: "离线",
+  cx: "O(n²)",
+  cxNote: "从朴素区间 DP 的 O(n³) 降一阶。",
+  cxTable: [
+    { c: "区间 DP（朴素 O(n³)）", v: "O(n²)" },
+    { c: "配合环形 / 前缀优化", v: "视题目而定" }
+  ],
+  when: [
+    "<code>dp[l][r] = w(l,r) + min_{l ≤ k &lt; r}{dp[l][k] + dp[k+1][r]}</code>，且 w 满足 QI 与区间单调性。",
+    "最优二叉搜索树（Knuth 1971 的原始动机）、石子合并、邮局选址、最优矩阵链乘的一类变体。"
+  ],
+  how: [
+    "若 w 满足 QI 且区间单调（<code>w(b,c) ≤ w(a,d)</code>，其中 a≤b≤c≤d），则 dp 也满足 QI。",
+    "由此推出最优分割点的双向夹逼：<code>opt[i][j-1] ≤ opt[i][j] ≤ opt[i+1][j]</code>。",
+    "按长度递增枚举区间，算 <code>dp[i][j]</code> 时只需在 <code>[opt[i][j-1], opt[i+1][j]]</code> 内枚举 k。",
+    "每个长度的 opt 跨度总和为 O(n)，故总代价 O(n²)。"
+  ],
+  code: "// dp[l][r] = w(l,r) + min_{l<=k<r} { dp[l][k] + dp[k+1][r] }\nfor (int i = 0; i < n; ++i) dp[i][i] = 0, opt[i][i] = i;\nfor (int len = 2; len <= n; ++len) {\n    for (int l = 0; l + len - 1 < n; ++l) {\n        int r = l + len - 1;\n        dp[l][r] = INF;\n        for (int k = opt[l][r - 1]; k <= opt[l + 1][r]; ++k) {\n            T v = dp[l][k] + dp[k + 1][r] + w(l, r);\n            if (v < dp[l][r]) dp[l][r] = v, opt[l][r] = k;\n        }\n    }\n}",
+  pitfalls: [
+    "<b>QI 与区间单调性必须同时验证</b>，只满足 QI 不足以推出 opt 的夹逼不等式。",
+    "循环顺序必须保证 <code>opt[l][r-1]</code> 与 <code>opt[l+1][r]</code> 在计算 <code>opt[l][r]</code> 之前已经得到（按长度递增枚举即可）。",
+    "它不是独立于决策单调性的技巧：Bein–Golin–Larmore–Zhang (SODA'05) 证明了 <b>Knuth-Yao 是完全单调性的一个推论</b>，可通过 D^d / L^m / R^m 三种分解归约到 SMAWK。别把它当成并列的独立工具。"
+  ],
+  problems: [
+    "石子合并（洛谷 P1880）",
+    "最优二叉搜索树（Optimal BST）",
+    "区间 DP 类的四边形不等式优化模板题"
+  ],
+  refs: [
+    { t: "Bein–Golin–Larmore–Zhang (SODA'05)", u: "https://web.cs.unlv.edu/bein/pubs/knuthyaosoda.pdf", d: "证明 Knuth-Yao 是完全单调性的推论" },
+    { t: "HKUST · Dynamic Programming Speedups", u: "https://home.cse.ust.hk/~golin/COMP572/Notes/DP_speedup.pdf", d: "QI speedup 的经典讲义" }
+  ]
+});
+
+/* ---------- 9 ---------- */
+ALGOS.push({
+  id: "partial-monge",
+  name: "Partial / Staircase Monge",
+  en: "Klawe–Kleitman (1990) / Chan (2021)",
+  family: "monge",
+  tagline: "矩阵是三角形或阶梯形时，SMAWK 直接用不上——这两个算法来补位。",
+  props: ["partial Monge", "staircase 完全单调"],
+  access: ["随机访问"],
+  mode: "离线",
+  cx: "O(m · α(n) + n)",
+  cxNote: "α 是反 Ackermann 函数，实用中可视为常数。",
+  cxTable: [
+    { c: "Klawe–Kleitman · staircase 完全单调", v: "O(m·α(n) + n)" },
+    { c: "Chan 2021 · concave Monge rising staircase", v: "期望 O(n)，随机化 Las-Vegas" },
+    { c: "Chan 2021 · 完全单调 v-matrix", v: "O(n·α(m)·log*m·log log m + m)" }
+  ],
+  when: [
+    "矩阵的已定义部分是<b>三角形或阶梯形</b>（每行从最左列开始连续定义，且定义长度逐行不减）——大量 DP 的转移矩阵天然如此。",
+    "典型例子：<code>dp[j] = min_i{dp[i] + w(i,j)}</code> 里 <code>i &lt; j</code> 的部分才有定义。",
+    "几何中的最大空矩形、两凸多边形间的距离 / 可见性问题。"
+  ],
+  how: [
+    "把矩阵反复切成四个子矩阵，其中两个是「正阶梯」、两个是「倒阶梯」，对阶梯子矩阵递归。",
+    "Klawe–Kleitman 的办法对<b>完全单调</b>阶梯矩阵成立（不要求 Monge），适用范围更广，且能推广到「在线」设定。",
+    "Chan 2021 用随机化把 Monge 阶梯情形的 α 因子去掉，代价是<b>不支持在线</b>——这在需要在线的 DP 加速中是致命的。"
+  ],
+  code: "// 阶梯矩阵示意（* 为已定义）：\n//   row 1: * . . .\n//   row 2: * * . .\n//   row 3: * * * .\n//   row 4: * * * *\n//\n// 递归结构：在中点行处切开，把「跨越中点行的列」拆成上下两段，\n// 得到 A1 / A3 两个阶梯子矩阵 + A2 / A4 两个矩形子矩阵，分别递归 / 用 SMAWK。",
+  pitfalls: [
+    "<b>不要一看到 α 就以为更快</b>：Chan 的算法虽然是期望 O(n)，但随机化 + 不支持在线，实际竞赛中 Klawe–Kleitman 反而更实用。",
+    "α(n) 在 n ≤ 10⁶ 时不超过 5，把它当常数看待即可。",
+    "Kaplan–Mozes–Nussbaum–Sharir 进一步把阶梯 Monge 的上包络复杂度从 O(m·α(m)) 收紧到 <b>O(m)</b>。"
+  ],
+  problems: [
+    "最大空矩形（largest empty rectangle）相关几何题",
+    "转移矩阵天然呈三角形的在线 DP（配合 Klawe–Kleitman 的在线版本）"
+  ],
+  refs: [
+    { t: "Klawe & Kleitman · An Almost Linear Time Algorithm for Generalized Matrix Searching", u: "https://epubs.siam.org/doi/pdf/10.1137/0403009", d: "SIAM J. Discrete Math 3(1), 1990" },
+    { t: "Chan · (Near-)Linear-Time Randomized Algorithms for Row Minima in Monge Partial Matrices", u: "http://tmc.web.engr.illinois.edu/matrix_search10_20.pdf", d: "SODA'21，去掉 α 因子并回答 Klawe 的开放问题" },
+    { t: "Kaplan–Mozes–Nussbaum–Sharir", u: "https://cs.idc.ac.il/~smozes/RMQMongeJournal.pdf", d: "Submatrix Maximum Queries in Monge Matrices" }
+  ]
+});
+
+/* ---------- 10 ---------- */
+ALGOS.push({
+  id: "cdq-smawk",
+  name: "CDQ 分治 + 矩阵搜索",
+  en: "Divide-and-conquer over index + monotone minima / SMAWK",
+  family: "monge",
+  tagline: "当「在线性」挡住矩阵搜索时，用外层分治把依赖切掉。",
+  props: ["四边形不等式 / Monge", "依赖由外层分治消解"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(N log N)",
+  cxNote: "内层用 SMAWK 为 O(N log N)；内层用 monotone minima 则多一个 log，为 O(N log²N)。",
+  cxTable: [
+    { c: "CDQ 分治 + SMAWK", v: "O(N log N)" },
+    { c: "CDQ 分治 + monotone minima", v: "O(N log²N)" }
+  ],
+  when: [
+    "一维在线 DP <code>dp[i] = min_{j&lt;i}{dp[j] + w(j,i) + λ}</code>，w 是 Monge 的，但<b>无法直接套 SMAWK</b>（因为矩阵元素依赖尚未算出的 dp）。",
+    "典型触发场景：外层已经是 WQS 二分的 check，或者 dp 之间存在链式依赖。",
+    "近三年 AtCoder 的高频组合技。"
+  ],
+  how: [
+    "定义 <code>solve(l, r)</code>：计算 <code>dp[l..r-1]</code>。",
+    "① 递归 <code>solve(l, m)</code>，先算出左半的全部 dp；",
+    "② 此时左半 dp 已知，可以<b>随机访问</b>矩阵中「左半 → 右半」的那块，于是一次 monotone minima / SMAWK 批量处理全部 <code>dp[j] → dp[i]</code>（<code>j ∈ [l,m)</code>，<code>i ∈ [m,r)</code>）的转移；",
+    "③ 递归 <code>solve(m, r)</code>。",
+    "关键在于第 ② 步把「在线」转化成了「离线批量」。"
+  ],
+  code: "void solve(int l, int r) {          // 计算 dp[l .. r-1]\n    if (r - l == 1) return;\n    int m = (l + r) / 2;\n    solve(l, m);                    // ① 先算左半\n    // ② 左半 dp 已知 → 用 monotone minima / SMAWK 批量处理 [l,m) → [m,r)\n    //    矩阵元素：A[i][j] = dp[j] + w(j, i) + lambda   (j < m <= i)\n    monotone_minima(m - l, r - m);\n    solve(m, r);                    // ③ 再算右半\n}",
+  pitfalls: [
+    "第 ② 步的矩阵是<b>左下角矩形 + 阶梯约束</b>，注意 j &lt; i 的限制与矩阵维度对齐。",
+    "内层算法的选择：SMAWK 省一个 log 但常数大；N 在 2×10⁵ 量级时两者可能难分高下（ABC355 官方题解明确指出这点）。",
+    "若外层还有 WQS 二分，总复杂度要再乘 O(log V)。"
+  ],
+  problems: [
+    "ABC355 G —— 官方解法即 D&C + monotone minima（O(N log²N)）与 D&C + SMAWK（O(N log N)）",
+    "带链式依赖 + Monge 代价的一维 DP"
+  ],
+  refs: [
+    { t: "AtCoder ABC355 Editorial", u: "https://atcoder.jp/contests/abc355/editorial/10209", d: "官方题解，对比多种解法的复杂度" },
+    { t: "tatyam · Monge の手引書", u: "https://atcoder.jp/contests/abc355/editorial/10209", d: "日文 Monge 专题 slides，由该 editorial 引用" }
+  ]
+});
+
+/* ---------- 11 ---------- */
+ALGOS.push({
+  id: "monge-shortest-path",
+  name: "决策单调性最短路",
+  en: "Monge Shortest Path / Monge DAG shortest path",
+  family: "monge",
+  tagline: "分层 DAG 上边权 Monge，配 WQS 二分可求「恰好 k 条边」的最短路。",
+  props: ["边权 Monge / 四边形不等式", "答案关于边数凸"],
+  access: ["随机访问", "移动访问"],
+  mode: "在线",
+  cx: "O(n log V) ~ O(n log V log n)",
+  cxNote: "V 是答案值域。内层用二分栈 / Simplified LARSCH 为 O(n log n)，用 Wilber 等线性算法可到 O(n)。",
+  cxTable: [
+    { c: "WQS 二分 + 二分栈内层", v: "O(n log V log n)" },
+    { c: "WQS 二分 + 线性在线内层", v: "O(n log V)" }
+  ],
+  when: [
+    "形如 <code>dp[i][k] = min_{j&lt;i}{dp[j][k-1] + w(j,i)}</code> 的问题：等价于在 DAG 上选恰好 k 条边的最短路。",
+    "「把序列分成恰好 k 段」且单段代价满足四边形不等式的划分问题。",
+    "单次查询某个特定 k（而不是全部 k）时的最优解法。"
+  ],
+  how: [
+    "关键观察：把矩阵整体减去 λ（<code>w'(j,i) = w(j,i) - λ</code>）后仍满足四边形不等式。",
+    "于是对 λ 做 WQS 二分：每个 λ 下的问题退化成<b>一维在线决策单调性 DP</b>（不限边数的最小值），用二分栈 / Simplified LARSCH 求解。",
+    "二分 λ 使最优解恰好使用 k 条边，还原答案时把 k·λ 加回去。",
+    "这里 Monge 性质还额外保证：<b>答案关于边数是凸的</b>，这正是 WQS 二分成立的前提。"
+  ],
+  code: "// check(lambda): 不限段数，每段代价 -lambda，求最小值及最优段数\nauto [val, cnt] = solve_with_penalty(lambda);\n//    内部：一维在线决策单调性（二分栈 / Simplified LARSCH）\n//\n// 二分 lambda 使 cnt == k，最终答案为 val + k * lambda",
+  pitfalls: [
+    "这是两个技术的<b>叠加</b>（WQS + 决策单调性），任一半的前提不满足都会崩——务必分别验证凸性与四边形不等式。",
+    "共线情形（多个 k 对应的点在同一条直线上）需要特殊处理，参见 Aliens Trick 的坑点。",
+    "若要求的是「至多 k 段」而非「恰好 k 段」，需结合代价的单调性判断答案落在哪一侧。"
+  ],
+  problems: [
+    "分 k 段的划分 DP（代价满足四边形不等式）",
+    "「恰好选 k 个」且内层是决策单调性 DP 的组合题"
+  ],
+  refs: [
+    { t: "博客园 · 决策单调性与四边形不等式", u: "https://www.cnblogs.com/apjifengc/p/17804772.html", d: "含「决策单调性最短路」与路径单调性的讨论" },
+    { t: "SOI · Alien Optimization", u: "https://soi.ch/wiki/alien-optimization/", d: "WQS 二分的几何直观" }
+  ]
+});
+
+/* ---------- 12 ---------- */
+ALGOS.push({
+  id: "monotone-queue",
+  name: "单调队列",
+  en: "Monotone Queue / Sliding Window Minimum",
+  family: "linear",
+  tagline: "决策区间是滑动窗口时的最基础一档：条件最强，也最快。",
+  props: ["决策区间为固定长度滑动窗口"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(n)",
+  cxNote: "每个元素进出队各一次。",
+  cxTable: [
+    { c: "滑动窗口最值", v: "O(n)" },
+    { c: "窗口内的 DP 转移优化", v: "O(n)" }
+  ],
+  when: [
+    "<code>dp[i] = min_{j ∈ [i-R, i-L]}{dp[j] + cost(j,i)}</code>，窗口长度固定，且 cost 与 j 无关（或可分离）。",
+    "多重背包的单调队列优化。",
+    "任何「候选集合随 i 平移」的转移。"
+  ],
+  how: [
+    "维护一个双端队列，队内候选按值单调递增。",
+    "推进 i 时：弹出超出窗口的队首；插入新候选时从队尾弹出所有不优于它的元素。",
+    "队首即为当前窗口的最优决策。"
+  ],
+  code: "deque<int> q;                       // 存下标，值单调递增\nfor (int i = 0; i <= n; ++i) {\n    while (!q.empty() && q.front() < i - R) q.pop_front();   // 出窗\n    if (i - L >= 0) {\n        while (!q.empty() && val(q.back()) >= val(i - L)) q.pop_back();\n        q.push_back(i - L);\n    }\n    if (!q.empty()) dp[i] = val(q.front());\n}",
+  pitfalls: [
+    "它的条件比决策单调性<b>强得多</b>（要求窗口固定），所以不能用决策单调性的思路反推它成立。",
+    "若窗口长度随 i 变化（如 <code>j &lt; i</code> 这种变长前缀），应改用 CHT 或决策单调性，而不是单调队列。",
+    "队内比较要与 min/max 方向一致；有并列时按需要保留或弹出（影响方案输出）。"
+  ],
+  problems: [
+    "滑动窗口最值（模板）",
+    "多重背包 / 单调队列优化背包",
+    "固定窗口长度的区间 DP 转移"
+  ],
+  refs: [
+    { t: "cp-algorithms", u: "https://cp-algorithms.com", d: "各类 DP 优化的基础条目" }
+  ]
+});
+
+
+/* ---------- 13 ---------- */
+ALGOS.push({
+  id: "cht",
+  name: "Convex Hull Trick",
+  en: "CHT / 斜率优化",
+  family: "linear",
+  tagline: "转移关于查询点呈线性：把每个决策看成一条直线，答案是凸壳上的最小值。",
+  props: ["转移形如 dp[j] + b[j]·a[i]", "斜率或查询单调（可选）"],
+  access: ["随机访问"],
+  mode: "离线 / 在线均可",
+  cx: "O(n) ~ O(n log n)",
+  cxNote: "取决于斜率与查询点是否单调，见下表。",
+  cxTable: [
+    { c: "斜率单调 + 查询点单调", v: "O(n)（单调队列维护凸壳）" },
+    { c: "斜率单调 + 查询点任意", v: "O(n log n)（凸壳上二分）" },
+    { c: "斜率任意 + 离线", v: "O(n log n)（排序后建壳）" },
+    { c: "斜率任意 + 在线插入", v: "动态 CHT / Li-Chao，O(log n)" }
+  ],
+  when: [
+    "<code>dp[i] = min_j{dp[j] + b[j] · a[i]}</code>——转移关于查询量 <code>a[i]</code> 是一次函数。",
+    "经典形态：<code>dp[i] = min_j{dp[j] + (sum[i]-sum[j])²}</code> 展开后呈线性。",
+    "常数远小于决策单调性类算法，能用就优先用。"
+  ],
+  how: [
+    "把每个决策 j 看作直线 <code>y = b[j]·x + dp[j]</code>，查询即在 <code>x = a[i]</code> 处取所有直线的最小值。",
+    "最小值一定在下凸壳上；维护凸壳并剔除无用直线。",
+    "斜率单调时用单调队列 O(n)；否则在壳上二分，或用 Li-Chao 支持任意插入。"
+  ],
+  code: "// 斜率单调 + 查询单调：单调队列维护下凸壳\n// 判断队首两条直线 l1, l2 在 x 处谁更优\n// 用交叉点比较，避免浮点：\n//   l1 优于 l2  <=>  (b2 - b1) * x + (c2 - c1) >= 0   (min 情形)\nwhile (q.size() >= 2 && bad(q[q.size()-2], q.back(), new_line))\n    q.pop_back();\nq.push_back(new_line);\nwhile (q.size() >= 2 && val(q[0], x) >= val(q[1], x))\n    q.pop_front();\ndp[i] = val(q[0], x);",
+  pitfalls: [
+    "min 用<b>下</b>凸壳、max 用<b>上</b>凸壳，方向搞反会全盘皆错。",
+    "比较两条直线优劣时<b>用交叉点的乘法形式</b>，避免除法与浮点误差（尤其是 <code>long long</code> 爆 int 的问题）。",
+    "斜率相等的两条直线只保留截距更优的那条。",
+    "斜率不单调但仍需在线插入时，CHT 不再适用，改用 Li-Chao。"
+  ],
+  problems: [
+    "APIO 2010 Commando",
+    "洛谷 P3195 玩具装箱",
+    "HDU 3507 Print Article",
+    "CF 311B Cats Transport"
+  ],
+  refs: [
+    { t: "cp-algorithms", u: "https://cp-algorithms.com", d: "Convex Hull Trick 条目" },
+    { t: "Codeforces · Convex Hull Trick Tutorial", u: "https://codeforces.com/blog/entry/63823", d: "各类 CHT 变体的汇总" }
+  ]
+});
+
+/* ---------- 14 ---------- */
+ALGOS.push({
+  id: "li-chao",
+  name: "Li Chao Segment Tree",
+  en: "Li Chao Segment Tree",
+  family: "linear",
+  tagline: "任意顺序插入直线，单点查询最小值——不要求任何单调性。",
+  props: ["无（任意直线集合）"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(log C) 每次插入 / 查询",
+  cxNote: "C 是 x 的值域大小。值域连续时用动态开点或坐标压缩。",
+  cxTable: [
+    { c: "插入直线 / 线段", v: "O(log C)" },
+    { c: "单点查询最小值", v: "O(log C)" },
+    { c: "插入线段（限定 x 区间）", v: "O(log² C)" }
+  ],
+  when: [
+    "斜率与查询点都<b>不单调</b>，且必须在线插入——CHT 的所有前提都不成立时的兜底方案。",
+    "x 值域可离散化（离线）或可接受动态开点 / 坐标压缩。",
+    "需要支持「插入线段」而非整条直线的场景。"
+  ],
+  how: [
+    "线段树的每个节点存一条「当前在该节点区间中点处最优」的直线。",
+    "插入新直线时，与节点存的直线在中点处比较；若新直线更优则交换，然后把输的那条递归下传到它更优的那一侧子区间。",
+    "查询时沿根到叶的路径取所有节点直线的最小值。"
+  ],
+  code: "// 每个节点存一条直线；插入时按「中点处谁更优」决定下传方向\nvoid insert(Line nw, int node, int l, int r) {\n    int mid = (l + r) >> 1;\n    bool lef = nw.get(l) < tree[node].get(l);\n    bool m   = nw.get(mid) < tree[node].get(mid);\n    if (m) swap(tree[node], nw);\n    if (l == r) return;\n    if (lef != m) insert(nw, node * 2, l, mid);\n    else          insert(nw, node * 2 + 1, mid + 1, r);\n}\nT query(int x, int node, int l, int r) {\n    T res = tree[node].get(x);\n    if (l == r) return res;\n    int mid = (l + r) >> 1;\n    return min(res, x <= mid ? query(x, node * 2, l, mid)\n                             : query(x, node * 2 + 1, mid + 1, r));\n}",
+  pitfalls: [
+    "值域很大（如 10⁹）时不能建满树，用<b>坐标压缩</b>或<b>动态开点</b>。",
+    "插入线段需要在区间上先做 O(log C) 的定位，总代价 O(log² C)。",
+    "min 与 max 的实现只差一个比较符号，容易写反。",
+    "若时间参数单调递增且要维护<b>区间</b>最值，Li-Chao 无法处理——那是 KTT 的地盘。"
+  ],
+  problems: [
+    "任意顺序插入直线的 DP 优化题",
+    "需要在线加直线的斜率优化变体"
+  ],
+  refs: [
+    { t: "cp-algorithms · Li Chao Segment Tree", u: "https://cp-algorithms.com", d: "标准实现与复杂度说明" },
+    { t: "USACO Guide · Convex Hull Tree", u: "https://usaco.guide/adv/slope-trick", d: "Platinum 级别的进阶模块" }
+  ]
+});
+
+/* ---------- 15 ---------- */
+ALGOS.push({
+  id: "kinetic-tournament",
+  name: "Kinetic Tournament Tree",
+  en: "KTT / Kinetic Segment Tree",
+  family: "linear",
+  tagline: "时间单调递增时维护区间线性函数最值，还能在线改函数。",
+  props: ["每个元素是时间的线性函数", "时间 t 单调递增", "函数两两交点 O(1) 次"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "均摊 O(log² n) 每次 heaten",
+  cxNote: "总代价 Θ(λ_s(n) log² n)，λ_s 为 Davenport–Schinzel 序列长度。",
+  cxTable: [
+    { c: "单次 heaten（推进时间）", v: "均摊 O(log² n)" },
+    { c: "区间查询最小值", v: "O(log n)" },
+    { c: "在线修改某个函数", v: "O(log² n)" }
+  ],
+  when: [
+    "每个候选是时间的线性函数，时间 t <b>单调递增</b>，要求维护<b>区间</b>内函数的最小值。",
+    "需要处理「随 t 增大，最优者不断易主」的 DP——Li-Chao 只能处理单点查询，处理不了区间最值。",
+    "需要在过程中<b>在线修改</b>某个候选函数（Li-Chao 做不到的关键优势）。"
+  ],
+  how: [
+    "在线段树每个节点记录：当前子树内的最优函数，以及<b>子树内任意节点首次「易主」的时间</b>。",
+    "heaten(t) 时，从根出发只递归那些「失效时间 ≤ t」的子树，批量重建，避免每次都全树更新。",
+    "关键性质：两条直线不可能交错三次（<code>A&lt;B, A&gt;B, A&lt;B</code> 不可能发生），所以每个节点的易主次数受子树内直线数量约束。",
+    "由 Davenport–Schinzel 序列约束总事件数，得到均摊 O(log² n)。"
+  ],
+  code: "// 节点维护：当前 winner 函数 + 子树内最早失效时间\nstruct Node { Line best; T fail_time; };\n\nvoid heaten(T t) {\n    // 从根开始，只重建失效时间 <= t 的节点\n    rebuild_if_needed(root, t);\n}\n// rebuild_if_needed：若 node.fail_time > t 则直接返回；\n// 否则重算 best 与 fail_time，并递归两个孩子\n// （正确性依赖：随 t 增大，每个节点的 winner 只变化有限次）",
+  pitfalls: [
+    "要求 <b>t 单调递增</b>：时间回退会让「易主次数有限」的性质失效。",
+    "实现约 100+ 行，调试成本高；先确认 Li-Chao / CHT 确实无解再上。",
+    "失效时间的比较涉及除法或交叉点，注意整数溢出与精度。",
+    "它替代的是「时间递增 + 区间最值」这一特定场景下的 Li-Chao，<b>不是</b> Li-Chao 的通用升级版。"
+  ],
+  problems: [
+    "Facebook Hacker Cup Round 2 · Log Drivin' Hirin'",
+    "国家集训队 2020 论文中「带修改函数序列最值」类问题"
+  ],
+  refs: [
+    { t: "Codeforces · [Tutorial] Kinetic Tournament", u: "https://codeforces.com/blog/entry/82094", d: "含可直接用的 C++ 实现（约 100 行）" },
+    { t: "Agarwal et al. · Kinetic Data Structures", u: "https://arxiv.org/pdf/1311.2032", d: "kinetic tournament tree 的理论基础" }
+  ]
+});
+
+/* ---------- 16 ---------- */
+ALGOS.push({
+  id: "aliens-trick",
+  name: "Aliens Trick（WQS 二分）",
+  en: "Alien Optimization / WQS Binary Search / Lagrangian Relaxation",
+  family: "convex",
+  tagline: "给每次选择加一个固定惩罚 λ，二分 λ 把「恰好选 K 个」变成「随便选几个」。",
+  props: ["答案关于选取个数凸（或凹）"],
+  access: ["随机访问"],
+  mode: "离线",
+  cx: "O(n log V)",
+  cxNote: "V 是惩罚值的值域。相比保留「个数」这一维状态，把 O(n·K) 换成 O(n log V)。",
+  cxTable: [
+    { c: "恰好选 K 个的划分 / 选取问题", v: "O(n log V)" },
+    { c: "内层是决策单调性 DP 时", v: "O(n log V log n)" }
+  ],
+  when: [
+    "问题带「恰好选 K 个」约束，且若去掉该约束会<b>容易得多</b>（状态能少一维）。",
+    "典型：把序列分成恰好 K 段、选恰好 K 个物品 / 边 / 区间。",
+    "前提：设 f(x) 是选 x 个时的最优值，<b>f 必须是凸（最小化问题）或凹（最大化问题）的</b>。"
+  ],
+  how: [
+    "给每次选择附加惩罚 λ：<code>g(λ) = min_x{f(x) - λ·x}</code>（最大化时符号相反）。",
+    "记 <code>x(λ)</code> 为达到最优时选取的个数。λ 越大越倾向少选，故 x(λ) 非增。",
+    "几何上：f 是凸函数，λ 是直线斜率，<code>g(λ)</code> 是用斜率为 λ 的直线去切 f 的下凸包得到的截距。",
+    "二分 λ 使 <code>x(λ) = K</code>，答案为 <code>g(λ) + λ·K</code>。"
+  ],
+  code: "// 最小化 + 恰好选 K 个\ndouble lo = -1e18, hi = 1e18;\nwhile (hi - lo > eps) {\n    double mid = (lo + hi) / 2;\n    auto [val, cnt] = solve(mid);   // 不限个数，每次选择惩罚 mid\n    if (cnt >= K) lo = mid; else hi = mid;\n}\nauto [val, cnt] = solve(lo);\nanswer = val + lo * K;              // 把惩罚加回去",
+  pitfalls: [
+    "<b>共线情形</b>：若多个点共线（f 在这段是线性的），二分可能永远跳过 K。解决办法：在 solve 内部记录最优时取<b>最多 / 最少</b>个数（与二分方向一致），或改用实数二分 + 插值。",
+    "<b>凸性必须验证</b>，常用四种证法：① 归约为 LP / 网络流 / 费用流的价值函数；② 用状态转移方程归纳；③ 区间分拆 + 验证单段代价满足四边形不等式；④ 交换论证。",
+    "<b>整数规划未必凸</b>：很多图论问题（最大流、最小割、最短路、二分图匹配、MST）可写成 LP 因而价值函数凸；但一旦引入必须取整的约束（如最大独立集），凸性可能不成立。",
+    "还价时要 <code>val + λ·K</code>，别漏掉还原项。"
+  ],
+  problems: [
+    "IOI 2016 Aliens（该技巧的命名来源）",
+    "USACO · Tall Barn",
+    "洛谷 P4983 忘情"
+  ],
+  refs: [
+    { t: "SOI · Alien Optimization", u: "https://soi.ch/wiki/alien-optimization/", d: "几何直观 + 退化情形处理，最好的英文入门" },
+    { t: "OI Wiki · WQS 二分", u: "https://oi-wiki.org/dp/opt/quadrangle/", d: "中文语境下的讲解与凸性证明方法汇总" }
+  ]
+});
+
+/* ---------- 17 ---------- */
+ALGOS.push({
+  id: "slope-trick",
+  name: "Slope Trick",
+  en: "Slope Trick for convex piecewise-linear DP",
+  family: "convex",
+  tagline: "DP 的第二维是凸的分段线性函数——只维护斜率变化点，无需存整个数组。",
+  props: ["DP 第二维是凸（凹）分段线性函数", "每段斜率为整数"],
+  access: ["随机访问"],
+  mode: "在线",
+  cx: "O(n log n)",
+  cxNote: "每次转移通常是几次堆操作。",
+  cxTable: [
+    { c: "维护拐点（两个堆）", v: "O(n log n)" },
+    { c: "维护斜率序列（multiset）", v: "O(n log n)" }
+  ],
+  when: [
+    "DP 的第二维取值连续，且 <code>dp[i][·]</code> 作为函数是一个凸（或凹）的分段线性函数。",
+    "转移形如加上 <code>|x - a|</code>、取前缀 min / 后缀 min、平移、与另一个凸函数做 Minkowski 和。",
+    "典型特征：朴素 DP 是二维 <code>dp[i][j]</code>，第二维很大，但函数形状很简单。"
+  ],
+  how: [
+    "用一个「最右侧线段的解析式」+ 一个「斜率变化点的多重集」唯一确定整个凸函数。",
+    "用两个堆维护：大根堆存左半边的拐点，小根堆存右半边的拐点，并保持小根堆大小等于当前斜率。",
+    "常见操作：<code>+|x-a|</code>（插入两个 a 并弹出堆顶）、前缀 min（清空一侧堆）、平移、两个凸函数相加（合并拐点集）。",
+    "凸函数的加法仍凸，且拐点集合直接取并——这是它能高效转移的根本原因。"
+  ],
+  code: "// 经典形态：dp_i(x) = min_{y <= x} { dp_{i-1}(y) } + |a_i - x|\n// 维护一个大根堆，ans 累加增量\npriority_queue<int> L;\nlong long ans = 0;\nfor (int i = 1; i <= n; ++i) {\n    L.push(a[i]);\n    L.push(a[i]);          // 加上 |a_i - x|：插入两个拐点\n    ans += L.top() - a[i];\n    L.pop();               // 弹出堆顶：完成「取前缀 min」\n}\n// ans 即为最小代价（洛谷 P4597 序列 sequence 的完整解法）",
+  pitfalls: [
+    "必须确认<b>凸的方向</b>：最小化问题配下凸、最大化问题配上凸，堆的大小关系随之不同。",
+    "斜率变化超过 1 的点要在集合中<b>重复存储</b>相应次数。",
+    "「两个凸函数的最小值」<b>未必</b>仍是凸的——只有能转化成卷积下确界（Minkowski 和）的那类最小值操作才保持凸性。",
+    "它与 Aliens Trick 都依赖凸性，但砍的维度不同：Aliens 砍「个数维」，Slope Trick 砍「值维」。"
+  ],
+  problems: [
+    "CF 713C Sonya and Problem Without a Legend",
+    "洛谷 P4597 序列 sequence",
+    "USACO · Landscaping",
+    "CSES · Increasing Array II",
+    "[BalticOI 2004] Sequence"
+  ],
+  refs: [
+    { t: "OI Wiki · Slope Trick 优化", u: "https://oi-wiki.org/dp/opt/slope-trick/", d: "含凸函数变换与两类维护方式的系统讲解" },
+    { t: "USACO Guide · Slope Trick", u: "https://usaco.guide/adv/slope-trick", d: "英文教材 + 配套习题" },
+    { t: "Codeforces · Slope trick explained (Kuroni)", u: "https://codeforces.com/blog/entry/77298", d: "最容易理解的入门博文" }
+  ]
+});
+
+/* ---------- 18 ---------- */
+ALGOS.push({
+  id: "min-plus-conv",
+  name: "Min-plus 卷积",
+  en: "(min,+) / (max,+) Convolution",
+  family: "convex",
+  tagline: "c[k] = min_{i+j=k}{a[i]+b[j]}：一般情形至今没有真正 subquadratic 的算法。",
+  props: ["一侧序列凸（可 O(n)）", "或单调且值有界（Õ(n^1.5)）"],
+  access: ["随机访问"],
+  mode: "离线",
+  cx: "O(n) ~ O(n²)",
+  cxNote: "取决于序列的结构，见下表。",
+  cxTable: [
+    { c: "两侧都凸（或都凹）", v: "O(n)（归并 / Minkowski 和）" },
+    { c: "<b>一侧凸 + 另一侧任意</b>", v: "<b>O(n)</b>（矩阵是 Monge → SMAWK）" },
+    { c: "单调 + 值有界", v: "Õ(n^1.5)（Chi–Duan–Xie–Zhang 2022）" },
+    { c: "一般情形（当前最优）", v: "n² / 2^{Ω(√log n)}" },
+    { c: "两个 n×n Monge 矩阵的 min-plus 乘积", v: "O(n²)（SMAWK）" }
+  ],
+  when: [
+    "卷积形态的转移：<code>C[k] = min_{i+j=k}{A[i] + B[j]}</code>。",
+    "背包问题的分治加速（Knapsack 与 (max,+) 卷积的 subquadratic 等价性）。",
+    "格上的最短向量 / 最近向量问题（SVP / CVP）、可分离非线性背包。"
+  ],
+  how: [
+    "<b>两侧凸</b>：两个凸序列的 min-plus 卷积等价于两个凸多边形的 Minkowski 和，直接归并即可，O(n)。",
+    "<b>一侧凸</b>：构造矩阵 <code>M[i][j] = a[j] + b[i-j]</code>。当 b 凸时，可验证 <code>M[i][j] - M[i][j+1] ≥ M[i+1][j] - M[i+1][j+1]</code>，即 M 是 Monge 矩阵。于是「求整个卷积」= 「求 Monge 矩阵每行最大值」，SMAWK 可 O(n) 完成。",
+    "<b>分段凹（k-step concave）</b>：按 k 步长抽取子序列，每块内退化为凸情形，总代价仍线性。",
+    "<b>一般情形</b>：至今无真正 subquadratic 算法，即 Min-Plus Convolution Hypothesis。"
+  ],
+  code: "// 一侧凸 + 另一侧任意：构造 Monge 矩阵后调 SMAWK\n// M[i][j] = a[j] + b[i - j]     (b 凸，越界为 +INF)\n// c[i] = max/min_j M[i][j]  →  即整个 (min,+) 卷积\n//\n// 验证 Monge（b 凸时成立）：\n//   M[i][j]   - M[i][j+1]   = a[j]   - a[j+1] + b[i-j]   - b[i-j-1]\n//   M[i+1][j] - M[i+1][j+1] = a[j]   - a[j+1] + b[i+1-j] - b[i-j]\n//   由 b 的凸性（差分单调）可得前者 >= 后者\n// → M 是 Monge → SMAWK 求每行最优，O(n)",
+  pitfalls: [
+    "<b>别把一般情形当 O(n)</b>：只有结构化（凸 / 单调有界）的实例才快。一般 min-plus 卷积目前最好的界是 n²/2^{Ω(√log n)}。",
+    "凸性方向：min-plus 卷积配凸，max-plus 卷积配凹；取负可以互相转化。",
+    "在竞赛里遇到它，通常是<b>背包的分治合并</b>或<b>题目直接给出凸性条件</b>，先验证再上 SMAWK。"
+  ],
+  problems: [
+    "Knapsack / Unbounded Knapsack 的分治加速",
+    "可分离非线性背包",
+    "格上 SVP / CVP 的结构化实例"
+  ],
+  refs: [
+    { t: "Axiotis & Tzamos · Capacitated Dynamic Programming", u: "https://arxiv.org/pdf/1802.06440", d: "给出「一侧凸 O(n)」的 Monge 矩阵证明" },
+    { t: "Bringmann et al. · Faster 0-1-Knapsack via Near-Convex Min-Plus-Convolution", u: "http://arxiv.org/pdf/2305.01593", d: "汇总各结构化情形的最好界" },
+    { t: "Gribanov et al. · Structured (min,+)-Convolution", u: "https://arxiv.org/pdf/2209.04812", d: "线性/单调/凸/凹/分段线性/多项式各类情形" },
+    { t: "Erickson · Necklaces, Convolutions, and X+Y", u: "https://jeffe.cs.illinois.edu/pubs/pdf/necklace.pdf", d: "min-plus 卷积的历史与 X+Y 的联系" }
+  ]
+});
+
+
+/* ===== 概念：性质层级 ===== */
+const CONCEPTS = {
+  chain: [
+    { t: "Monge（四边形不等式）", d: "对任意 i&lt;i', j&lt;j'：<code>A[i][j] + A[i'][j'] ≤ A[i][j'] + A[i'][j]</code>。最强、最好验证。" },
+    { t: "Totally Monotone（TM，完全单调）", d: "任意 2×2 子矩阵（行/列不必连续）都单调。等价于「不存在行最小值落在右上和左下的 2×2」。" },
+    { t: "Monotone（单调）", d: "每行最小值所在的列位置随行号非降。最弱，只需它即可跑 Monotone Minima / 分治。" }
+  ],
+  verify: [
+    "判断 Monge 无需枚举所有四元组：只需检查<b>相邻</b>的 2×2，即 <code>A[i][j] + A[i+1][j+1] ≤ A[i][j+1] + A[i+1][j]</code>，O(mn) 即可完成。",
+    "竞赛中最快的验货方式是<b>打表</b>：写朴素 DP，把每个状态的最优决策点 opt 打印出来，肉眼确认是否单调。",
+    "Monge 的转置仍是 Monge（所以可以求列最优）；但 <b>TM 的转置未必是 TM</b>。",
+    "TM 的定义与 min / max 无关。若你的 opt 序列是非增的，把行序反转即可套用。"
+  ],
+  accessModels: [
+    {
+      t: "随机访问",
+      d: "<code>w(j, i)</code> 对任意 j、i 都能 O(1) 直接算出。SMAWK、二分栈、LARSCH 都要求这一条。",
+      ok: "SMAWK / Monotone Minima / 二分栈 / LARSCH / D&C"
+    },
+    {
+      t: "移动访问",
+      d: "无法 O(1) 随机取，只能从当前 (j,i) 移到相邻格并增量维护（莫队式双指针）。",
+      ok: "D&C 分治（每层总移动 O(n)）/ Simplified LARSCH；SMAWK 与二分栈不可用"
+    },
+    {
+      t: "在线",
+      d: "算第 i 个状态时，前面的状态才刚刚确定，矩阵是逐列「长出来」的。",
+      ok: "二分栈 / Simplified LARSCH / LARSCH / Wilber / Galil-Park / CDQ 分治；SMAWK 与 Monotone Minima 直接不可用"
+    }
+  ],
+  myths: [
+    "「SMAWK 是 O(n) 所以一定最快」—— 常数很大，N ≈ 2×10⁵ 时 O(n log n) 的 Monotone Minima 常常更快。",
+    "「Knuth 优化是独立技巧」—— 它是完全单调性的推论（SODA'05 证明），可通过 D^d / L^m / R^m 分解归约到 SMAWK。",
+    "「Aliens Trick 属于决策单调性」—— 它依赖的是答案关于个数的<b>凸性</b>，与决策单调性是两条独立的轴，只是经常叠加使用。",
+    "「LARSCH 只需要 Monge」—— Monge / TM 是<b>保证</b>前置条件的充分条件，真正的运行条件是三条形式化的可计算性约定。",
+    "「min-plus 卷积有 O(n) 算法」—— 只有<b>结构化</b>（凸 / 单调有界）实例才行，一般情形至今没有真正 subquadratic 的算法。"
+  ]
+};
+
+/* ===== 选型决策树 ===== */
+const DECISION_TREE = `遇到 dp[i] = min/max over j { ... }，先按这条路径判断：
+
+├─ 决策区间是固定长度滑动窗口 ────────────────→ [[monotone-queue|单调队列]]              O(n)
+│
+├─ 转移关于查询点线性  dp[j] + b[j]·a[i]
+│   ├─ 斜率单调 / 可离线 ─────────────────────→ [[cht|Convex Hull Trick]]           O(n) ~ O(n log n)
+│   ├─ 任意顺序插入，单点查询 ──────────────────→ [[li-chao|Li Chao 线段树]]           O(log C)
+│   └─ 时间递增 + 区间最值 + 需在线修改 ────────→ [[kinetic-tournament|KTT]]         均摊 O(log²n)
+│
+├─ 有「恰好选 K 个」约束
+│   ├─ 答案关于个数凸 ─────────────────────────→ [[aliens-trick|Aliens Trick / WQS]]  O(n log V)
+│   └─ 第二维是凸的分段线性函数 ────────────────→ [[slope-trick|Slope Trick]]         O(n log n)
+│
+├─ 决策点单调（w 满足四边形不等式）
+│   ├─ 离线 + 随机访问 ────────────────────────→ [[monotone-minima|Monotone Minima]]  O((n+m) log m)
+│   │                                            [[smawk|SMAWK]]                  O(n + m)
+│   ├─ 离线 + 移动访问 ────────────────────────→ [[dc-optimization|D&C + 莫队双指针]]       O(n log n)
+│   ├─ 在线 + 随机访问 ────────────────────────→ [[binary-stack|二分栈]]               O(n log n)
+│   │                                            [[larsch|LARSCH]]                O(n)
+│   ├─ 在线 + 移动访问 ────────────────────────→ [[simplified-larsch|Simplified LARSCH]]   O(n log n)
+│   └─ 在线 + 依赖未定（矩阵不可随机访问）───────→ [[cdq-smawk|CDQ 分治 + SMAWK]]        O(N log N)
+│
+├─ 区间 DP（最优搜索树），满足 QI + 区间单调 ───→ [[knuth-yao|Knuth-Yao]]              O(n²)
+├─ 转移矩阵是三角形 / 阶梯形 ───────────────────→ [[partial-monge|Klawe–Kleitman]]     O(n·α)
+├─ 卷积形态  C[k] = min_{i+j=k}{A[i]+B[j]} ─────→ [[min-plus-conv|Min-plus 卷积]]      凸则 O(n)
+└─ 分层 DAG 最短路，边权 Monge ─────────────────→ [[monge-shortest-path|Monge 最短路]] + WQS`;
+
+/* ===== 资料页 ===== */
+const RESOURCES = [
+  {
+    cat: "总览与讲义",
+    items: [
+      { t: "Jeff Erickson · Advanced Dynamic Programming", u: "https://jeffe.cs.illinois.edu/teaching/comptop/2017/notes/D-faster-dynprog.pdf", d: "TM / Monge 的定义、SMAWK 与 D&C 的界，配图清晰" },
+      { t: "Golin · DP Speedups II: The Monge Property", u: "https://cse.hkust.edu.hk/~golin/COMP572/Notes/SMAWK.pdf", d: "SMAWK 定理最清晰的证明之一" },
+      { t: "Golin · Dynamic Programming Speedups", u: "https://home.cse.ust.hk/~golin/COMP572/Notes/DP_speedup.pdf", d: "QI speedup（Knuth-Yao）与 Monge 矩阵加速的对照讲义" },
+      { t: "Golin · Revisiting The Monge Property", u: "https://www.cse.ust.hk/faculty/golin/Talks/Revisiting_Monge.pdf", d: "Monge / TM / SMAWK / LARSCH 全景 slides" },
+      { t: "HKOI · Dynamic Programming (III)", u: "https://assets.hkoi.org/training2025/dp-iii.pdf", d: "含 D&C 优化正确性的图形化证明与练习题单" }
+    ]
+  },
+  {
+    cat: "中文资料",
+    items: [
+      { t: "OI Wiki · 四边形不等式优化", u: "https://oi-wiki.org/dp/opt/quadrangle/", d: "分治 + 二分队列两档，含移动访问的完整讨论" },
+      { t: "OI Wiki · Slope Trick 优化", u: "https://oi-wiki.org/dp/opt/slope-trick/", d: "凸函数变换与两类维护方式的系统讲解" },
+      { t: "博客园 · 决策单调性与四边形不等式", u: "https://www.cnblogs.com/apjifengc/p/17804772.html", d: "分治 / 二分栈 / 二维决策单调性 / 决策单调性最短路" },
+      { t: "博客园 · 四边形不等式和决策单调性", u: "https://www.cnblogs.com/Tyih/p/19484077", d: "三类算法的对照：二分队列 / Simplified LARSCH / LARSCH" }
+    ]
+  },
+  {
+    cat: "专题博客与题单",
+    items: [
+      { t: "Codeforces Blog 110844 · SMAWK as an alternative for D&C optimization", u: "https://codeforces.com/blog/entry/110844", d: "从 D&C Optimization 视角切入 SMAWK，讲清 TM 与 Monge 的关系" },
+      { t: "Codeforces · Slope trick explained (Kuroni)", u: "https://codeforces.com/blog/entry/77298", d: "Slope Trick 最容易理解的入门博文" },
+      { t: "Codeforces · [Tutorial] Kinetic Tournament", u: "https://codeforces.com/blog/entry/82094", d: "KTT 教程 + 可直接用的 C++ 实现（约 100 行）" },
+      { t: "SOI · Alien Optimization", u: "https://soi.ch/wiki/alien-optimization/", d: "WQS 二分的几何直观与退化情形处理" },
+      { t: "USACO Guide · Slope Trick", u: "https://usaco.guide/adv/slope-trick", d: "英文教材 + 配套习题" },
+      { t: "AtCoder ABC355 Editorial", u: "https://atcoder.jp/contests/abc355/editorial/10209", d: "CDQ 分治 + monotone minima + SMAWK 三种解法的官方对比" }
+    ]
+  },
+  {
+    cat: "可直接抄的模板库",
+    items: [
+      { t: "maspy's library", u: "https://maspypy.github.io/library/convex/monge/monge_shortest_path.hpp", d: "convex/monge/ 目录：monge_shortest_path、simple larsch 等" },
+      { t: "noshi91 · simplified LARSCH", u: "https://noshi91.hatenablog.com/entry/2023/02/18/005856", d: "原始博文（日文），含正确性说明" },
+      { t: "cp-algorithms", u: "https://cp-algorithms.com", d: "CHT、Li Chao、单调队列等基础条目的英文实现" }
+    ]
+  },
+  {
+    cat: "原始论文",
+    items: [
+      { t: "Aggarwal–Klawe–Moran–Shor–Wilber · Geometric applications of a matrix-searching algorithm", u: "https://doi.org/10.1007/BF01840359", d: "Algorithmica 2 (1987) 195–208：SMAWK 原始论文" },
+      { t: "Klawe & Kleitman · An Almost Linear Time Algorithm for Generalized Matrix Searching", u: "https://epubs.siam.org/doi/pdf/10.1137/0403009", d: "SIAM J. Discrete Math 3(1), 1990：partial/staircase 矩阵" },
+      { t: "Wilber · The concave least-weight subsequence problem revisited", u: "https://doi.org/10.1016/0196-6774(88)90032-6", d: "J. Algorithms 9(3), 1988：无条件 O(n)" },
+      { t: "Galil & Park · A Linear-Time Algorithm for Concave One-Dimensional Dynamic Programming", u: "https://gwern.net/doc/cs/algorithm/1990-galil.pdf", d: "Information Processing Letters, 1990" },
+      { t: "Bein–Golin–Larmore–Zhang (SODA'05)", u: "https://web.cs.unlv.edu/bein/pubs/knuthyaosoda.pdf", d: "证明 Knuth-Yao 是完全单调性的推论" },
+      { t: "Chan · (Near-)Linear-Time Randomized Algorithms for Row Minima in Monge Partial Matrices", u: "http://tmc.web.engr.illinois.edu/matrix_search10_20.pdf", d: "SODA'21：去掉 α 因子，回答 Klawe 的开放问题" },
+      { t: "Kaplan–Mozes–Nussbaum–Sharir · Submatrix Maximum Queries in Monge Matrices", u: "https://cs.idc.ac.il/~smozes/RMQMongeJournal.pdf", d: "阶梯 Monge 上包络复杂度收紧到 O(m)" },
+      { t: "Axiotis & Tzamos · Capacitated Dynamic Programming", u: "https://arxiv.org/pdf/1802.06440", d: "min-plus 卷积「一侧凸 O(n)」的 Monge 矩阵证明" },
+      { t: "Bringmann et al. · Faster 0-1-Knapsack via Near-Convex Min-Plus-Convolution", u: "http://arxiv.org/pdf/2305.01593", d: "min-plus 卷积各结构化情形的最好界汇总" },
+      { t: "Gribanov et al. · Structured (min,+)-Convolution and Its Applications", u: "https://arxiv.org/pdf/2209.04812", d: "线性/单调/凸/凹/分段线性/多项式各类情形" },
+      { t: "Gawrychowski–Gorbachev–Kociumaka · Core-Sparse Monge Matrix Multiplication", u: "http://export.arxiv.org/pdf/2408.04613", d: "Monge 矩阵 min-plus 乘积 O(n²) 的现代视角" }
+    ]
+  }
+];
+
+/* ================= 工具 ================= */
+const esc = (s) => String(s == null ? "" : s)
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+const strip = (s) => String(s == null ? "" : s).replace(/<[^>]*>/g, "");
+
+function hl(src) {
+  const stash = [];
+  let s = esc(src);
+  s = s.replace(/\/\/[^\n]*/g, (m) => {
+    stash.push('<span class="c">' + m + "</span>");
+    return "@@STASH" + (stash.length - 1) + "@@";
+  });
+  s = s.replace(/"(?:[^"\\]|\\.)*"/g, (m) => {
+    stash.push('<span class="s">' + m + "</span>");
+    return "@@STASH" + (stash.length - 1) + "@@";
+  });
+  s = s.replace(/\b(int|long|void|bool|auto|const|struct|template|typename|class|for|while|if|else|return|pair|deque|vector|priority_queue|double|float|swap|size|push_back|pop_back|emplace_back|pop_front|push_front|using|namespace|include|new|delete)\b/g,
+    '<span class="k">$1</span>');
+  s = s.replace(/\b(\d+)\b/g, '<span class="n">$1</span>');
+  s = s.replace(/@@STASH(\d+)@@/g, (m, i) => stash[+i]);
+  return s;
+}
+
+function treeHTML(src) {
+  return esc(src).replace(/\[\[([a-z0-9-]+)\|([^\]]+)\]\]/g,
+    (m, id, name) => `<a href="#/algo/${id}">${name}</a>`);
+}
+
+const byId = (id) => ALGOS.find((a) => a.id === id);
+const hashOf = (p) => "#/" + p;
+const go = (p) => { location.hash = hashOf(p); };
+
+/* ================= 页面顺序 ================= */
+const PAGES = ["overview", "concepts", ...ALGOS.map((a) => a.id), "resources"];
+const pageTitle = {
+  overview: "总览",
+  concepts: "判定与选型",
+  resources: "资料"
+};
+
+/* ================= 侧边栏 ================= */
+let searchQuery = "";
+
+function renderSidebar() {
+  const q = searchQuery.trim().toLowerCase();
+  const match = (a) => !q ||
+    (a.name + a.en + a.tagline + a.props.join("") + a.cx + strip(a.when.join("")))
+      .toLowerCase().includes(q);
+
+  let html = "";
+  const link = (p, label, cx) =>
+    `<a class="nav-link" data-page="${p}" href="${hashOf(p)}">${label}${cx ? `<span class="cx">${esc(cx)}</span>` : ""}</a>`;
+
+  html += '<div class="nav-group"><div class="nav-group-title">起步</div>';
+  html += link("overview", "总览 · 算法对照表");
+  html += link("concepts", "判定与选型");
+  html += "</div>";
+
+  FAMILIES.filter((f) => f.id !== "appendix").forEach((f) => {
+    const items = ALGOS.filter((a) => a.family === f.id && match(a));
+    if (!items.length) return;
+    html += `<div class="nav-group"><div class="nav-group-title">${esc(f.name)}</div>`;
+    items.forEach((a) => { html += link(a.id, esc(a.name), a.cx); });
+    html += "</div>";
+  });
+
+  html += '<div class="nav-group"><div class="nav-group-title">附录</div>';
+  html += link("resources", "资料 · 讲义 / 论文 / 模板");
+  html += "</div>";
+
+  document.getElementById("nav").innerHTML = html;
+}
+
+function markActive(page) {
+  document.querySelectorAll(".nav-link").forEach((el) => {
+    el.classList.toggle("active", el.dataset.page === page);
+  });
+}
+
+/* ================= 主页 ================= */
+function renderOverview() {
+  const q = searchQuery.trim().toLowerCase();
+  let h = "";
+
+  h += `<div class="page-head">
+    <h2>决策单调性与 DP 优化算法导览</h2>
+    <p class="sub">这些算法的共同内核是：<b>在一个具有 Monge 性质 / 完全单调性的结构里，把「逐行枚举所有决策」摊平成 O(1) 或 O(log n)</b>。</p>
+    <p class="en">SMAWK · Monotone Minima · LARSCH · Knuth-Yao · WQS · Slope Trick · Li Chao · KTT</p>
+  </div>`;
+
+  h += `<div class="callout"><b>怎么读这张表：</b>竞赛里真正决定成败的往往不是算法的渐进复杂度，而是
+    <b>访问模型</b>——你的成本函数是「随机访问」「移动访问」还是「在线」。这三条把同一族算法切成互不可替代的三档，
+    表格里专门列了一列。详见 <a href="#/concepts">判定与选型</a>。</div>`;
+
+  /* --- 对照表 --- */
+  h += `<h3 class="sec">算法对照表</h3>`;
+  h += `<div class="chips" id="famChips">
+    <button class="chip on" data-fam="all">全部</button>
+    ${FAMILIES.filter((f) => f.id !== "appendix")
+      .map((f) => `<button class="chip" data-fam="${f.id}">${esc(f.name.split("·").slice(1).join("·").trim())}</button>`)
+      .join("")}
+  </div>`;
+
+  h += `<div class="table-wrap"><table class="grid"><thead><tr>
+    <th style="min-width:150px">算法</th>
+    <th style="min-width:170px">所需性质</th>
+    <th style="min-width:120px">访问模型</th>
+    <th style="min-width:130px">时间复杂度</th>
+    <th style="min-width:280px">典型场景 / 经典题</th>
+  </tr></thead><tbody>`;
+
+  FAMILIES.filter((f) => f.id !== "appendix").forEach((f) => {
+    const items = ALGOS.filter((a) => a.family === f.id).filter((a) => {
+      if (!q) return true;
+      const hay = (a.name + a.en + a.tagline + a.props.join("") + strip(a.when.join("")) + strip(a.problems.join(""))).toLowerCase();
+      return hay.includes(q);
+    });
+    if (!items.length) return;
+    h += `<tr class="group-row" data-fam="${f.id}"><td colspan="5">${esc(f.name)}</td></tr>`;
+    items.forEach((a) => {
+      h += `<tr data-fam="${a.family}">
+        <td class="name"><a href="${hashOf(a.id)}">${esc(a.name)}</a></td>
+        <td>${a.props.map((p) => `<div>${p}</div>`).join("")}</td>
+        <td>${a.access.map((x) => `<div>${x}</div>`).join("")}${a.mode ? `<div style="color:var(--text-dim);font-size:12px">${a.mode}</div>` : ""}</td>
+        <td><span class="cx-cell">${esc(a.cx)}</span></td>
+        <td>${esc(strip(a.when[0] || ""))}<div style="color:var(--text-dim);font-size:12px;margin-top:3px">${esc(strip(a.problems[0] || ""))}</div></td>
+      </tr>`;
+    });
+  });
+
+  h += `</tbody></table></div>`;
+
+  h += `<div class="legend">
+    <span><b>随机访问</b>：w(j,i) 可 O(1) 直接取</span>
+    <span><b>移动访问</b>：只能靠双指针增量维护</span>
+    <span><b>在线</b>：算 dp[i] 时前面的 dp 才刚确定</span>
+  </div>`;
+
+  /* --- 两条轴 --- */
+  h += `<h3 class="sec">第一条轴：性质层级</h3>`;
+  h += `<div class="chain">`;
+  CONCEPTS.chain.forEach((c, i) => {
+    if (i) h += `<span class="arrow">⟹</span>`;
+    h += `<span class="node"><strong>${c.t}</strong><br><span style="font-size:12.5px">${c.d}</span></span>`;
+  });
+  h += `</div>`;
+  h += `<div class="callout ok">严格蕴含链：<code>Monge（四边形不等式） ⟹ 完全单调 TM ⟹ 单调 Monotone</code>。
+    所以「能用 SMAWK（要 TM）就一定能用分治（只要 Monotone）」，反之不成立。</div>`;
+
+  h += `<h3 class="sec">第二条轴：访问模型</h3>`;
+  h += `<div class="cards">`;
+  CONCEPTS.accessModels.forEach((m) => {
+    h += `<div class="card"><div class="t">${esc(m.t)}</div><div class="d">${m.d}</div>
+      <div class="m" style="color:var(--text-dim);font-weight:400;font-size:11.5px;margin-top:8px">可用：${esc(strip(m.ok))}</div></div>`;
+  });
+  h += `</div>`;
+
+  /* --- 决策树 --- */
+  h += `<h3 class="sec">选型决策树</h3>`;
+  h += `<pre class="tree"><code>${treeHTML(DECISION_TREE)}</code></pre>`;
+
+  /* --- 误区 --- */
+  h += `<h3 class="sec">五个常见误区</h3><ul class="list">`;
+  CONCEPTS.myths.forEach((m) => { h += `<li>${m}</li>`; });
+  h += `</ul>`;
+
+  /* --- 卡片导航 --- */
+  h += `<h3 class="sec">全部算法</h3>`;
+  FAMILIES.filter((f) => f.id !== "appendix").forEach((f) => {
+    h += `<h4 class="sec">${esc(f.name)} · <span style="font-weight:400">${esc(f.desc)}</span></h4><div class="cards">`;
+    ALGOS.filter((a) => a.family === f.id).forEach((a) => {
+      h += `<a class="card" href="${hashOf(a.id)}">
+        <div class="t">${esc(a.name)}</div>
+        <div class="d">${esc(a.tagline)}</div>
+        <div class="m">${esc(a.cx)}</div></a>`;
+    });
+    h += `</div>`;
+  });
+
+  return h;
+}
+
+/* ================= 判定与选型页 ================= */
+function renderConcepts() {
+  let h = `<div class="page-head"><h2>判定与选型</h2>
+    <p class="sub">先判断「有没有性质」，再判断「访问模型」——这两步做完，该用哪个算法基本就唯一确定了。</p></div>`;
+
+  h += `<h3 class="sec">性质层级（强 → 弱）</h3>`;
+  h += `<div class="table-wrap"><table class="grid"><thead><tr>
+    <th style="min-width:190px">性质</th><th>定义</th></tr></thead><tbody>`;
+  CONCEPTS.chain.forEach((c) => {
+    h += `<tr><td class="name">${esc(strip(c.t))}</td><td>${c.d}</td></tr>`;
+  });
+  h += `</tbody></table></div>`;
+  h += `<div class="callout ok"><code>Monge ⟹ TM ⟹ Monotone</code>，逆向都不成立。
+    TM 的严格定义：任意 2×2 子矩阵（行、列都<b>不必连续</b>）都是单调的；等价于不存在这样的 2×2——它的行最小值落在右上角和左下角。</div>`;
+
+  h += `<h3 class="sec">如何验证性质</h3><ul class="list">`;
+  CONCEPTS.verify.forEach((v) => { h += `<li>${v}</li>`; });
+  h += `</ul>`;
+
+  h += `<h3 class="sec">访问模型：最关键的一步</h3>`;
+  h += `<div class="table-wrap"><table class="grid"><thead><tr>
+    <th style="min-width:110px">模型</th><th style="min-width:260px">含义</th><th>可用算法</th></tr></thead><tbody>`;
+  CONCEPTS.accessModels.forEach((m) => {
+    h += `<tr><td class="name">${esc(strip(m.t))}</td><td>${m.d}</td><td>${esc(strip(m.ok))}</td></tr>`;
+  });
+  h += `</tbody></table></div>`;
+  h += `<div class="callout warn"><b>最容易踩的坑：</b>看到「决策单调」就套 SMAWK，结果成本函数只能靠双指针维护（移动访问），
+    或者 dp 存在链式依赖（在线）。这两种情况下 SMAWK 直接不成立，应分别退回
+    <a href="#/algo/dc-optimization">D&C 分治 + 莫队</a> 与 <a href="#/algo/cdq-smawk">CDQ 分治 + 矩阵搜索</a>。</div>`;
+
+  h += `<h3 class="sec">选型决策树</h3>`;
+  h += `<pre class="tree"><code>${treeHTML(DECISION_TREE)}</code></pre>`;
+
+  h += `<h3 class="sec">常见误区</h3><ul class="list">`;
+  CONCEPTS.myths.forEach((m) => { h += `<li>${m}</li>`; });
+  h += `</ul>`;
+
+  return h;
+}
+
+/* ================= 算法页 ================= */
+function renderAlgo(a) {
+  let h = `<div class="page-head">
+    <h2>${esc(a.name)}</h2>
+    <p class="sub">${a.tagline}</p>
+    <p class="en">${esc(a.en)}</p>
+  </div>`;
+
+  h += `<div class="badges">`;
+  h += `<span class="badge cx">${esc(a.cx)}</span>`;
+  a.props.forEach((p) => { h += `<span class="badge">${p}</span>`; });
+  a.access.forEach((x) => { h += `<span class="badge ${x === "移动访问" ? "moving" : ""}">${x}</span>`; });
+  h += `<span class="badge ${a.mode && a.mode.indexOf("在线") >= 0 ? "online" : "offline"}">${esc(a.mode)}</span>`;
+  if (/随机化|期望/.test(a.cx + a.cxNote)) h += `<span class="badge rand">随机化</span>`;
+  h += `</div>`;
+
+  if (a.cxNote) h += `<div class="callout"><b>复杂度说明：</b>${a.cxNote}</div>`;
+
+  if (a.cxTable && a.cxTable.length) {
+    h += `<h3 class="sec">复杂度细分</h3><div class="table-wrap"><table class="grid"><thead><tr>
+      <th style="min-width:220px">情形</th><th style="min-width:200px">复杂度</th></tr></thead><tbody>`;
+    a.cxTable.forEach((r) => {
+      h += `<tr><td>${r.c}</td><td><span class="cx-cell">${esc(r.v)}</span></td></tr>`;
+    });
+    h += `</tbody></table></div>`;
+  }
+
+  h += `<h3 class="sec">适用场景</h3><ul class="list">`;
+  a.when.forEach((w) => { h += `<li>${w}</li>`; });
+  h += `</ul>`;
+
+  h += `<h3 class="sec">原理与步骤</h3><ol class="list">`;
+  a.how.forEach((s) => { h += `<li>${s}</li>`; });
+  h += `</ol>`;
+
+  if (a.code) {
+    h += `<h3 class="sec">代码骨架</h3><pre><code>${hl(a.code)}</code></pre>`;
+  }
+
+  h += `<h3 class="sec">坑点</h3><ul class="list">`;
+  a.pitfalls.forEach((p) => { h += `<li>${p}</li>`; });
+  h += `</ul>`;
+
+  h += `<h3 class="sec">经典题</h3><ul class="list">`;
+  a.problems.forEach((p) => { h += `<li>${p}</li>`; });
+  h += `</ul>`;
+
+  if (a.refs && a.refs.length) {
+    h += `<h3 class="sec">参考</h3>`;
+    a.refs.forEach((r) => {
+      h += `<div class="ref-item"><span class="rt">${esc(r.t)}</span>
+        <span class="rd"> — ${esc(r.d)}</span><br><a href="${r.u}" target="_blank" rel="noopener">${esc(r.u)}</a></div>`;
+    });
+  }
+
+  return h;
+}
+
+/* ================= 资料页 ================= */
+function renderResources() {
+  let h = `<div class="page-head"><h2>资料</h2>
+    <p class="sub">讲义、模板库、原始论文与配套题单。链接均为公开可访问的资源。</p></div>`;
+
+  RESOURCES.forEach((g) => {
+    h += `<h3 class="sec">${esc(g.cat)}</h3>`;
+    g.items.forEach((it) => {
+      h += `<div class="ref-item"><span class="rt">${esc(it.t)}</span>
+        <span class="rd"> — ${esc(it.d)}</span><br><a href="${it.u}" target="_blank" rel="noopener">${esc(it.u)}</a></div>`;
+    });
+  });
+
+  h += `<h3 class="sec">建议的学习顺序</h3><ol class="list">
+    <li>先吃透 <a href="#/algo/dc-optimization">D&C Optimization</a> 与 <a href="#/algo/monotone-minima">Monotone Minima</a>——它们是整个族的入口，代码短、直觉强。</li>
+    <li>再学 <a href="#/algo/binary-stack">二分栈</a>：理解「在线」与「离线」的分野，这是本族最容易被忽略的一条轴。</li>
+    <li>然后读 <a href="#/concepts">判定与选型</a>，把 Monge / TM / 访问模型三者的关系理清。</li>
+    <li>需要时再上 <a href="#/algo/smawk">SMAWK</a> 与 <a href="#/algo/simplified-larsch">Simplified LARSCH</a>——这两个覆盖了剩下的绝大多数场景。</li>
+    <li><a href="#/algo/aliens-trick">Aliens Trick</a> 与 <a href="#/algo/slope-trick">Slope Trick</a> 是另一条独立的轴（凸性），建议单独练。</li>
+    <li>线性的 <a href="#/algo/larsch">LARSCH</a> / Wilber / Galil–Park 留到最后：理论价值高，竞赛性价比低。</li>
+  </ol>`;
+
+  h += `<div class="footer-note">本页为学习导航，复杂度与适用条件以各算法的原始论文与官方题解为准；
+    竞赛中建议优先使用经过验证的模板库实现。</div>`;
+  return h;
+}
+
+/* ================= 路由 ================= */
+function pagerFor(page) {
+  const i = PAGES.indexOf(page);
+  if (i < 0) return "";
+  const prev = PAGES[i - 1], next = PAGES[i + 1];
+  const label = (p) => pageTitle[p] || (byId(p) ? byId(p).name : p);
+  let h = `<div class="pager">`;
+  h += prev ? `<a href="${hashOf(prev)}"><span class="lb">← 上一个</span>${esc(label(prev))}</a>` : `<span></span>`;
+  h += next ? `<a href="${hashOf(next)}" style="text-align:right;margin-left:auto"><span class="lb">下一个 →</span>${esc(label(next))}</a>` : `<span></span>`;
+  h += `</div>`;
+  return h;
+}
+
+function render() {
+  const page = (location.hash.replace(/^#\/?/, "") || "overview").split("/")[0];
+  let html = "";
+
+  if (page === "overview") html = renderOverview();
+  else if (page === "concepts") html = renderConcepts();
+  else if (page === "resources") html = renderResources();
+  else {
+    const a = byId(page);
+    html = a ? renderAlgo(a)
+      : `<div class="page-head"><h2>页面不存在</h2><p class="sub"><a href="#/overview">返回总览</a></p></div>`;
+  }
+
+  html += pagerFor(page);
+  const c = document.getElementById("content");
+  c.innerHTML = html;
+  markActive(page);
+
+  const crumb = document.getElementById("crumb");
+  if (page === "overview") crumb.innerHTML = "<b>总览</b>";
+  else if (page === "concepts") crumb.innerHTML = "<b>判定与选型</b>";
+  else if (page === "resources") crumb.innerHTML = "<b>资料</b>";
+  else {
+    const a = byId(page);
+    const fam = a ? FAMILIES.find((f) => f.id === a.family) : null;
+    crumb.innerHTML = `${fam ? esc(fam.name.split("·").slice(1).join("·").trim()) : ""} / <b>${esc(a ? a.name : page)}</b>`;
+  }
+
+  // 族筛选
+  document.querySelectorAll("#famChips .chip").forEach((btn) => {
+    btn.onclick = () => {
+      document.querySelectorAll("#famChips .chip").forEach((b) => b.classList.remove("on"));
+      btn.classList.add("on");
+      const fam = btn.dataset.fam;
+      document.querySelectorAll("table.grid tr").forEach((tr) => {
+        const f = tr.dataset.fam;
+        if (!f) return;
+        tr.style.display = (fam === "all" || f === fam) ? "" : "none";
+      });
+      document.querySelectorAll("table.grid tr.group-row").forEach((tr) => {
+        tr.style.display = (fam === "all") ? "" : (tr.dataset.fam === fam ? "" : "none");
+      });
+    };
+  });
+
+  window.scrollTo(0, 0);
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("scrim").classList.remove("show");
+}
+
+/* ================= 启动 ================= */
+/* file:// 下部分浏览器禁用 localStorage，做安全包装避免脚本中断 */
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+};
+
+function initTheme() {
+  const saved = store.get("dpopt-theme");
+  const theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+  document.getElementById("themeBtn").textContent = theme === "dark" ? "☀" : "☾";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  renderSidebar();
+  render();
+
+  window.addEventListener("hashchange", render);
+
+  document.getElementById("search").addEventListener("input", (e) => {
+    searchQuery = e.target.value;
+    renderSidebar();
+    markActive((location.hash.replace(/^#\/?/, "") || "overview").split("/")[0]);
+    if ((location.hash.replace(/^#\/?/, "") || "overview").split("/")[0] === "overview") render();
+  });
+
+  document.getElementById("themeBtn").onclick = () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const nx = cur === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", nx);
+    store.set("dpopt-theme", nx);
+    document.getElementById("themeBtn").textContent = nx === "dark" ? "☀" : "☾";
+  };
+
+  document.getElementById("menuBtn").onclick = () => {
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("scrim").classList.toggle("show");
+  };
+  document.getElementById("scrim").onclick = () => {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("scrim").classList.remove("show");
+  };
+});
+
+</script>
+</body>
+</html>
